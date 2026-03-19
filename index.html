@@ -13,8 +13,10 @@ body {
   color: white;
   margin: 0;
 }
-  .zone.selected {
-  animation: pulse 1s infinite;
+ .zone.selected {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  transition: 0.3s;
 }
 
 @keyframes pulse {
@@ -217,7 +219,17 @@ button {
 function nextScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen' + n).classList.add('active');
+
+  // убираем затемнение
   document.getElementById("overlay").classList.remove("active");
+
+  // стоп всех аудио
+  document.querySelectorAll("audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+  });
+
+  currentAudio = null;
 }
 
 function playAudio(id) {
@@ -226,24 +238,47 @@ function playAudio(id) {
 
 let selected = false;
 
+let currentAudio = null;
+
 function cellClick(n) {
-  if (selected) return;
-  selected = true;
-document.querySelectorAll('.zone')[n - 1].classList.add("selected");
-  document.getElementById("clickSound").play();
-  document.getElementById('cell' + n).play();
+  let audio = document.getElementById('cell' + n);
+
+  // если уже играет — остановить
+  if (currentAudio && currentAudio !== audio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // если нажали на тот же — стоп
+  if (currentAudio === audio && !audio.paused) {
+    audio.pause();
+    document.getElementById("overlay").classList.remove("active");
+    return;
+  }
+
+  currentAudio = audio;
+
+  // включаем звук
+  audio.play();
+
+  // затемнение
   document.getElementById("overlay").classList.add("active");
 
-  document.querySelectorAll('.zone').forEach((z, i) => {
-    if (i !== n - 1) {
-      z.style.opacity = "0.3";
-    } else {
-      z.style.background = "rgba(255,255,255,0.25)";
-    }
-  });
+  // подсветка
+  document.querySelectorAll('.zone').forEach(z => z.classList.remove("selected"));
+  document.querySelectorAll('.zone')[n - 1].classList.add("selected");
+
+  // когда аудио закончилось
+  audio.onended = () => {
+    document.getElementById("overlay").classList.remove("active");
+  };
 }
-  document.getElementById("rulesImg").onclick = function() {
-  this.classList.toggle("zoomed");
+  document.getElementById("overlay").onclick = function() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    this.classList.remove("active");
+  }
 };
 </script>
 <div class="overlay" id="overlay"></div>
