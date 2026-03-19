@@ -167,7 +167,6 @@ button {
   <div class="card">
     <h2>Правила</h2>
    <img src="rules.jpg" class="content-img">
-     id="rulesImg"
      <style="width:100%; border-radius:15px;">
     <button onclick="nextScreen(3)">Далее</button>
   </div>
@@ -209,15 +208,16 @@ button {
 <audio id="audio3" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"></audio>
 <audio id="audio4" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"></audio>
 
-<audio id="cell1" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"></audio>
-<audio id="cell2" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3"></audio>
-<audio id="cell3" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3"></audio>
-<audio id="cell4" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
+<audio id="cell1" src="tothems.mp3"></audio>
+<audio id="cell2" src="family.mp3"></audio>
+<audio id="cell3" src="stone.mp3"></audio>
+<audio id="cell4" src="mountain.mp3"></audio>
 
 <script>
 function nextScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen' + n).classList.add('active');
+  document.getElementById("overlay").classList.remove("active");
 }
 
 function playAudio(id) {
