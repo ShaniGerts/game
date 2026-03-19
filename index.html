@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Жить = Творить Демо-игра</title>
-
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <style>
 body {
   font-family: -apple-system, sans-serif;
@@ -12,6 +12,14 @@ body {
   background: linear-gradient(180deg, #0f0f1f, #1a1a2e);
   color: white;
   margin: 0;
+}
+  .zone.selected {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0px rgba(255,255,255,0.3); }
+  100% { box-shadow: 0 0 25px rgba(255,255,255,0.8); }
 }
   .map {
   position: relative;
@@ -43,7 +51,15 @@ body {
 .screen {
   display: none;
   padding: 20px;
-  animation: fade 0.5s;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: 0.4s;
+}
+
+.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .active {
@@ -109,6 +125,29 @@ button {
   from { filter: brightness(1); }
   to { filter: brightness(1.15); }
 }
+  .content-img {
+  width: 100%;
+  max-width: 340px;
+  margin: 15px auto;
+  display: block;
+  border-radius: 15px;
+}
+  .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+  z-index: 500;
+}
+
+.overlay.active {
+  opacity: 1;
+}
 </style>
 </head>
 
@@ -117,7 +156,7 @@ button {
 <div class="screen active" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
-    <img src="hello.jpg" 
+    <img src="hello.jpg" class="content-img">
      style="width:100%; border-radius:15px; margin-top:15px;">
     <button onclick="playAudio('audio1')">▶️ Слушать</button><br>
     <button onclick="nextScreen(2)">Далее</button>
@@ -127,7 +166,7 @@ button {
 <div class="screen" id="screen2">
   <div class="card">
     <h2>Правила</h2>
-   <img src="rules.jpg" 
+   <img src="rules.jpg" class="content-img">
      id="rulesImg"
      style="width:100%; border-radius:15px;">
     <button onclick="nextScreen(3)">Далее</button>
@@ -190,8 +229,10 @@ let selected = false;
 function cellClick(n) {
   if (selected) return;
   selected = true;
-
+document.querySelectorAll('.zone')[n - 1].classList.add("selected");
+  document.getElementById("clickSound").play();
   document.getElementById('cell' + n).play();
+  document.getElementById("overlay").classList.add("active");
 
   document.querySelectorAll('.zone').forEach((z, i) => {
     if (i !== n - 1) {
@@ -205,6 +246,6 @@ function cellClick(n) {
   this.classList.toggle("zoomed");
 };
 </script>
-
+<div class="overlay" id="overlay"></div>
 </body>
 </html>
