@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Трансформационная игра</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #111;
+  color: white;
+  margin: 0;
+}
+
+.screen {
+  display: none;
+  padding: 20px;
+}
+
+.active {
+  display: block;
+}
+
+button {
+  padding: 15px 25px;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+.cell {
+  background: #333;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="screen active" id="screen1">
+  <h2>Добро пожаловать</h2>
+  <button onclick="playAudio('audio1')">▶️ Включить аудио</button><br>
+  <button onclick="nextScreen(2)">Далее</button>
+</div>
+
+<div class="screen" id="screen2">
+  <h2>Правила</h2>
+  <img src="https://via.placeholder.com/300x200" width="100%">
+  <button onclick="nextScreen(3)">Далее</button>
+</div>
+
+<div class="screen" id="screen3">
+  <h2>Подготовка 1</h2>
+  <button onclick="playAudio('audio2')">▶️ Аудио</button><br>
+  <button onclick="nextScreen(4)">Далее</button>
+</div>
+
+<div class="screen" id="screen4">
+  <h2>Подготовка 2</h2>
+  <button onclick="playAudio('audio3')">▶️ Аудио</button><br>
+  <button onclick="nextScreen(5)">К игре</button>
+</div>
+
+<div class="screen" id="screen5">
+  <h2>Выбери клетку</h2>
+
+  <div class="grid">
+    <div class="cell" onclick="cellClick(1)">1</div>
+    <div class="cell" onclick="cellClick(2)">2</div>
+    <div class="cell" onclick="cellClick(3)">3</div>
+    <div class="cell" onclick="cellClick(4)">4</div>
+  </div>
+
+  <button onclick="nextScreen(6)">Завершить</button>
+</div>
+
+<div class="screen" id="screen6">
+  <h2>Заключение</h2>
+  <button onclick="playAudio('audio4')">▶️ Аудио</button>
+</div>
+
+<audio id="audio1" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+<audio id="audio2" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+<audio id="audio3" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"></audio>
+<audio id="audio4" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"></audio>
+
+<audio id="cell1" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"></audio>
+<audio id="cell2" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3"></audio>
+<audio id="cell3" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3"></audio>
+<audio id="cell4" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
+
+<script>
+function nextScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen' + n).classList.add('active');
+}
+
+function playAudio(id) {
+  document.getElementById(id).play();
+}
+
+function cellClick(n) {
+  document.getElementById('cell' + n).play();
+}
+</script>
+
+</body>
+</html>
