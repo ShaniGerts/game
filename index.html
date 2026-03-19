@@ -13,7 +13,32 @@ body {
   color: white;
   margin: 0;
 }
+  .map {
+  position: relative;
+  max-width: 340px;
+  margin: 30px auto;
+}
 
+.map-img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.zone {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+}
+
+.zone1 { top: 0; left: 0; }
+.zone2 { top: 0; right: 0; }
+.zone3 { bottom: 0; left: 0; }
+.zone4 { bottom: 0; right: 0; }
+
+.zone:active {
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+}
 .screen {
   display: none;
   padding: 20px;
@@ -68,32 +93,6 @@ button {
 
 .cell:active {
   transform: scale(0.95);
-}
-  .map {
-  position: relative;
-  max-width: 340px;
-  margin: 30px auto;
-}
-
-.map-img {
-  width: 100%;
-  border-radius: 20px;
-}
-
-.zone {
-  position: absolute;
-  width: 50%;
-  height: 50%;
-}
-
-.zone1 { top: 0; left: 0; }
-.zone2 { top: 0; right: 0; }
-.zone3 { bottom: 0; left: 0; }
-.zone4 { bottom: 0; right: 0; }
-
-.zone:active {
-  background: rgba(255,255,255,0.2);
-  border-radius: 20px;
 }
 </style>
 </head>
