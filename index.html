@@ -1,20 +1,464 @@
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-    <title>Game</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Жить = Творить Демо-игра</title>
+
+<style>
+body {
+  font-family: -apple-system, sans-serif;
+  text-align: center;
+  background: linear-gradient(180deg, #0f1e17, #1f3a2e);
+  color: #e8f2ec;
+  margin: 0;
+}
+
+  .visited {
+  filter: brightness(0.65) grayscale(0.4);
+  transition: 0.5s;
+}
+  
+.screen {
+  display: none;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.screen.active {
+  display: flex;
+  opacity: 1;
+}
+
+button {
+  padding: 15px 25px;
+  font-size: 16px;
+  margin-top: 20px;
+  border-radius: 12px;
+  border: none;
+  background: #2e5e4e;
+  color: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #3f7d68;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+.card {
+  background: rgba(20, 40, 30, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.content-img {
+  width: 100%;
+  max-width: 340px;
+  margin: 15px auto;
+  display: block;
+  border-radius: 15px;
+}
+
+.map {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 30px auto;
+}
+  
+.map-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-img:hover {
+  filter: brightness(1.05);
+}
+  
+.zone {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  z-index: 5;
+}
+
+.zone1 { top: 0; left: 0; }
+.zone2 { top: 0; right: 0; }
+.zone3 { bottom: 0; left: 0; }
+.zone4 { bottom: 0; right: 0; }
+
+.zone.selected {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 25, 20, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zoomed {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:black;
+  z-index:1000;
+}
+
+  .zone.visited {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+  transition: 0.5s;
+}
+
+  .fade-letter {
+  opacity: 0;
+  display: inline-block;
+  animation: fadeLetter 0.6s forwards;
+}
+
+@keyframes fadeLetter {
+  to {
+    opacity: 1;
+  }
+}
+  #insightBlock {
+  opacity: 0;
+  transition: opacity 1s;
+   margin-top: 10px;
+}
+#insightText span {
+  display: inline-block;
+}
+  
+</style>
 </head>
+
 <body>
-    <div id="map-screen">
-        <!-- Other screen content -->
-        <div id="screen5">
-            <!-- screen5 content -->
-        </div>
-        <!-- Closing screen5 -->
+
+<div class="overlay" id="overlay"></div>
+
+<!-- экран 1 -->
+<div class="screen" id="screen1">
+  <div class="card">
+    <h2>Добро пожаловать</h2>
+    <img src="hello.jpg" class="content-img">
+
+    <button onclick="playAudio('audio1')">▶️ Слушать</button><br>
+    <button onclick="nextScreen(2)">Далее</button>
+  </div>
+</div>
+
+<!-- экран 2 -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <h2>Правила</h2>
+    <img src="rules.jpg" id="rulesImg" class="content-img">
+
+    <button onclick="nextScreen(3)">Далее</button>
+  </div>
+</div>
+
+<!-- экран 3 -->
+<div class="screen" id="screen3">
+  <div class="card">
+    <h2>Подготовка</h2>
+
+    <button onclick="playAudio('audio2')">Определяем запрос</button><br>
+    <button onclick="playAudio('audio3')">Высшая цель</button><br>
+    <button onclick="playAudio('audio5')">Собираемся в путь</button><br>
+
+    <button onclick="nextScreen(5)">Начать путешествие</button>
+  </div>
+</div>
+
+<!-- карта -->
+<div class="screen" id="screen5">
+  <h2>Пройди поочередно каждую из четырех локаций</h2>
+
+  <div class="map">
+    <img src="IMG_9728.PNG" class="map-img">
+
+ <div class="zone zone1" onclick="cellClick(1)"></div>
+<div class="zone zone2" onclick="cellClick(2)"></div>
+<div class="zone zone3" onclick="cellClick(3)"></div>
+<div class="zone zone4" onclick="cellClick(4)"></div>
+  </div>
+  
+<div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
+  <p id="insightText" style="min-height:40px;"></p>
+
+  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">
+    Завершить
+  </button>
+</div>
+</div>
+
+<!-- экран 6 -->
+<div class="screen" id="screen6">
+  <div class="card">
+    <h2>Заключение</h2>
+    <button onclick="playFinalAudio()">Слушать</button>
+  </div>
+</div>
+
+<!-- экран 7 -->
+<div class="screen" id="screen7">
+  <div class="card">
+    <h2>Ваше сегодняшнее путешествие подошло к концу 🌿</h2>
+
+    <p style="opacity:0;" id="finalText">
+      Но это только начало. Готовы ли вы отправиться в более глубокое путешествие?
+      Ещё больше историй, смыслов и открытий.
+    </p>
+
+    <button id="fullBtn" style="display:none;">
+      Отправиться в полную версию путешествия
+    </button>
+
+    <div id="feedbackBlock" style="opacity:0; margin-top:20px;">
+      <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
+      <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;"></textarea>
+
+      <button onclick="sendFeedback()">Отправить</button>
     </div>
-    <div id="screen6">
-        <!-- screen6 content -->
-    </div>
-    <div id="screen7">
-        <!-- screen7 content -->
-    </div>
+  </div>
+</div>
+
+<!-- аудио -->
+<audio id="audio1" src="no1.m4a"></audio>
+<audio id="audio2" src="request.m4a"></audio>
+<audio id="audio3" src="mission.m4a"></audio>
+<audio id="audio4" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"></audio>
+<audio id="audio5" src="backpack.m4a"></audio>
+
+<audio id="cell1" src="tothems.mp3"></audio>
+<audio id="cell2" src="family.mp3"></audio>
+<audio id="cell3" src="stone.mp3"></audio>
+<audio id="cell4" src="mountain.mp3"></audio>
+
+<script>
+
+function nextScreen(n) {
+  const current = document.querySelector('.screen.active');
+  const next = document.getElementById('screen' + n);
+
+  // выключаем затемнение
+  document.getElementById("overlay").classList.remove("active");
+
+  // останавливаем все аудио
+  document.querySelectorAll("audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+  });
+
+  currentAudio = null;
+  prepAudio = null;
+
+  // плавно убираем текущий экран
+  if (current) {
+    current.classList.remove('active');
+
+    setTimeout(() => {
+      current.style.display = 'none';
+    }, 1500);
+  }
+
+  // показываем следующий
+  next.style.display = 'block';
+
+  setTimeout(() => {
+    next.classList.add('active');
+  }, 50);
+}
+
+// 🔊 один звук за раз
+let prepAudio = null;
+
+function playAudio(id) {
+  let audio = document.getElementById(id);
+
+  if (prepAudio && prepAudio !== audio) {
+    prepAudio.pause();
+    prepAudio.currentTime = 0;
+  }
+
+  if (prepAudio === audio && !audio.paused) {
+    audio.pause();
+    return;
+  }
+
+  prepAudio = audio;
+  audio.play();
+}
+
+// карта
+let currentAudio = null;
+
+let visitedSet = new Set();
+let visitedCount = 0;
+
+// ИСПРАВЛЕНО: Добавлена функция showInsights()
+function showInsights() {
+  const insightBlock = document.getElementById("insightBlock");
+  const insightText = document.getElementById("insightText");
+  const finishBtn = document.getElementById("finishBtn");
+  
+  insightBlock.style.opacity = 1;
+  
+  // Анимация текста
+  const message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
+  insightText.innerHTML = ""; // Очищаем предыдущее содержимое
+  
+  message.split("").forEach((letter, i) => {
+    let span = document.createElement("span");
+    span.innerHTML = letter === " " ? "&nbsp;" : letter;
+    span.style.opacity = 0;
+    span.style.transition = "opacity 0.5s";
+    insightText.appendChild(span);
+    setTimeout(() => {
+      span.style.opacity = 1;
+    }, i * 40);
+  });
+
+  setTimeout(() => {
+    finishBtn.style.display = "inline-block";
+  }, message.length * 40 + 400);
+}
+
+function cellClick(n) {
+  let audio = document.getElementById('cell' + n);
+  let zone = document.querySelectorAll('.zone')[n - 1];
+
+  // стоп предыдущего аудио
+  if (currentAudio && currentAudio !== audio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  // если повторный клик — остановка
+  if (currentAudio === audio && !audio.paused) {
+    audio.pause();
+    document.getElementById("overlay").classList.remove("active");
+    return;
+  }
+
+  currentAudio = audio;
+  audio.play();
+
+  document.getElementById("overlay").classList.add("active");
+
+  // подсветка текущей
+  document.querySelectorAll('.zone').forEach(z => z.classList.remove("selected"));
+  zone.classList.add("selected");
+
+  // ✅ добавляем "пройдено"
+  if (!visitedSet.has(n)) {
+    visitedSet.add(n);
+    visitedCount++;
+  }
+
+  audio.onended = () => {
+    document.getElementById("overlay").classList.remove("active");
+
+    // затемняем клетку после прослушивания
+    zone.classList.add("visited");
+
+    // если все 4 пройдены
+    if (visitedCount === 4) {
+      showInsights();
+    }
+  };
+}
+
+// клик по затемнению
+document.getElementById("overlay").onclick = function() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    this.classList.remove("active");
+  }
+};
+  
+function playFinalAudio() {
+  let audio = document.getElementById('audio4'); // аудио заключения
+  audio.currentTime = 0;
+  audio.play();
+
+  audio.onended = () => {
+    setTimeout(() => {
+      showFinalScreen(); // экран 7
+    }, 500);
+  };
+}
+
+function showFinalScreen() {
+  nextScreen(7);
+
+  const text = document.getElementById("finalText");
+  const btn = document.getElementById("fullBtn");
+  const feedback = document.getElementById("feedbackBlock");
+
+  setTimeout(() => {
+    text.style.opacity = 1;
+  }, 500);
+
+  setTimeout(() => {
+    btn.style.display = "inline-block";
+  }, 2000);
+
+  setTimeout(() => {
+    feedback.style.opacity = 1;
+  }, 3000);
+}
+
+// отправка (пока просто лог)
+function sendFeedback() {
+  let text = document.getElementById("feedbackText").value;
+  console.log("Отзыв:", text);
+  alert("Благодарю 💛");
+}
+
+window.onload = () => {
+  const first = document.getElementById("screen1");
+  first.style.display = "block";
+
+  setTimeout(() => {
+    first.classList.add("active");
+  }, 100);
+};
+  
+</script>
+  
+</body>
+</html>
 </body>
 </html>
