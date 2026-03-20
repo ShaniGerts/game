@@ -18,14 +18,12 @@ body {
   display: none;
   padding: 20px;
   opacity: 0;
-  transform: translateY(10px);
-  transition: 0.4s;
+  transition: opacity 1.5s ease;
 }
 
 .screen.active {
   display: block;
   opacity: 1;
-  transform: translateY(0);
 }
 
 button {
@@ -203,11 +201,13 @@ button:active {
 <script>
 
 function nextScreen(n) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen' + n).classList.add('active');
+  const current = document.querySelector('.screen.active');
+  const next = document.getElementById('screen' + n);
 
+  // выключаем затемнение
   document.getElementById("overlay").classList.remove("active");
 
+  // останавливаем все аудио
   document.querySelectorAll("audio").forEach(a => {
     a.pause();
     a.currentTime = 0;
@@ -215,6 +215,22 @@ function nextScreen(n) {
 
   currentAudio = null;
   prepAudio = null;
+
+  // плавно убираем текущий экран
+  if (current) {
+    current.classList.remove('active');
+
+    setTimeout(() => {
+      current.style.display = 'none';
+    }, 1500);
+  }
+
+  // показываем следующий
+  next.style.display = 'block';
+
+  setTimeout(() => {
+    next.classList.add('active');
+  }, 50);
 }
 
 // 🔊 один звук за раз
