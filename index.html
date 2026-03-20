@@ -282,6 +282,25 @@ let visitedSet = new Set();
 let visitedCount = 0;
 
 function cellClick(n) {
+  
+  setTimeout(() => {
+  let zone = document.querySelectorAll('.zone')[n - 1];
+
+  // отметим как прослушанную
+  if (!visitedSet.has(n)) {
+    visitedSet.add(n);
+    visitedCount++;
+  }
+
+  zone.classList.add("visited");
+
+  // если это последняя
+  if (visitedCount === 4) {
+    showInsights();
+  }
+}, 1000); // 1000ms = 1 секунда
+
+  
   let audio = document.getElementById('cell' + n);
   let zone = document.querySelectorAll('.zone')[n - 1];
 
@@ -335,14 +354,15 @@ document.getElementById("overlay").onclick = function() {
   }
 };
 
-  function showInsights() {
+ function showInsights() {
   const block = document.getElementById('insightBlock');
   const text = document.getElementById('insightText');
   const btn = document.getElementById('finishBtn');
 
-  block.style.opacity = 1;
+  block.style.opacity = 1; // плавно появляется блок
 
   let message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
+  text.innerHTML = ""; // очистить перед показом
   let i = 0;
 
   let interval = setInterval(() => {
@@ -352,11 +372,12 @@ document.getElementById("overlay").onclick = function() {
     if (i >= message.length) {
       clearInterval(interval);
 
+      // маленькая пауза перед появлением кнопки
       setTimeout(() => {
         btn.style.display = 'inline-block';
-      }, 800);
+      }, 600); 
     }
-  }, 35);
+  }, 70); // 70ms на символ — регулируется для медитативного эффекта
 }
   
 window.onload = () => {
