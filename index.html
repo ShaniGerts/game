@@ -76,15 +76,14 @@ button:active {
   width: 100%;
   max-width: 340px;
   margin: 30px auto;
+  aspect-ratio: 1 / 1;
 }
   
 .map-img {
   width: 100%;
-  border-radius: 20px;
-  transition: 0.5s;
-  filter: brightness(0.95);
+  height: 100%;
+  object-fit: cover;
   display: block;
-  z-index: 1;
 }
 
 .map-img:hover {
@@ -103,8 +102,8 @@ button:active {
   position: absolute;
   width: 50%;
   height: 50%;
-  background: rgba(255,0,0,0.2);
-  z-index: 2;
+  z-index: 5;
+   background: rgba(255,0,0,0.2);
 }
 
 .zone1 { top: 0; left: 0; }
