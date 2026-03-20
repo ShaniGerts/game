@@ -153,6 +153,7 @@ button:active {
   #insightBlock {
   opacity: 0;
   transition: opacity 1s;
+   margin-top: 10px;
 }
 #insightText span {
   display: inline-block;
@@ -211,6 +212,7 @@ button:active {
 <div class="zone zone3" onclick="cellClick(3)"></div>
 <div class="zone zone4" onclick="cellClick(4)"></div>
   </div>
+  
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
   <p id="insightText" style="min-height:40px;"></p>
 
@@ -219,13 +221,14 @@ button:active {
   </button>
 </div>
 
-<!-- финал -->
+  <!-- экран 6 -->
 <div class="screen" id="screen6">
   <div class="card">
     <h2>Заключение</h2>
-   <button onclick="playFinalAudio()">Слушать</button>
+    <button onclick="playFinalAudio()">Слушать</button>
   </div>
 </div>
+
 
    <div class="screen" id="screen7">
   <div class="card">
@@ -434,22 +437,18 @@ function sendFeedback() {
   alert("Благодарю 💛");
 }
   
-function showInsights() {
-  const block = document.getElementById('insightBlock');
-  const text = document.getElementById('insightText');
-  const btn = document.getElementById('finishBtn');
-
-  block.style.opacity = 1;
-  text.innerHTML = "";
-
   let message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
-
-  for (let i = 0; i < message.length; i++) {
-    let span = document.createElement('span');
-    span.textContent = message[i];
+  message.split("").forEach((letter, i) => {
+    let span = document.createElement("span");
+    // ВАЖНО: сохраняем пробелы
+    span.innerHTML = letter === " " ? "&nbsp;" : letter;
     span.style.opacity = 0;
-    span.style.transition = 'opacity 0.6s';
+    span.style.transition = "opacity 0.5s";
     text.appendChild(span);
+    setTimeout(() => {
+      span.style.opacity = 1;
+    }, i * 40);
+  });
 
     setTimeout(() => {
       span.style.opacity = 1;
@@ -457,8 +456,8 @@ function showInsights() {
   }
 
   setTimeout(() => {
-    btn.style.display = 'inline-block';
-  }, 70 * message.length + 600);
+    btn.style.display = "inline-block";
+  }, message.length * 40 + 400);
 }
   
 window.onload = () => {
