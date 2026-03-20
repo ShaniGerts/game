@@ -374,13 +374,13 @@ document.getElementById("overlay").onclick = function() {
 };
   
 function playFinalAudio() {
-  let audio = document.getElementById('audioFinal'); // вставь id твоего заключительного аудио
+  let audio = document.getElementById('audio4'); // аудио заключения
   audio.currentTime = 0;
   audio.play();
 
   audio.onended = () => {
     setTimeout(() => {
-      nextScreen(7); // финальный экран
+      showFinalScreen(); // экран 7
     }, 500);
   };
 }
@@ -417,13 +417,11 @@ function showInsights() {
   const text = document.getElementById('insightText');
   const btn = document.getElementById('finishBtn');
 
-  // показываем блок плавно
   block.style.opacity = 1;
+  text.innerHTML = "";
 
   let message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
-  text.innerHTML = ""; // очищаем текст
 
-  // создаём буквы как span
   for (let i = 0; i < message.length; i++) {
     let span = document.createElement('span');
     span.textContent = message[i];
@@ -433,15 +431,12 @@ function showInsights() {
 
     setTimeout(() => {
       span.style.opacity = 1;
-    }, 70 * i); // регулируем скорость появления
+    }, 70 * i);
   }
 
-  // появление кнопки после текста
   setTimeout(() => {
     btn.style.display = 'inline-block';
   }, 70 * message.length + 600);
-}
-  }, 70); // 70ms на символ — регулируется для медитативного эффекта
 }
   
 window.onload = () => {
