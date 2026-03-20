@@ -7,6 +7,34 @@
 <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <style>
 body {
+  background: #0f1e17;
+  color: #e8f2ec;
+  font-family: sans-serif;
+}
+
+button {
+  background: #2e5e4e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+  .insight-input {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 15px;
+  border-radius: 12px;
+  padding: 12px;
+  border: none;
+  background: #1c2f27;
+  color: #e8f2ec;
+}
+
+button:active {
+  background: #3f7d68;
+}
+  body {
+  
   font-family: -apple-system, sans-serif;
   text-align: center;
   background: linear-gradient(180deg, #0f0f1f, #1a1a2e);
@@ -54,8 +82,14 @@ body {
   display: none;
   padding: 20px;
   opacity: 0;
-  transform: translateY(10px);
-  transition: 0.4s;
+  transform: translateY(20px) scale(0.98);
+  transition: all 0.6s ease;
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .active {
@@ -154,7 +188,14 @@ button {
 </head>
 
 <body>
+.fade-text {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
 
+.fade-text.show {
+  opacity: 1;
+}
 <div class="screen active" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
@@ -177,9 +218,9 @@ button {
 <div class="screen" id="screen3">
   <div class="card">
     <h2>Подготовка</h2>
-    <button onclick="playAudio('audio2')">Этап 1</button><br>
-    <button onclick="playAudio('audio3')">Этап 2</button><br>
-        <button onclick="playAudio('audio5')">Этап 3</button><br>
+    <button onclick="playPrep('prep1')">Определение запроса</button>
+<button onclick="playPrep('prep2')">Ваша Миссия</button>
+       <button onclick="playPrep('prep3')">Сбор рюкзака</button>
     <button onclick="nextScreen(5)">К игре</button>
   </div>
 </div>
@@ -195,7 +236,13 @@ button {
   <div class="zone zone3" onclick="cellClick(3)"></div>
   <div class="zone zone4" onclick="cellClick(4)"></div>
 </div>
-  
+  <div id="resultBlock" style="display:none; text-align:center; margin-top:20px;">
+  <p id="resultText"></p>
+       <textarea placeholder="Запиши свои чувства, мысли, инсайты..." 
+          style="width:100%; max-width:340px; margin-top:15px; border-radius:10px; padding:10px;">
+</textarea>
+  <button onclick="nextScreen(5)">Продолжить</button>
+</div>
   <button onclick="nextScreen(6)">Завершить</button>
 </div>
 
@@ -233,7 +280,9 @@ function nextScreen(n) {
 
   currentAudio = null;
 }
-
+if (n === 5) {
+  document.body.style.background = "#0a1511";
+}
 function playAudio(id) {
   document.getElementById(id).play();
 }
@@ -243,6 +292,15 @@ let selected = false;
 let currentAudio = null;
 
 function cellClick(n) {
+  let texts = {
+  1: "Что все это значит для тебя?",
+  2: "Что нового открывают в этой ситуации твои родные?",
+  3: "Ты стоишь перед выбором — доверься внутреннему голосу.",
+  4: "То, что ты увидишь на вершине - имеет большой смысл"
+};
+
+document.getElementById("resultText").innerText = texts[n];
+document.getElementById("resultBlock").style.display = "block";
   let audio = document.getElementById('cell' + n);
 
   // если уже играет — остановить
@@ -282,7 +340,50 @@ function cellClick(n) {
     this.classList.remove("active");
   }
 };
+  let prepAudio = null;
+
+function playPrep(id) {
+  let audio = document.getElementById(id);
+
+  // если играет другой — остановить
+  if (prepAudio && prepAudio !== audio) {
+    prepAudio.pause();
+    prepAudio.currentTime = 0;
+  }
+
+  // если нажали повторно — стоп
+  if (prepAudio === audio && !audio.paused) {
+    audio.pause();
+    return;
+  }
+
+  prepAudio = audio;
+  audio.play();
+}
+  let textEl = document.getElementById("resultText");
+textEl.classList.remove("show");
+
+setTimeout(() => {
+  textEl.classList.add("show");
+}, 100);
 </script>
-<div class="overlay" id="overlay"></div>
+<div class="screen" id="screen5">
+  <h2>Завершение</h2>
+
+  <p class="fade-text show">
+    Этот путь оказался перед твоим внутренним взором неслучайно - его тебе показало твое подсознание.  
+    Обрати внимание на свои ощущения, подумай над метафорами своего путешествия — в них и лежат ответы.
+  </p>
+
+  <textarea 
+    placeholder="Что стало самым важным для тебя?"
+    class="insight-input">
+  </textarea>
+
+  <div style="margin-top:20px;">
+    <p>Ты готов отправиться в более глубокое путешествие?</p>
+    <button>Получить доступ</button>
+  </div>
+</div>
 </body>
 </html>
