@@ -89,14 +89,6 @@ button:active {
 .map-img:hover {
   filter: brightness(1.05);
 }
-
-  <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
-  <p id="insightText" style="min-height:40px;"></p>
-
-  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">
-    Завершить
-  </button>
-</div>
   
 .zone {
   position: absolute;
@@ -198,13 +190,17 @@ button:active {
   <div class="map">
     <img src="IMG_9728.PNG" class="map-img">
 
-    <div class="zone zone1" onclick="playAudio('cell1')"></div>
-<div class="zone zone2" onclick="playAudio('cell2')"></div>
-<div class="zone zone3" onclick="playAudio('cell3')"></div>
-<div class="zone zone4" onclick="playAudio('cell4')"></div>
+ <div class="zone zone1" onclick="cellClick(1)"></div>
+<div class="zone zone2" onclick="cellClick(2)"></div>
+<div class="zone zone3" onclick="cellClick(3)"></div>
+<div class="zone zone4" onclick="cellClick(4)"></div>
   </div>
+<div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
+  <p id="insightText" style="min-height:40px;"></p>
 
-  <button onclick="nextScreen(6)">Завершить</button>
+  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">
+    Завершить
+  </button>
 </div>
 
 <!-- финал -->
