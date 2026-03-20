@@ -150,6 +150,13 @@ button:active {
     opacity: 1;
   }
 }
+  #insightBlock {
+  opacity: 0;
+  transition: opacity 1s;
+}
+#insightText span {
+  display: inline-block;
+}
   
 </style>
 </head>
@@ -367,53 +374,18 @@ document.getElementById("overlay").onclick = function() {
 };
   
 function playFinalAudio() {
-  let audio = document.getElementById('audio4');
-
+  let audio = document.getElementById('audioFinal'); // вставь id твоего заключительного аудио
   audio.currentTime = 0;
   audio.play();
 
   audio.onended = () => {
     setTimeout(() => {
-      showFinalScreen();
-    }, 800); // маленькая пауза после окончания
+      nextScreen(7); // финальный экран
+    }, 500);
   };
 }
-  
- function showInsights() {
-  const block = document.getElementById('insightBlock');
-  const text = document.getElementById('insightText');
-  const btn = document.getElementById('finishBtn');
 
-  block.style.opacity = 1; // плавно появляется блок
-
-  let message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
-  text.innerHTML = ""; // очистить перед показом
-  let i = 0;
-
-  let interval = setInterval(() => {
-    text.innerHTML += `<span class="fade-letter">${message[i]}</span>`;
-    i++;
-
-    if (i >= message.length) {
-      clearInterval(interval);
-
-      // маленькая пауза перед появлением кнопки
-      setTimeout(() => {
-        btn.style.display = 'inline-block';
-      }, 600); 
-    }
-  }, 70); // 70ms на символ — регулируется для медитативного эффекта
-}
-  
-window.onload = () => {
-  const first = document.getElementById("screen1");
-  first.style.display = "block";
-
-  setTimeout(() => {
-    first.classList.add("active");
-  }, 100);
-};
-  function showFinalScreen() {
+   function showFinalScreen() {
   nextScreen(7);
 
   const text = document.getElementById("finalText");
@@ -439,6 +411,49 @@ function sendFeedback() {
   console.log("Отзыв:", text);
   alert("Благодарю 💛");
 }
+  
+function showInsights() {
+  const block = document.getElementById('insightBlock');
+  const text = document.getElementById('insightText');
+  const btn = document.getElementById('finishBtn');
+
+  // показываем блок плавно
+  block.style.opacity = 1;
+
+  let message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
+  text.innerHTML = ""; // очищаем текст
+
+  // создаём буквы как span
+  for (let i = 0; i < message.length; i++) {
+    let span = document.createElement('span');
+    span.textContent = message[i];
+    span.style.opacity = 0;
+    span.style.transition = 'opacity 0.6s';
+    text.appendChild(span);
+
+    setTimeout(() => {
+      span.style.opacity = 1;
+    }, 70 * i); // регулируем скорость появления
+  }
+
+  // появление кнопки после текста
+  setTimeout(() => {
+    btn.style.display = 'inline-block';
+  }, 70 * message.length + 600);
+}
+  }, 70); // 70ms на символ — регулируется для медитативного эффекта
+}
+  
+window.onload = () => {
+  const first = document.getElementById("screen1");
+  first.style.display = "block";
+
+  setTimeout(() => {
+    first.classList.add("active");
+  }, 100);
+};
+  
+ 
 </script>
 
   <div class="screen" id="screen7">
