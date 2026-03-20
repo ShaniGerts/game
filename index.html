@@ -4,143 +4,214 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Жить = Творить Демо-игра</title>
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+
 <style>
 body {
-  background: #0f1e17;
-  color: #e8f2ec;
-  font-family: sans-serif;
-}
-
-button {
-  background: #2e5e4e;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 10px;
-}
-  .insight-input {
-  width: 100%;
-  max-width: 340px;
-  margin-top: 15px;
-  border-radius: 12px;
-  padding: 12px;
-  border: none;
-  background: #1c2f27;
-  color: #e8f2ec;
-}
-
-button:active {
-  background: #3f7d68;
-}
-  body {
-  
   font-family: -apple-system, sans-serif;
   text-align: center;
   background: linear-gradient(180deg, #0f0f1f, #1a1a2e);
-@@ -54,8 +82,14 @@
+  color: white;
+  margin: 0;
+}
+
+.screen {
   display: none;
   padding: 20px;
   opacity: 0;
   transform: translateY(10px);
   transition: 0.4s;
-  transform: translateY(20px) scale(0.98);
-  transition: all 0.6s ease;
 }
 
 .screen.active {
   display: block;
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 
-.active {
-@@ -154,7 +188,14 @@
+button {
+  padding: 15px 25px;
+  font-size: 16px;
+  margin-top: 20px;
+  border-radius: 12px;
+  border: none;
+  background: #6c5ce7;
+  color: white;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.content-img {
+  width: 100%;
+  max-width: 340px;
+  margin: 15px auto;
+  display: block;
+  border-radius: 15px;
+}
+
+.map {
+  position: relative;
+  max-width: 340px;
+  margin: 30px auto;
+}
+
+.map-img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.zone {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+}
+
+.zone1 { top: 0; left: 0; }
+.zone2 { top: 0; right: 0; }
+.zone3 { bottom: 0; left: 0; }
+.zone4 { bottom: 0; right: 0; }
+
+.zone.selected {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zoomed {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:black;
+  z-index:1000;
+}
+</style>
 </head>
 
 <body>
-.fade-text {
-  opacity: 0;
-  transition: opacity 1s ease;
-}
 
-.fade-text.show {
-  opacity: 1;
-}
+<div class="overlay" id="overlay"></div>
+
+<!-- экран 1 -->
 <div class="screen active" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
-@@ -177,9 +218,9 @@
+    <img src="hello.jpg" class="content-img">
+
+    <button onclick="playAudio('audio1')">▶️ Слушать</button><br>
+    <button onclick="nextScreen(2)">Далее</button>
+  </div>
+</div>
+
+<!-- экран 2 -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <h2>Правила</h2>
+    <img src="rules.jpg" id="rulesImg" class="content-img">
+
+    <button onclick="nextScreen(3)">Далее</button>
+  </div>
+</div>
+
+<!-- экран 3 -->
 <div class="screen" id="screen3">
   <div class="card">
     <h2>Подготовка</h2>
+
     <button onclick="playAudio('audio2')">Этап 1</button><br>
     <button onclick="playAudio('audio3')">Этап 2</button><br>
-        <button onclick="playAudio('audio5')">Этап 3</button><br>
-    <button onclick="playPrep('prep1')">Определение запроса</button>
-<button onclick="playPrep('prep2')">Ваша Миссия</button>
-       <button onclick="playPrep('prep3')">Сбор рюкзака</button>
+    <button onclick="playAudio('audio5')">Этап 3</button><br>
+
     <button onclick="nextScreen(5)">К игре</button>
   </div>
 </div>
-@@ -195,7 +236,13 @@
-  <div class="zone zone3" onclick="cellClick(3)"></div>
-  <div class="zone zone4" onclick="cellClick(4)"></div>
-</div>
-  
-  <div id="resultBlock" style="display:none; text-align:center; margin-top:20px;">
-  <p id="resultText"></p>
-       <textarea placeholder="Запиши свои чувства, мысли, инсайты..." 
-          style="width:100%; max-width:340px; margin-top:15px; border-radius:10px; padding:10px;">
-</textarea>
-  <button onclick="nextScreen(5)">Продолжить</button>
-</div>
+
+<!-- карта -->
+<div class="screen" id="screen5">
+  <h2>Пройди поочередно каждую из четырех локаций</h2>
+
+  <div class="map">
+    <img src="IMG_9728.PNG" class="map-img">
+
+    <div class="zone zone1" onclick="cellClick(1)"></div>
+    <div class="zone zone2" onclick="cellClick(2)"></div>
+    <div class="zone zone3" onclick="cellClick(3)"></div>
+    <div class="zone zone4" onclick="cellClick(4)"></div>
+  </div>
+
   <button onclick="nextScreen(6)">Завершить</button>
 </div>
 
-@@ -233,7 +280,9 @@
+<!-- финал -->
+<div class="screen" id="screen6">
+  <div class="card">
+    <h2>Заключение</h2>
+    <button onclick="playAudio('audio4')">Слушать</button>
+  </div>
+</div>
+
+<!-- аудио -->
+<audio id="audio1" src="no1.m4a"></audio>
+<audio id="audio2" src="request.m4a"></audio>
+<audio id="audio3" src="mission.m4a"></audio>
+<audio id="audio4" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"></audio>
+<audio id="audio5" src="backpack.m4a"></audio>
+
+<audio id="cell1" src="tothems.mp3"></audio>
+<audio id="cell2" src="family.mp3"></audio>
+<audio id="cell3" src="stone.mp3"></audio>
+<audio id="cell4" src="mountain.mp3"></audio>
+
+<script>
+
+function nextScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen' + n).classList.add('active');
+
+  document.getElementById("overlay").classList.remove("active");
+
+  document.querySelectorAll("audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+  });
 
   currentAudio = null;
+  prepAudio = null;
 }
 
-if (n === 5) {
-  document.body.style.background = "#0a1511";
-}
+// 🔊 один звук за раз
+let prepAudio = null;
+
 function playAudio(id) {
-  document.getElementById(id).play();
-}
-@@ -243,6 +292,15 @@
-let currentAudio = null;
-
-function cellClick(n) {
-  let texts = {
-  1: "Что все это значит для тебя?",
-  2: "Что нового открывают в этой ситуации твои родные?",
-  3: "Ты стоишь перед выбором — доверься внутреннему голосу.",
-  4: "То, что ты увидишь на вершине - имеет большой смысл"
-};
-
-document.getElementById("resultText").innerText = texts[n];
-document.getElementById("resultBlock").style.display = "block";
-  let audio = document.getElementById('cell' + n);
-
-  // если уже играет — остановить
-@@ -282,7 +340,50 @@
-    this.classList.remove("active");
-  }
-};
-  let prepAudio = null;
-
-function playPrep(id) {
   let audio = document.getElementById(id);
 
-  // если играет другой — остановить
   if (prepAudio && prepAudio !== audio) {
     prepAudio.pause();
     prepAudio.currentTime = 0;
   }
 
-  // если нажали повторно — стоп
   if (prepAudio === audio && !audio.paused) {
     audio.pause();
     return;
@@ -149,31 +220,52 @@ function playPrep(id) {
   prepAudio = audio;
   audio.play();
 }
-  let textEl = document.getElementById("resultText");
-textEl.classList.remove("show");
 
-setTimeout(() => {
-  textEl.classList.add("show");
-}, 100);
+// карта
+let currentAudio = null;
+
+function cellClick(n) {
+  let audio = document.getElementById('cell' + n);
+
+  if (currentAudio && currentAudio !== audio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+
+  if (currentAudio === audio && !audio.paused) {
+    audio.pause();
+    document.getElementById("overlay").classList.remove("active");
+    return;
+  }
+
+  currentAudio = audio;
+  audio.play();
+
+  document.getElementById("overlay").classList.add("active");
+
+  document.querySelectorAll('.zone').forEach(z => z.classList.remove("selected"));
+  document.querySelectorAll('.zone')[n - 1].classList.add("selected");
+
+  audio.onended = () => {
+    document.getElementById("overlay").classList.remove("active");
+  };
+}
+
+// клик по затемнению
+document.getElementById("overlay").onclick = function() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    this.classList.remove("active");
+  }
+};
+
+// увеличение правил
+document.getElementById("rulesImg").onclick = function() {
+  this.classList.toggle("zoomed");
+};
+
 </script>
-<div class="overlay" id="overlay"></div>
-<div class="screen" id="screen5">
-  <h2>Завершение</h2>
 
-  <p class="fade-text show">
-    Этот путь оказался перед твоим внутренним взором неслучайно - его тебе показало твое подсознание.  
-    Обрати внимание на свои ощущения, подумай над метафорами своего путешествия — в них и лежат ответы.
-  </p>
-
-  <textarea 
-    placeholder="Что стало самым важным для тебя?"
-    class="insight-input">
-  </textarea>
-
-  <div style="margin-top:20px;">
-    <p>Ты готов отправиться в более глубокое путешествие?</p>
-    <button>Получить доступ</button>
-  </div>
-</div>
 </body>
 </html>
