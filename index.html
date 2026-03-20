@@ -14,6 +14,11 @@ body {
   margin: 0;
 }
 
+  .visited {
+  filter: brightness(0.65) grayscale(0.4);
+  transition: 0.5s;
+}
+  
 .screen {
   display: none;
   padding: 20px;
@@ -256,14 +261,20 @@ function playAudio(id) {
 // карта
 let currentAudio = null;
 
+let visitedSet = new Set();
+let visitedCount = 0;
+
 function cellClick(n) {
   let audio = document.getElementById('cell' + n);
+  let zone = document.querySelectorAll('.zone')[n - 1];
 
+  // стоп предыдущего аудио
   if (currentAudio && currentAudio !== audio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
   }
 
+  // если повторный клик — остановка
   if (currentAudio === audio && !audio.paused) {
     audio.pause();
     document.getElementById("overlay").classList.remove("active");
@@ -275,11 +286,26 @@ function cellClick(n) {
 
   document.getElementById("overlay").classList.add("active");
 
+  // подсветка текущей
   document.querySelectorAll('.zone').forEach(z => z.classList.remove("selected"));
-  document.querySelectorAll('.zone')[n - 1].classList.add("selected");
+  zone.classList.add("selected");
+
+  // ✅ добавляем "пройдено"
+  if (!visitedSet.has(n)) {
+    visitedSet.add(n);
+    visitedCount++;
+  }
 
   audio.onended = () => {
     document.getElementById("overlay").classList.remove("active");
+
+    // затемняем клетку после прослушивания
+    zone.classList.add("visited");
+
+    // если все 4 пройдены
+    if (visitedCount === 4) {
+      showInsights();
+    }
   };
 }
 
