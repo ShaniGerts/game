@@ -24,10 +24,15 @@ body {
   padding: 20px;
   opacity: 0;
   transition: opacity 1.5s ease;
+
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .screen.active {
-  display: block;
+  display: flex;
   opacity: 1;
 }
 
@@ -82,6 +87,14 @@ button:active {
 .map-img:hover {
   filter: brightness(1.05);
 }
+
+  <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
+  <p id="insightText" style="min-height:40px;"></p>
+
+  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">
+    Завершить
+  </button>
+</div>
 
 .zone {
   position: absolute;
@@ -141,7 +154,7 @@ button:active {
 <div class="overlay" id="overlay"></div>
 
 <!-- экран 1 -->
-<div class="screen active" id="screen1">
+<div class="screen" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
     <img src="hello.jpg" class="content-img">
@@ -325,11 +338,39 @@ document.getElementById("overlay").onclick = function() {
   }
 };
 
-// увеличение правил
-document.getElementById("rulesImg").onclick = function() {
-  this.classList.toggle("zoomed");
-};
+  function showInsights() {
+  const block = document.getElementById('insightBlock');
+  const text = document.getElementById('insightText');
+  const btn = document.getElementById('finishBtn');
 
+  block.style.opacity = 1;
+
+  let message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
+  let i = 0;
+
+  let interval = setInterval(() => {
+    text.innerHTML += message[i];
+    i++;
+
+    if (i >= message.length) {
+      clearInterval(interval);
+
+      setTimeout(() => {
+        btn.style.display = 'inline-block';
+      }, 800);
+    }
+  }, 35);
+}
+  
+window.onload = () => {
+  const first = document.getElementById("screen1");
+  first.style.display = "block";
+
+  setTimeout(() => {
+    first.classList.add("active");
+  }, 100);
+};
+  
 </script>
 
 </body>
