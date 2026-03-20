@@ -325,26 +325,35 @@ let currentAudio = null;
 let visitedSet = new Set();
 let visitedCount = 0;
 
-function cellClick(n) {
+// ИСПРАВЛЕНО: Добавлена функция showInsights()
+function showInsights() {
+  const insightBlock = document.getElementById("insightBlock");
+  const insightText = document.getElementById("insightText");
+  const finishBtn = document.getElementById("finishBtn");
   
+  insightBlock.style.opacity = 1;
+  
+  // Анимация текста
+  const message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
+  insightText.innerHTML = ""; // Очищаем предыдущее содержимое
+  
+  message.split("").forEach((letter, i) => {
+    let span = document.createElement("span");
+    span.innerHTML = letter === " " ? "&nbsp;" : letter;
+    span.style.opacity = 0;
+    span.style.transition = "opacity 0.5s";
+    insightText.appendChild(span);
+    setTimeout(() => {
+      span.style.opacity = 1;
+    }, i * 40);
+  });
+
   setTimeout(() => {
-  let zone = document.querySelectorAll('.zone')[n - 1];
+    finishBtn.style.display = "inline-block";
+  }, message.length * 40 + 400);
+}
 
-  // отметим как прослушанную
-  if (!visitedSet.has(n)) {
-    visitedSet.add(n);
-    visitedCount++;
-  }
-
-  zone.classList.add("visited");
-
-  // если это последняя
-  if (visitedCount === 4) {
-    showInsights();
-  }
-}, 1000); // 1000ms = 1 секунда
-
-  
+function cellClick(n) {
   let audio = document.getElementById('cell' + n);
   let zone = document.querySelectorAll('.zone')[n - 1];
 
@@ -410,7 +419,7 @@ function playFinalAudio() {
   };
 }
 
-   function showFinalScreen() {
+function showFinalScreen() {
   nextScreen(7);
 
   const text = document.getElementById("finalText");
@@ -436,30 +445,7 @@ function sendFeedback() {
   console.log("Отзыв:", text);
   alert("Благодарю 💛");
 }
-  
-  let message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
-  message.split("").forEach((letter, i) => {
-    let span = document.createElement("span");
-    // ВАЖНО: сохраняем пробелы
-    span.innerHTML = letter === " " ? "&nbsp;" : letter;
-    span.style.opacity = 0;
-    span.style.transition = "opacity 0.5s";
-    text.appendChild(span);
-    setTimeout(() => {
-      span.style.opacity = 1;
-    }, i * 40);
-  });
 
-    setTimeout(() => {
-      span.style.opacity = 1;
-    }, 70 * i);
-  }
-
-  setTimeout(() => {
-    btn.style.display = "inline-block";
-  }, message.length * 40 + 400);
-}
-  
 window.onload = () => {
   const first = document.getElementById("screen1");
   first.style.display = "block";
@@ -469,7 +455,6 @@ window.onload = () => {
   }, 100);
 };
   
- 
 </script>
   
 </body>
