@@ -355,6 +355,24 @@ function showInsights() {
 }
 
 function cellClick(n) {
+  setTimeout(() => {
+  let zone = document.querySelectorAll('.zone')[n - 1];
+
+  // отметим как прослушанную
+  if (!visitedSet.has(n)) {
+    visitedSet.add(n);
+    visitedCount++;
+  }
+
+  zone.classList.add("visited");
+
+  // если это последняя
+  if (visitedCount === 4) {
+    showInsights();
+  }
+}, 1000); // 1000ms = 1 секунда
+
+  
   let audio = document.getElementById('cell' + n);
   let zone = document.querySelectorAll('.zone')[n - 1];
 
