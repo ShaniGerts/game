@@ -66,6 +66,18 @@ button:active {
   margin-top: 20px;
 }
 
+  .back-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.card {
+  position: relative;
+}
 .content-img {
   width: 100%;
   max-width: 340px;
@@ -184,6 +196,7 @@ button:active {
 <!-- экран 2 -->
 <div class="screen" id="screen2">
   <div class="card">
+    <button class="back-btn" onclick="goBack()">←</button>
     <h2>Правила</h2>
     <img src="rules.png" id="rulesImg" class="content-img">
 
@@ -194,6 +207,7 @@ button:active {
 <!-- экран 3 -->
 <div class="screen" id="screen3">
   <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
 
     <button onclick="playAudio('audio2')">Определяем запрос</button><br>
@@ -208,6 +222,7 @@ button:active {
 
 <!-- карта -->
 <div class="screen" id="screen5">
+   <button class="back-btn" onclick="goBack()">←</button>
   <h2>Пройди поочередно каждую из четырех локаций</h2>
 
   <div class="map">
@@ -231,6 +246,7 @@ button:active {
 <!-- экран 6 -->
 <div class="screen" id="screen6">
   <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Заключение</h2>
     <button onclick="playFinalAudio()">Слушать</button>
   </div>
@@ -239,6 +255,7 @@ button:active {
 <!-- экран 7 -->
 <div class="screen" id="screen7">
   <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Ваше сегодняшнее путешествие подошло к концу 🌿</h2>
 
     <p style="opacity:0;" id="finalText">
@@ -272,13 +289,18 @@ button:active {
 <audio id="cell4" src="mountain.mp3"></audio>
 
 <script>
-
+let cheatMode = true;
+  let historyStack = [];
   let prepCount = 0;
   
 function nextScreen(n) {
   const current = document.querySelector('.screen.active');
   const next = document.getElementById('screen' + n);
 
+  if (current) {
+    historyStack.push(current.id);
+  }
+  
   // выключаем затемнение
   document.getElementById("overlay").classList.remove("active");
 
@@ -311,6 +333,38 @@ function nextScreen(n) {
 // 🔊 один звук за раз
 let prepAudio = null;
 
+  function goBack() {
+  const prevId = historyStack.pop();
+  if (!prevId) return;
+
+  const current = document.querySelector('.screen.active');
+  const prev = document.getElementById(prevId);
+
+  // останавливаем аудио
+  document.querySelectorAll("audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+  });
+
+  prepAudio = null;
+
+  // скрываем текущий
+  if (current) {
+    current.classList.remove('active');
+
+    setTimeout(() => {
+      current.style.display = 'none';
+    }, 1500);
+  }
+
+  // показываем предыдущий
+  prev.style.display = 'block';
+
+  setTimeout(() => {
+    prev.classList.add('active');
+  }, 50);
+}
+
 function playAudio(id) {
   let audio = document.getElementById(id);
 
@@ -333,9 +387,9 @@ function playAudio(id) {
     audio.onended = () => {
       prepCount++;
 
-      if (prepCount >= 3) {
-        showStartButton();
-      }
+     if (prepCount >= 3 || cheatMode) {
+  showStartButton();
+}
     };
   }
 }
