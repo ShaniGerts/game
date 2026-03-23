@@ -168,11 +168,38 @@ button:active {
 }
   #insightBlock {
   opacity: 0;
-  transition: opacity 1s;
-   margin-top: 10px;
+  transition: opacity 0.6s;
+  margin-top: 10px;
 }
-#insightText span {
-  display: inline-block;
+
+#insightText {
+  word-break: normal;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+}
+
+.final-section {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid rgba(232, 242, 236, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.final-section p {
+  margin-top: 0;
+  line-height: 1.6;
+}
+
+.final-section textarea {
+  box-sizing: border-box;
+  background: rgba(243, 248, 244, 0.95);
+  color: #173127;
+  border: 1px solid rgba(46, 94, 78, 0.28);
+}
+
+.final-section textarea::placeholder {
+  color: #5f7b70;
 }
 
   #finalText {
@@ -263,22 +290,18 @@ button:active {
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Ваше сегодняшнее путешествие подошло к концу 🌿</h2>
 
-    <p style="opacity:0;" id="finalText">
-      Но это только начало. 
-     Готовы ли вы отправиться в более глубокое путешествие?
-     
-      Ещё больше историй, смыслов и открытий.
-    </p>
-
-    <p style="opacity:0;" id="softPush">
-  Я буду рядом в этом пути 🌿
-</p>
+    <div class="final-section">
+      <p id="finalText">
+        Но это только начало. Готовы ли вы отправиться в более глубокое путешествие?
+        Ещё больше историй, смыслов и открытий.
+        Я буду рядом в этом пути: поддержу и все объясню.
+      </p>
 
     <button onclick="window.open('https://t.me/madreshani')">
   Продолжить путь со мной →
 </button>
 
-    <div id="feedbackBlock" style="opacity:0; margin-top:20px;">
+     <div id="feedbackBlock" class="final-section">
       <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
            <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
 
@@ -297,16 +320,16 @@ button:active {
 </div>
 
 <!-- аудио -->
-<audio id="audio1" src="no1.m4a"></audio>
-<audio id="audio2" src="request.m4a"></audio>
-<audio id="audio3" src="mission.m4a"></audio>
-<audio id="audio4" src="backpack.m4a"></audio>
-<audio id="audio5" src="backpack.m4a"></audio>
+<audio id="audio1" src="no1.m4a" preload="none"></audio>
+<audio id="audio2" src="request.m4a" preload="none"></audio>
+<audio id="audio3" src="mission.m4a" preload="none"></audio>
+<audio id="audio4" src="backpack.m4a" preload="none"></audio>
+<audio id="audio5" src="backpack.m4a" preload="none"></audio>
 
-<audio id="cell1" src="tothems.mp3"></audio>
-<audio id="cell2" src="family.mp3"></audio>
-<audio id="cell3" src="stone.mp3"></audio>
-<audio id="cell4" src="mountain.mp3"></audio>
+<audio id="cell1" src="tothems.mp3" preload="none"></audio>
+<audio id="cell2" src="family.mp3" preload="none"></audio>
+<audio id="cell3" src="stone.mp3" preload="none"></audio>
+<audio id="cell4" src="mountain.mp3" preload="none"></audio>
 
 <script>
 let cheatMode = true;
@@ -453,27 +476,10 @@ function showInsights() {
   const insightBlock = document.getElementById("insightBlock");
   const insightText = document.getElementById("insightText");
   const finishBtn = document.getElementById("finishBtn");
-  
+ 
+  insightText.textContent = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
   insightBlock.style.opacity = 1;
-  
-  // Анимация текста
-  const message = "Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.";
-  insightText.innerHTML = ""; // Очищаем предыдущее содержимое
-  
-  message.split("").forEach((letter, i) => {
-    let span = document.createElement("span");
-    span.innerHTML = letter === " " ? "&nbsp;" : letter;
-    span.style.opacity = 0;
-    span.style.transition = "opacity 0.5s";
-    insightText.appendChild(span);
-    setTimeout(() => {
-      span.style.opacity = 1;
-    }, i * 40);
-  });
-
-  setTimeout(() => {
-    finishBtn.style.display = "inline-block";
-  }, message.length * 40 + 400);
+  finishBtn.style.display = "inline-block";
 }
 
 function cellClick(n) {
@@ -556,19 +562,6 @@ function playFinalAudio() {
 
 function showFinalScreen() {
   nextScreen(7);
-
-  const text = document.getElementById("finalText");
-
-  const feedback = document.getElementById("feedbackBlock");
-
-  setTimeout(() => {
-    text.style.opacity = 1;
-  }, 500);
-
-
-  setTimeout(() => {
-    feedback.style.opacity = 1;
-  }, 3000);
 }
 
 const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeZ-PxW0j1VnUCRdhGTbLpXsNTUDNRgS6JHpS7mppd8a9mKSQ/formResponse";
