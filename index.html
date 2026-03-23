@@ -269,10 +269,19 @@ button:active {
 
     <div id="feedbackBlock" style="opacity:0; margin-top:20px;">
       <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
-      <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;"></textarea>
+           <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
 
-      <button onclick="sendFeedback()">Отправить</button>
+     <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
+      <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
     </div>
+  </div>
+</div>
+  
+<div id="thankYouModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:999; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#fff; border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
+    <h3 style="margin-top:0;">Спасибо 💛</h3>
+    <p style="margin-bottom:20px;">Ваш отзыв отправлен и сохранён в таблицу.</p>
+    <button onclick="closeThankYouModal()">Закрыть</button>
   </div>
 </div>
 
@@ -542,10 +551,56 @@ function showFinalScreen() {
   }, 3000);
 }
 
-function sendFeedback() {
-  let text = document.getElementById("feedbackText").value;
-  console.log("Отзыв:", text);
-  alert("Благодарю 💛");
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeZ-PxW0j1VnUCRdhGTbLpXsNTUDNRgS6JHpS7mppd8a9mKSQ/formResponse";
+const GOOGLE_FORM_FEEDBACK_ENTRY = "entry.1283820105";
+
+async function sendFeedback() {
+  const textField = document.getElementById("feedbackText");
+  const submitBtn = document.getElementById("feedbackSubmitBtn");
+  const status = document.getElementById("feedbackStatus");
+  const feedbackText = textField.value.trim();
+
+  if (!feedbackText) {
+    status.textContent = "Пожалуйста, напишите отзыв перед отправкой.";
+    status.style.display = "block";
+    status.style.color = "#b85c00";
+    textField.focus();
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Отправляем...";
+  status.style.display = "none";
+
+  const formData = new FormData();
+  formData.append(GOOGLE_FORM_FEEDBACK_ENTRY, feedbackText);
+
+  try {
+    await fetch(GOOGLE_FORM_ACTION, {
+      method: "POST",
+      mode: "no-cors",
+      body: formData
+    });
+
+    textField.value = "";
+    openThankYouModal();
+  } catch (error) {
+    console.error("Ошибка при отправке отзыва:", error);
+    status.textContent = "Не удалось отправить отзыв. Попробуйте ещё раз.";
+    status.style.display = "block";
+    status.style.color = "#b00020";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Отправить";
+  }
+}
+
+function openThankYouModal() {
+  document.getElementById("thankYouModal").style.display = "flex";
+}
+
+function closeThankYouModal() {
+  document.getElementById("thankYouModal").style.display = "none";
 }
 
 window.onload = () => {
