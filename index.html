@@ -544,25 +544,18 @@ function showFinalScreen() {
 
 function sendFeedback() {
   let text = document.getElementById("feedbackText").value;
+  console.log("Отзыв:", text);
+  alert("Благодарю 💛");
+}
 
-  if (!text.trim()) {
-    alert("Напиши что-нибудь 💛");
-    return;
-  }
+window.onload = () => {
+  const first = document.getElementById("screen1");
+  first.style.display = "block";
 
-  // fetch("https://docs.google.com/forms/d/e/1283820105/formResponse", {
-//   method: "POST",
-//   mode: "no-cors",
-//   headers: {
-//     "Content-Type": "application/x-www-form-urlencoded"
-//   },
-//   body: "entry.1283820105=" + encodeURIComponent(text)
-// });
-
-  //  alert("Благодарю 💛");
-
-   //  document.getElementById("feedbackText").value = "";
-  // }
+  setTimeout(() => {
+    first.classList.add("active");
+  }, 100);
+}
   
 </script>
   
