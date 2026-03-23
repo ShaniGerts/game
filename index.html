@@ -54,7 +54,10 @@ button:hover {
 button:active {
   transform: scale(0.96);
 }
-
+#startBtn {
+  box-shadow: 0 0 20px rgba(100,255,200,0.3);
+}
+  
 .card {
   background: rgba(20, 40, 30, 0.6);
   backdrop-filter: blur(10px);
@@ -197,7 +200,9 @@ button:active {
     <button onclick="playAudio('audio3')">Высшая цель</button><br>
     <button onclick="playAudio('audio5')">Собираемся в путь</button><br>
 
-    <button onclick="nextScreen(5)">Начать путешествие</button>
+   <button id="startBtn" onclick="nextScreen(5)" style="display:none;">
+  Начать путешествие
+</button>
   </div>
 </div>
 
@@ -268,6 +273,8 @@ button:active {
 
 <script>
 
+  let prepCount = 0;
+  
 function nextScreen(n) {
   const current = document.querySelector('.screen.active');
   const next = document.getElementById('screen' + n);
@@ -319,6 +326,30 @@ function playAudio(id) {
 
   prepAudio = audio;
   audio.play();
+
+  // 👉 считаем только подготовительные аудио
+  if (id === 'audio2' || id === 'audio3' || id === 'audio5') {
+
+    audio.onended = () => {
+      prepCount++;
+
+      if (prepCount >= 3) {
+        showStartButton();
+      }
+    };
+  }
+}
+
+  function showStartButton() {
+  const btn = document.getElementById("startBtn");
+
+  btn.style.display = "inline-block";
+  btn.style.opacity = 0;
+  btn.style.transition = "opacity 1s";
+
+  setTimeout(() => {
+    btn.style.opacity = 1;
+  }, 50);
 }
 
 // карта
