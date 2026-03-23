@@ -491,12 +491,6 @@ function cellClick(n) {
   document.querySelectorAll('.zone').forEach(z => z.classList.remove("selected"));
   zone.classList.add("selected");
 
-  // ✅ добавляем "пройдено"
-  if (!visitedSet.has(n)) {
-    visitedSet.add(n);
-    visitedCount++;
-  }
-
   audio.onended = () => {
     document.getElementById("overlay").classList.remove("active");
 
