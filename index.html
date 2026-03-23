@@ -174,6 +174,11 @@ button:active {
 #insightText span {
   display: inline-block;
 }
+
+  #finalText {
+  transform: translateY(20px);
+  transition: 1s;
+}
   
 </style>
 </head>
@@ -263,8 +268,12 @@ button:active {
       Ещё больше историй, смыслов и открытий.
     </p>
 
+    <p style="opacity:0;" id="softPush">
+  Я буду рядом в этом пути 🌿
+</p>
+
     <button onclick="window.open('https://t.me/madreshani')">
-  Пройти полное путешествие
+  Продолжить путь со мной →
 </button>
 
     <div id="feedbackBlock" style="opacity:0; margin-top:20px;">
@@ -337,6 +346,15 @@ function nextScreen(n) {
   setTimeout(() => {
     next.classList.add('active');
   }, 50);
+
+  setTimeout(() => {
+  document.getElementById("softPush").style.opacity = 1;
+}, 2000);
+
+  setTimeout(() => {
+  text.style.opacity = 1;
+  text.style.transform = "translateY(0)";
+}, 500);
 
    // 🔥 ЧИТ ДЛЯ ТЕСТА
 if (n === 3 && cheatMode) {
