@@ -188,7 +188,7 @@ button:active {
     <h2>Добро пожаловать</h2>
     <img src="hello.jpg" class="content-img">
 
-    <button onclick="playAudio('audio1')">▶️ Слушать</button><br>
+    <button onclick="playAudio('audio1')">Слушать</button><br>
     <button onclick="nextScreen(2)">Далее</button>
   </div>
 </div>
@@ -328,6 +328,13 @@ function nextScreen(n) {
   setTimeout(() => {
     next.classList.add('active');
   }, 50);
+}
+
+  // 🔥 ЧИТ ДЛЯ ТЕСТА
+if (n === 3 && cheatMode) {
+  setTimeout(() => {
+    showStartButton();
+  }, 500);
 }
 
 // 🔊 один звук за раз
@@ -528,16 +535,13 @@ function showFinalScreen() {
   nextScreen(7);
 
   const text = document.getElementById("finalText");
-  const btn = document.getElementById("fullBtn");
+
   const feedback = document.getElementById("feedbackBlock");
 
   setTimeout(() => {
     text.style.opacity = 1;
   }, 500);
 
-  setTimeout(() => {
-    btn.style.display = "inline-block";
-  }, 2000);
 
   setTimeout(() => {
     feedback.style.opacity = 1;
