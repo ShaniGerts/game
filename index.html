@@ -24,6 +24,7 @@ body {
   padding: 20px;
   opacity: 0;
   transition: opacity 1.5s ease;
+  position: relative;
 
   min-height: 100vh;
   justify-content: center;
@@ -34,6 +35,26 @@ body {
 .screen.active {
   display: flex;
   opacity: 1;
+}
+
+.tech-next {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 242, 236, 0.2);
+  background: rgba(232, 242, 236, 0.08);
+  color: rgba(232, 242, 236, 0.45);
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+}
+
+.tech-next:hover {
+  background: rgba(232, 242, 236, 0.14);
+  color: rgba(232, 242, 236, 0.7);
 }
 
 button {
@@ -427,6 +448,7 @@ button:active {
     </div>
       </div>
     </div>
+    <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
 
 
 <!-- экран 2 -->
@@ -438,6 +460,7 @@ button:active {
 
     <button onclick="nextScreen(3)">Далее</button>
   </div>
+  <button class="tech-next" onclick="nextScreen(3)" aria-label="Следующий экран">→</button>
 </div>
 
 <!-- экран 3 -->
@@ -474,6 +497,7 @@ button:active {
   Начать путешествие
 </button>
   </div>
+  <button class="tech-next" onclick="nextScreen(5)" aria-label="Следующий экран">→</button>
 </div>
 
 <!-- карта -->
@@ -504,6 +528,7 @@ button:active {
   </button>
 </div>
 
+  <button class="tech-next" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
 </div>
 
 
@@ -526,6 +551,7 @@ button:active {
       </div>
     </div>
   </div>
+  <button class="tech-next" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
 </div>
 
 <!-- экран 7 -->
@@ -902,18 +928,9 @@ window.onload = () => {
   first.style.display = 'block';
   setTimeout(() => first.classList.add('active'), 100);
 
-  const welcomeImages = ['IMG_9829.JPG', 'hello.jpg', 'rules.jpg', 'demo-map.JPG'];
   const welcomeImg = document.getElementById('welcomeImg');
-  let slideIndex = 0;
   if (welcomeImg) {
-    setInterval(() => {
-      slideIndex = (slideIndex + 1) % welcomeImages.length;
-      welcomeImg.classList.add('swap');
-      setTimeout(() => {
-        welcomeImg.src = welcomeImages[slideIndex];
-        welcomeImg.classList.remove('swap');
-      }, 260);
-    }, 3200);
+    welcomeImg.src = 'IMG_9829.JPG';
   }
   const traveler = document.getElementById('traveler');
   if (traveler) {
