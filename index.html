@@ -52,6 +52,17 @@ body {
   padding: 0;
 }
 
+#screen1 .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#screen1 .tech-next {
+  position: static;
+  margin-top: 10px;
+}
+
 .tech-next:hover {
   background: rgba(232, 242, 236, 0.14);
   color: rgba(232, 242, 236, 0.7);
@@ -179,12 +190,38 @@ button:active {
 }
 
 #traveler.walking {
-  animation: walkBounce 0.35s ease-in-out infinite;
+  animation: walkBounce 0.28s ease-in-out infinite;
 }
 
 @keyframes walkBounce {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-3px) scale(1.04); }
+  0%, 100% { transform: translateY(0px) scale(1) rotate(-4deg); }
+  50% { transform: translateY(-10px) scale(1.12) rotate(4deg); }
+}
+
+.map {
+  overflow: hidden;
+}
+
+.paw-print {
+  position: absolute;
+  z-index: 7;
+  font-size: 22px;
+  pointer-events: none;
+  opacity: 0.72;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+  transform: translate(-50%, -50%) scale(0.86);
+  animation: pawFade 1.6s ease-out forwards;
+}
+
+@keyframes pawFade {
+  0% {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) scale(0.86);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.16);
+  }
 }
   
 .zone {
@@ -248,6 +285,14 @@ button:active {
 
 .audio-btn {
   margin-top: 10px;
+}
+
+.audio-btn.pause-btn {
+  width: 44px;
+  min-width: 44px;
+  padding: 10px 0;
+  font-size: 18px;
+  border-radius: 999px;
 }
 
 .audio-btn.done {
@@ -438,6 +483,7 @@ button:active {
     <div class="audio-action" data-audio="audio1">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio1', this, 'screen1')">Слушать</button>
+        <button class="audio-btn pause-btn" onclick="pauseAudio('audio1', 'screen1')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -473,18 +519,21 @@ button:active {
  <div class="audio-action" data-audio="audio2">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio2', this, 'screen3')">Определяем запрос</button>
+        <button class="audio-btn pause-btn" onclick="pauseAudio('audio2', 'screen3')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
     <div class="audio-action" data-audio="audio3">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio3', this, 'screen3')">Высшая цель</button>
+        <button class="audio-btn pause-btn" onclick="pauseAudio('audio3', 'screen3')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
     <div class="audio-action" data-audio="audio5">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio5', this, 'screen3')">Собираемся в путь</button>
+        <button class="audio-btn pause-btn" onclick="pauseAudio('audio5', 'screen3')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -505,6 +554,7 @@ button:active {
     <span class="wave"></span><span class="wave"></span><span class="wave"></span>
     <span class="wave"></span><span class="wave"></span><span class="wave"></span>
   </div>
+  <button class="audio-btn pause-btn" onclick="pauseMapAudio()" aria-label="Пауза локации">⏸</button>
 
   <div class="map">
     <img src="IMG_9728.PNG" class="map-img">
@@ -543,6 +593,7 @@ button:active {
     <div class="audio-action" data-audio="audio4">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playFinalAudio(this, 'screen6')">Слушать</button>
+        <button class="audio-btn pause-btn" onclick="pauseAudio('audio4', 'screen6')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -615,6 +666,7 @@ let prepAudio = null;
 let currentAudio = null;
 const visitedSet = new Set();
 let visitedCount = 0;
+let pawTrailTimer = null;
 
 const locationMeta = {
   1: { title: "Тотем", img: "demo-map.JPG" },
@@ -681,6 +733,14 @@ function stopAllAudio() {
   document.getElementById('mapWave')?.classList.remove('active');
   currentAudio = null;
   prepAudio = null;
+}
+
+function pauseAudio(id, screenId) {
+  const audio = document.getElementById(id);
+  if (!audio || audio.paused) return;
+  audio.pause();
+  stopWaveTracking(id, false);
+  if (screenId) setWaveProgress(screenId, audio.duration ? (audio.currentTime / audio.duration) * 100 : 0, false);
 }
 
 function nextScreen(n) {
@@ -830,6 +890,13 @@ function cellClick(n) {
   };
 }
 
+function pauseMapAudio() {
+  if (!currentAudio || currentAudio.paused) return;
+  currentAudio.pause();
+  document.getElementById('overlay').classList.remove('active');
+  document.getElementById('mapWave')?.classList.remove('active');
+}
+
 document.getElementById('overlay').onclick = function () {
   if (currentAudio) {
     currentAudio.pause();
@@ -955,9 +1022,46 @@ function moveTravelerToZone(zone, instant = false) {
     return;
   }
 
+  const startLeft = traveler.offsetLeft + (traveler.offsetWidth / 2);
+  const startTop = traveler.offsetTop + traveler.offsetHeight - 8;
+  const endLeft = targetLeft + (traveler.offsetWidth / 2);
+  const endTop = targetTop + traveler.offsetHeight - 8;
+  startPawTrail(startLeft, startTop, endLeft, endTop, 1800);
+
   traveler.style.left = `${targetLeft}px`;
   traveler.style.top = `${targetTop}px`;
   setTimeout(() => traveler.classList.remove('walking'), 1800);
+}
+
+function startPawTrail(startLeft, startTop, endLeft, endTop, duration) {
+  const map = document.querySelector('.map');
+  if (!map) return;
+  if (pawTrailTimer) clearInterval(pawTrailTimer);
+
+  const started = performance.now();
+  let step = 0;
+  pawTrailTimer = setInterval(() => {
+    const elapsed = performance.now() - started;
+    const progress = Math.min(elapsed / duration, 1);
+    const x = startLeft + (endLeft - startLeft) * progress;
+    const y = startTop + (endTop - startTop) * progress;
+    createPawPrint(map, x + (step % 2 === 0 ? -8 : 8), y);
+    step++;
+    if (progress >= 1) {
+      clearInterval(pawTrailTimer);
+      pawTrailTimer = null;
+    }
+  }, 210);
+}
+
+function createPawPrint(container, x, y) {
+  const paw = document.createElement('span');
+  paw.className = 'paw-print';
+  paw.textContent = '🐾';
+  paw.style.left = `${x}px`;
+  paw.style.top = `${y}px`;
+  container.appendChild(paw);
+  setTimeout(() => paw.remove(), 1650);
 }
 
 </script>
