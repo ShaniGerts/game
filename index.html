@@ -58,6 +58,11 @@ body {
   align-items: center;
 }
 
+#screen1 .audio-action {
+  display: flex;
+  justify-content: center;
+}
+
 .tech-next:hover {
   background: rgba(232, 242, 236, 0.14);
   color: rgba(232, 242, 236, 0.7);
@@ -291,6 +296,15 @@ button:active {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1;
   border-radius: 999px;
+  background: transparent;
+  border: none;
+  color: #d5eee2;
+  box-shadow: none;
+}
+
+.audio-btn.pause-btn:hover,
+.audio-btn.pause-btn:active {
+  background: transparent;
 }
 
 .screen-audio-controls {
@@ -341,15 +355,17 @@ button:active {
 
 .wave-progress .wave {
   flex: 1;
-  min-width: 4px;
-  height: 8px;
+  min-width: 2px;
+  max-width: 4px;
+  height: 6px;
   border-radius: 999px;
-  background: rgba(77, 111, 96, 0.95);
+  background: linear-gradient(180deg, rgba(117, 186, 157, 0.95), rgba(54, 95, 80, 0.72));
   transform-origin: center bottom;
+  transition: transform 0.24s ease, opacity 0.24s ease, background 0.24s ease;
 }
 
 .wave-progress .wave.listened {
-  background: rgba(186, 255, 222, 0.95);
+  background: linear-gradient(180deg, rgba(210, 255, 233, 0.98), rgba(122, 191, 160, 0.86));
 }
 
 .screen-audio-bar {
@@ -359,7 +375,7 @@ button:active {
 }
 
 .screen-audio-bar .wave-progress {
-  border: 1px solid rgba(179, 233, 206, 0.18);
+  border: none;
   border-radius: 999px;
   padding: 6px 8px;
   background: rgba(10, 28, 20, 0.22);
@@ -377,10 +393,10 @@ button:active {
 }
 
 .wave-row .wave {
-  width: 6px;
-  height: 8px;
+  width: 3px;
+  height: 7px;
   border-radius: 999px;
-  background: rgba(100, 147, 124, 0.8);
+  background: linear-gradient(180deg, rgba(137, 201, 173, 0.95), rgba(72, 120, 100, 0.8));
 }
 
 .wave-progress.active .wave,
@@ -400,8 +416,8 @@ button:active {
 .wave-row.active .wave:nth-child(6) { animation-delay: 0.7s; }
 
 @keyframes wavePulse {
-  0%, 100% { transform: scaleY(0.4); opacity: 0.45; }
-  50% { transform: scaleY(1.4); opacity: 1; }
+  0%, 100% { transform: scaleY(0.35) translateY(1px); opacity: 0.42; }
+  50% { transform: scaleY(1.65) translateY(-1px); opacity: 1; }
 }
 
 .map-note {
@@ -508,8 +524,8 @@ button:active {
       </div>
     </div>
     <button onclick="nextScreen(2)">Далее</button>
-    <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
   </div>
+  <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
 </div>
 
 
@@ -973,7 +989,7 @@ async function sendFeedback() {
   const feedbackText = textField.value.trim();
 
   if (!feedbackText) {
-    status.textContent = 'Пожалуста, напишите отзыв перед отправкой.';
+    status.textContent = 'Пожалуйста, напишите отзыв перед отправкой.';
     status.style.display = 'block';
     status.style.color = '#b85c00';
     textField.focus();
