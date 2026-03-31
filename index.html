@@ -148,7 +148,109 @@ button:active {
   background:black;
   z-index:1000;
 }
+.audio-ui {
+  width: 100%;
+  max-width: 340px;
+  margin: 12px auto 8px;
+}
 
+.audio-ui p {
+  margin: 6px 0;
+  font-size: 13px;
+  color: #d2e6dc;
+}
+
+.audio-progress {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(225, 244, 235, 0.18);
+}
+
+.audio-progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #7adbb3, #b8ffd9);
+  transition: width 0.15s linear;
+}
+
+.wave-row {
+  width: 100%;
+  max-width: 220px;
+  margin: 10px auto 4px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+  height: 28px;
+}
+
+.wave {
+  width: 6px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(167, 238, 205, 0.9);
+  animation: wavePulse 1.2s ease-in-out infinite;
+}
+
+.wave:nth-child(2) { animation-delay: 0.1s; }
+.wave:nth-child(3) { animation-delay: 0.2s; }
+.wave:nth-child(4) { animation-delay: 0.35s; }
+.wave:nth-child(5) { animation-delay: 0.5s; }
+.wave:nth-child(6) { animation-delay: 0.7s; }
+
+@keyframes wavePulse {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.45; }
+  50% { transform: scaleY(1.4); opacity: 1; }
+}
+
+.map-note {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #c7ded2;
+}
+
+.location-preview {
+  margin-top: 14px;
+  padding: 12px;
+  width: 100%;
+  max-width: 340px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(220, 245, 233, 0.12);
+  display: none;
+}
+
+.location-preview img {
+  width: 100%;
+  border-radius: 12px;
+  max-height: 220px;
+  object-fit: cover;
+}
+.map-note {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #c7ded2;
+}
+
+.location-preview {
+  margin-top: 14px;
+  padding: 12px;
+  width: 100%;
+  max-width: 340px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(220, 245, 233, 0.12);
+  display: none;
+}
+
+.location-preview img {
+  width: 100%;
+  border-radius: 12px;
+  max-height: 220px;
+  object-fit: cover;
+}
   .zone.visited {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 20px;
@@ -218,7 +320,15 @@ button:active {
 <div class="screen" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
-    <img src="IMG_9829.JPG" class="content-img">
+ <img src="IMG_9829.JPG" id="welcomeImg" class="content-img breathing">
+
+    <div class="audio-ui">
+      <p id="audioLabel">Аудио пока не запущено</p>
+      <div class="audio-progress">
+        <div id="audioProgressFill" class="audio-progress-fill"></div>
+      </div>
+    </div>
+
 
     <button onclick="playAudio('audio1')">Слушать</button><br>
     <button onclick="nextScreen(2)">Далее</button>
@@ -241,7 +351,12 @@ button:active {
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
-
+ <div class="wave-row" aria-hidden="true">
+      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    </div>
+    <p style="margin:8px 0 12px; color:#c7ded2; font-size:14px;">Волны двигаются по кругу — просто дышите и слушайте.</p>
+    
     <button onclick="playAudio('audio2')">Определяем запрос</button><br>
     <button onclick="playAudio('audio3')">Высшая цель</button><br>
     <button onclick="playAudio('audio5')">Собираемся в путь</button><br>
@@ -256,6 +371,7 @@ button:active {
 <div class="screen" id="screen5">
    <button class="back-btn" onclick="goBack()">←</button>
   <h2>Пройди поочередно каждую из четырех локаций</h2>
+    <p class="map-note">После нажатия откроется карточка локации и начнётся её аудио.</p>
 
   <div class="map">
     <img src="IMG_9728.PNG" class="map-img">
@@ -273,6 +389,11 @@ button:active {
     Завершить
   </button>
 </div>
+<div class="location-preview" id="locationPreview">
+  <p id="locationTitle" style="margin-top:0;"></p>
+  <img id="locationImage" src="IMG_9728.PNG" alt="Локация">
+</div>
+  
 </div>
 
 <!-- экран 6 -->
@@ -335,6 +456,24 @@ button:active {
 let cheatMode = true;
   let historyStack = [];
   let prepCount = 0;
+  function updateAudioProgress(audio, label) {
+  const bar = document.getElementById("audioProgressFill");
+  const text = document.getElementById("audioLabel");
+  if (!bar || !text) return;
+
+  text.textContent = label || "Идёт воспроизведение...";
+  clearInterval(audioProgressTimer);
+  audioProgressTimer = setInterval(() => {
+    const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+    bar.style.width = `${Math.min(progress, 100)}%`;
+  }, 100);
+
+  audio.onended = () => {
+    clearInterval(audioProgressTimer);
+    bar.style.width = "100%";
+    text.textContent = "Прослушивание завершено";
+  };
+}
   
 function nextScreen(n) {
   const current = document.querySelector('.screen.active');
@@ -439,12 +578,15 @@ function playAudio(id) {
 
   prepAudio = audio;
   audio.play();
+   updateAudioProgress(audio, `Сейчас звучит: ${audio.id}`);
 
   // 👉 считаем только подготовительные аудио
   if (id === 'audio2' || id === 'audio3' || id === 'audio5') {
 
     audio.onended = () => {
       prepCount++;
+       const bar = document.getElementById("audioProgressFill");
+      if (bar) bar.style.width = "100%";
 
      if (prepCount >= 3 || cheatMode) {
   showStartButton();
@@ -538,7 +680,19 @@ function cellClick(n) {
     }
   };
 }
+function showLocationPreview(n) {
+  const preview = document.getElementById("locationPreview");
+  const title = document.getElementById("locationTitle");
+  const img = document.getElementById("locationImage");
+  const data = locationMeta[n];
+  if (!preview || !title || !img || !data) return;
 
+  title.textContent = `Локация: ${data.title}`;
+  img.src = data.img;
+  preview.style.display = "block";
+}
+
+  
 // клик по затемнению
 document.getElementById("overlay").onclick = function() {
   if (currentAudio) {
