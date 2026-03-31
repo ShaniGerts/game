@@ -65,6 +65,9 @@ button:active {
   border-radius: 20px;
   margin-top: 20px;
 }
+.card h2 {
+  margin-bottom: 10px;
+}
 
   .back-btn {
   position: absolute;
@@ -84,8 +87,44 @@ button:active {
   margin: 15px auto;
   display: block;
   border-radius: 15px;
+   transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
+}
+.content-img.breathing {
+  animation: breathe 4s ease-in-out infinite;
 }
 
+.content-img.swap {
+  opacity: 0.25;
+  filter: brightness(0.8);
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.extra-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 16px;
+}
+
+.extra-gallery img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  opacity: 0.88;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.extra-gallery img:hover {
+  transform: scale(1.04);
+  opacity: 1;
+}
 .map {
   position: relative;
   width: 100%;
@@ -119,6 +158,8 @@ button:active {
 .zone.selected {
   background: rgba(255,255,255,0.15);
   border-radius: 20px;
+    box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
+
 }
 
 .overlay {
@@ -148,31 +189,55 @@ button:active {
   background:black;
   z-index:1000;
 }
-.audio-ui {
+.audio-action {
   width: 100%;
   max-width: 340px;
-  margin: 12px auto 8px;
+  margin: 10px auto 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.audio-ui p {
-  margin: 6px 0;
-  font-size: 13px;
-  color: #d2e6dc;
+.audio-btn {
+  margin-top: 0;
 }
 
-.audio-progress {
-  width: 100%;
+.audio-btn.done {
+  opacity: 0.55;
+}
+
+.done-check {
+  color: #9bf1c6;
+  font-size: 20px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.done-check.visible {
+  opacity: 1;
+}
+
+.wave-progress {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  padding: 0 2px;
+}
+
+.wave-progress .wave {
+  flex: 1;
+  min-width: 4px;
   height: 8px;
   border-radius: 999px;
-  overflow: hidden;
-  background: rgba(225, 244, 235, 0.18);
+  background: rgba(77, 111, 96, 0.95);
+  transform-origin: center bottom;
 }
 
-.audio-progress-fill {
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, #7adbb3, #b8ffd9);
-  transition: width 0.15s linear;
+.wave-progress .wave.listened {
+  background: rgba(186, 255, 222, 0.95);
 }
 
 .wave-row {
@@ -186,19 +251,28 @@ button:active {
   height: 28px;
 }
 
-.wave {
+.wave-row .wave {
   width: 6px;
   height: 8px;
   border-radius: 999px;
-  background: rgba(167, 238, 205, 0.9);
+  background: rgba(100, 147, 124, 0.8);
+}
+
+.wave-progress.active .wave,
+.wave-row.active .wave {
   animation: wavePulse 1.2s ease-in-out infinite;
 }
 
-.wave:nth-child(2) { animation-delay: 0.1s; }
-.wave:nth-child(3) { animation-delay: 0.2s; }
-.wave:nth-child(4) { animation-delay: 0.35s; }
-.wave:nth-child(5) { animation-delay: 0.5s; }
-.wave:nth-child(6) { animation-delay: 0.7s; }
+.wave-progress.active .wave:nth-child(2),
+.wave-row.active .wave:nth-child(2) { animation-delay: 0.1s; }
+.wave-progress.active .wave:nth-child(3),
+.wave-row.active .wave:nth-child(3) { animation-delay: 0.2s; }
+.wave-progress.active .wave:nth-child(4),
+.wave-row.active .wave:nth-child(4) { animation-delay: 0.35s; }
+.wave-progress.active .wave:nth-child(5),
+.wave-row.active .wave:nth-child(5) { animation-delay: 0.5s; }
+.wave-progress.active .wave:nth-child(6),
+.wave-row.active .wave:nth-child(6) { animation-delay: 0.7s; }
 
 @keyframes wavePulse {
   0%, 100% { transform: scaleY(0.4); opacity: 0.45; }
@@ -211,46 +285,17 @@ button:active {
   color: #c7ded2;
 }
 
-.location-preview {
-  margin-top: 14px;
-  padding: 12px;
-  width: 100%;
-  max-width: 340px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(220, 245, 233, 0.12);
-  display: none;
+#motivationModal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(6,18,14,0.58);
+  z-index:1001;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-.location-preview img {
-  width: 100%;
-  border-radius: 12px;
-  max-height: 220px;
-  object-fit: cover;
-}
-.map-note {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #c7ded2;
-}
-
-.location-preview {
-  margin-top: 14px;
-  padding: 12px;
-  width: 100%;
-  max-width: 340px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(220, 245, 233, 0.12);
-  display: none;
-}
-
-.location-preview img {
-  width: 100%;
-  border-radius: 12px;
-  max-height: 220px;
-  object-fit: cover;
-}
   .zone.visited {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 20px;
@@ -322,10 +367,19 @@ button:active {
     <h2>Добро пожаловать</h2>
  <img src="IMG_9829.JPG" id="welcomeImg" class="content-img breathing">
 
-    <div class="audio-ui">
-      <p id="audioLabel">Аудио пока не запущено</p>
-      <div class="audio-progress">
-        <div id="audioProgressFill" class="audio-progress-fill"></div>
+    <div class="audio-action" data-audio="audio1">
+      <button class="audio-btn" onclick="playAudio('audio1', this)">Слушать</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <button onclick="nextScreen(2)">Далее</button>
+    <div class="extra-gallery">
+      <img src="hello.jpg" alt="Вдохновляющий кадр">
+      <img src="demo-map.JPG" alt="Карта путешествия">
+    </div>
       </div>
     </div>
 
@@ -351,16 +405,31 @@ button:active {
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
- <div class="wave-row" aria-hidden="true">
-      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
-      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+ <div class="audio-action" data-audio="audio2">
+      <button class="audio-btn" onclick="playAudio('audio2', this)">Определяем запрос</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
     </div>
-    <p style="margin:8px 0 12px; color:#c7ded2; font-size:14px;">Волны двигаются по кругу — просто дышите и слушайте.</p>
+    <div class="audio-action" data-audio="audio3">
+      <button class="audio-btn" onclick="playAudio('audio3', this)">Высшая цель</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <div class="audio-action" data-audio="audio5">
+      <button class="audio-btn" onclick="playAudio('audio5', this)">Собираемся в путь</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
     
-    <button onclick="playAudio('audio2')">Определяем запрос</button><br>
-    <button onclick="playAudio('audio3')">Высшая цель</button><br>
-    <button onclick="playAudio('audio5')">Собираемся в путь</button><br>
-
    <button id="startBtn" onclick="nextScreen(5)" style="display:none;">
   Начать путешествие
 </button>
@@ -371,7 +440,11 @@ button:active {
 <div class="screen" id="screen5">
    <button class="back-btn" onclick="goBack()">←</button>
   <h2>Пройди поочередно каждую из четырех локаций</h2>
-    <p class="map-note">После нажатия откроется карточка локации и начнётся её аудио.</p>
+   <p class="map-note">После нажатия запускается аудио локации.</p>
+  <div class="wave-row" id="mapWave">
+    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+  </div>
 
   <div class="map">
     <img src="IMG_9728.PNG" class="map-img">
@@ -389,19 +462,24 @@ button:active {
     Завершить
   </button>
 </div>
-<div class="location-preview" id="locationPreview">
-  <p id="locationTitle" style="margin-top:0;"></p>
-  <img id="locationImage" src="IMG_9728.PNG" alt="Локация">
+
 </div>
-  
-</div>
+
 
 <!-- экран 6 -->
 <div class="screen" id="screen6">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Заключение</h2>
-    <button onclick="playFinalAudio()">Слушать</button>
+   <img src="rules.jpg" class="content-img" alt="Завершение путешествия">
+    <div class="audio-action" data-audio="audio4">
+      <button class="audio-btn" onclick="playFinalAudio(this)">Слушать</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
   </div>
 </div>
 
@@ -431,6 +509,501 @@ button:active {
     </div>
   </div>
 </div>
+
+  <div id="motivationModal">
+  <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
+    <h3 style="margin-top:0; margin-bottom:10px; color:#2e5e4e;">Ты отлично идёшь 🌿</h3>
+    <p style="margin:0 0 18px; color:#35594d;">Сделай короткую паузу и зафиксируй инсайт: в заметки или голосом.</p>
+    <button onclick="closeMotivationModal()">Продолжить</button>
+  </div>
+</div>
+  
+<div id="thankYouModal" style="display:none; position:fixed; inset:0; background:rgba(6,18,14,0.58); z-index:999; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
+    <h3 style="margin-top:0; margin-bottom:12px; color:#2e5e4e; font-size:40px; line-height:1.1;">Спасибо, что поделились своей душой 💚</h3>
+    <p style="margin:0 0 20px; color:#35594d; font-size:28px; line-height:1.45;">Это очень ценно для меня.</p>
+    <button onclick="closeThankYouModal()">Закрыть</button>
+  </div>
+</div>
+
+<!-- аудио -->
+<audio id="audio1" src="hello.mp3" preload="none"></audio>
+<audio id="audio2" src="mission2.m4a" preload="none"></audio>
+<audio id="audio3" src="mission3.m4a" preload="none"></audio>
+<audio id="audio4" src="end.m4a" preload="none"></audio>
+<audio id="audio5" src="backpack2.m4a" preload="none"></audio>
+
+<audio id="cell1" src="tothem.m4a" preload="none"></audio>
+<audio id="cell2" src="sweethome.m4a" preload="none"></audio>
+<audio id="cell3" src="stonev2.m4a" preload="none"></audio>
+<audio id="cell4" src="mountain2.m4a" preload="none"></audio>
+
+<script>
+let historyStack = [];
+  let prepCount = 0;
+  @@ -44,133 +44,283 @@ button {
+  border: none;
+  background: #2e5e4e;
+  color: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #3f7d68;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+#startBtn {
+  box-shadow: 0 0 20px rgba(100,255,200,0.3);
+}
+  
+.card {
+  background: rgba(20, 40, 30, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+}
+
+  .back-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.card {
+  position: relative;
+}
+.content-img {
+  width: 100%;
+  max-width: 340px;
+  margin: 15px auto;
+  display: block;
+  border-radius: 15px;
+  transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
+}
+
+.content-img.breathing {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.content-img.swap {
+  opacity: 0.25;
+  filter: brightness(0.8);
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.extra-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 16px;
+}
+
+.extra-gallery img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  opacity: 0.88;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.extra-gallery img:hover {
+  transform: scale(1.04);
+  opacity: 1;
+}
+
+.map {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 30px auto;
+  border-radius: 12px;
+}
+  
+.map-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-img:hover {
+  filter: brightness(1.05);
+}
+  
+.zone {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  z-index: 5;
+}
+
+.zone1 { top: 0; left: 0; }
+.zone2 { top: 0; right: 0; }
+.zone3 { bottom: 0; left: 0; }
+.zone4 { bottom: 0; right: 0; }
+
+.zone.selected {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 25, 20, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zoomed {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:black;
+  z-index:1000;
+}
+
+.audio-action {
+  width: 100%;
+  max-width: 340px;
+  margin: 10px auto 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.audio-btn {
+  margin-top: 0;
+}
+
+.audio-btn.done {
+  opacity: 0.55;
+}
+
+.done-check {
+  color: #9bf1c6;
+  font-size: 20px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.done-check.visible {
+  opacity: 1;
+}
+
+.wave-progress {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  padding: 0 2px;
+}
+
+.wave-progress .wave {
+  flex: 1;
+  min-width: 4px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(77, 111, 96, 0.95);
+  transform-origin: center bottom;
+}
+
+.wave-progress .wave.listened {
+  background: rgba(186, 255, 222, 0.95);
+}
+
+.wave-row {
+  width: 100%;
+  max-width: 220px;
+  margin: 10px auto 4px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+  height: 28px;
+}
+
+.wave-row .wave {
+  width: 6px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(100, 147, 124, 0.8);
+}
+
+.wave-progress.active .wave,
+.wave-row.active .wave {
+  animation: wavePulse 1.2s ease-in-out infinite;
+}
+
+.wave-progress.active .wave:nth-child(2),
+.wave-row.active .wave:nth-child(2) { animation-delay: 0.1s; }
+.wave-progress.active .wave:nth-child(3),
+.wave-row.active .wave:nth-child(3) { animation-delay: 0.2s; }
+.wave-progress.active .wave:nth-child(4),
+.wave-row.active .wave:nth-child(4) { animation-delay: 0.35s; }
+.wave-progress.active .wave:nth-child(5),
+.wave-row.active .wave:nth-child(5) { animation-delay: 0.5s; }
+.wave-progress.active .wave:nth-child(6),
+.wave-row.active .wave:nth-child(6) { animation-delay: 0.7s; }
+
+@keyframes wavePulse {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.45; }
+  50% { transform: scaleY(1.4); opacity: 1; }
+}
+
+.map-note {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #c7ded2;
+}
+
+#motivationModal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(6,18,14,0.58);
+  z-index:1001;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+  .zone.visited {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+  transition: 0.5s;
+}
+
+  .fade-letter {
+  opacity: 0;
+  display: inline-block;
+  animation: fadeLetter 0.6s forwards;
+}
+
+@keyframes fadeLetter {
+  to {
+    opacity: 1;
+  }
+}
+  #insightBlock {
+  opacity: 0;
+  transition: opacity 0.6s;
+  margin-top: 10px;
+}
+
+#insightText {
+  word-break: normal;
+@@ -196,392 +346,521 @@ button:active {
+  background: rgba(243, 248, 244, 0.95);
+  color: #173127;
+  border: 1px solid rgba(46, 94, 78, 0.28);
+}
+
+.final-section textarea::placeholder {
+  color: #5f7b70;
+}
+
+  #finalText {
+  transform: translateY(20px);
+  transition: 1s;
+}
+  
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- экран 1 -->
+<div class="screen" id="screen1">
+  <div class="card">
+    <h2>Добро пожаловать</h2>
+    <img src="IMG_9829.JPG" class="content-img">
+
+    <button onclick="playAudio('audio1')">Слушать</button><br>
+    <img src="IMG_9829.JPG" id="welcomeImg" class="content-img breathing">
+
+    <div class="audio-action" data-audio="audio1">
+      <button class="audio-btn" onclick="playAudio('audio1', this)">Слушать</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <button onclick="nextScreen(2)">Далее</button>
+    <div class="extra-gallery">
+      <img src="hello.jpg" alt="Вдохновляющий кадр">
+      <img src="demo-map.JPG" alt="Карта путешествия">
+    </div>
+  </div>
+</div>
+
+<!-- экран 2 -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Правила</h2>
+    <img src="rules1.png" id="rulesImg" class="content-img">
+
+    <button onclick="nextScreen(3)">Далее</button>
+  </div>
+</div>
+
+<!-- экран 3 -->
+<div class="screen" id="screen3">
+  <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Подготовка</h2>
+
+    <button onclick="playAudio('audio2')">Определяем запрос</button><br>
+    <button onclick="playAudio('audio3')">Высшая цель</button><br>
+    <button onclick="playAudio('audio5')">Собираемся в путь</button><br>
+    <div class="audio-action" data-audio="audio2">
+      <button class="audio-btn" onclick="playAudio('audio2', this)">Определяем запрос</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <div class="audio-action" data-audio="audio3">
+      <button class="audio-btn" onclick="playAudio('audio3', this)">Высшая цель</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <div class="audio-action" data-audio="audio5">
+      <button class="audio-btn" onclick="playAudio('audio5', this)">Собираемся в путь</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+
+   <button id="startBtn" onclick="nextScreen(5)" style="display:none;">
+  Начать путешествие
+</button>
+  </div>
+</div>
+
+<!-- карта -->
+<div class="screen" id="screen5">
+   <button class="back-btn" onclick="goBack()">←</button>
+  <h2>Пройди поочередно каждую из четырех локаций</h2>
+  <p class="map-note">После нажатия запускается аудио локации.</p>
+  <div class="wave-row" id="mapWave">
+    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+  </div>
+
+  <div class="map">
+    <img src="IMG_9728.PNG" class="map-img">
+
+ <div class="zone zone1" onclick="cellClick(1)"></div>
+<div class="zone zone2" onclick="cellClick(2)"></div>
+<div class="zone zone3" onclick="cellClick(3)"></div>
+<div class="zone zone4" onclick="cellClick(4)"></div>
+  </div>
+  
+<div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
+  <p id="insightText" style="min-height:40px;"></p>
+
+  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">
+    Завершить
+  </button>
+</div>
+
+</div>
+
+<!-- экран 6 -->
+<div class="screen" id="screen6">
+  <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Заключение</h2>
+    <button onclick="playFinalAudio()">Слушать</button>
+    <img src="rules.jpg" class="content-img" alt="Завершение путешествия">
+    <div class="audio-action" data-audio="audio4">
+      <button class="audio-btn" onclick="playFinalAudio(this)">Слушать</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+  </div>
+</div>
+
+<!-- экран 7 -->
+<div class="screen" id="screen7">
+  <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Ваше сегодняшнее путешествие подошло к концу 🌿</h2>
+
+    <div class="final-section">
+      <p id="finalText">
+        Но это только начало. Готовы ли вы отправиться в более глубокое путешествие?
+        Ещё больше историй, смыслов и открытий.
+        Я буду рядом в этом пути: поддержу и все объясню.
+      </p>
+
+    <button onclick="window.open('https://t.me/madreshani')">
+  Продолжить путь со мной →
+</button>
+
+     <div id="feedbackBlock" class="final-section">
+      <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
+           <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
+
+     <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
+      <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
+    </div>
+  </div>
+</div>
+
+<div id="motivationModal">
+  <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
+    <h3 style="margin-top:0; margin-bottom:10px; color:#2e5e4e;">Ты отлично идёшь 🌿</h3>
+    <p style="margin:0 0 18px; color:#35594d;">Сделай короткую паузу и зафиксируй инсайт: в заметки или голосом.</p>
+    <button onclick="closeMotivationModal()">Продолжить</button>
+  </div>
+</div>
   
 <div id="thankYouModal" style="display:none; position:fixed; inset:0; background:rgba(6,18,14,0.58); z-index:999; align-items:center; justify-content:center; padding:20px;">
   <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
@@ -455,24 +1028,54 @@ button:active {
 <script>
 let cheatMode = true;
   let historyStack = [];
+let historyStack = [];
   let prepCount = 0;
-  function updateAudioProgress(audio, label) {
-  const bar = document.getElementById("audioProgressFill");
-  const text = document.getElementById("audioLabel");
-  if (!bar || !text) return;
+  let prepDoneSet = new Set();
+  let waveTimers = new Map();
 
-  text.textContent = label || "Идёт воспроизведение...";
-  clearInterval(audioProgressTimer);
-  audioProgressTimer = setInterval(() => {
+function getAudioAction(audioId) {
+  return document.querySelector(`.audio-action[data-audio="${audioId}"]`);
+}
+
+function setWaveProgress(audioId, progress = 0, playing = false) {
+  const action = getAudioAction(audioId);
+  if (!action) return;
+  const waveBox = action.querySelector(".wave-progress");
+  if (!waveBox) return;
+  const waves = waveBox.querySelectorAll(".wave");
+  const listenedCount = Math.round((progress / 100) * waves.length);
+
+  waves.forEach((w, i) => {
+    w.classList.toggle("listened", i < listenedCount);
+  });
+  waveBox.classList.toggle("active", playing);
+}
+
+function startWaveTracking(audio, audioId) {
+  stopWaveTracking(audioId);
+  setWaveProgress(audioId, 0, true);
+
+  const timer = setInterval(() => {
     const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-    bar.style.width = `${Math.min(progress, 100)}%`;
-  }, 100);
+    setWaveProgress(audioId, progress, !audio.paused);
+  }, 120);
+  waveTimers.set(audioId, timer);
+}
 
-  audio.onended = () => {
-    clearInterval(audioProgressTimer);
-    bar.style.width = "100%";
-    text.textContent = "Прослушивание завершено";
-  };
+function stopWaveTracking(audioId, fill = false) {
+  if (waveTimers.has(audioId)) {
+    clearInterval(waveTimers.get(audioId));
+    waveTimers.delete(audioId);
+  }
+  setWaveProgress(audioId, fill ? 100 : 0, false);
+}
+
+function markAudioDone(audioId, btnEl) {
+  const action = getAudioAction(audioId);
+  const check = action?.querySelector(".done-check");
+  const button = btnEl || action?.querySelector(".audio-btn");
+  if (check) check.classList.add("visible");
+  if (button) button.classList.add("done");
 }
   
 function nextScreen(n) {
@@ -490,6 +1093,7 @@ function nextScreen(n) {
   document.querySelectorAll("audio").forEach(a => {
     a.pause();
     a.currentTime = 0;
+        stopWaveTracking(a.id, false);
   });
 
   currentAudio = null;
@@ -512,20 +1116,21 @@ function nextScreen(n) {
   }, 50);
 
   setTimeout(() => {
-  document.getElementById("softPush").style.opacity = 1;
+ const softPush = document.getElementById("softPush");
+  if (softPush) softPush.style.opacity = 1;
 }, 2000);
 
   setTimeout(() => {
-  text.style.opacity = 1;
-  text.style.transform = "translateY(0)";
+  const text = document.getElementById("finalText");
+  if (text) {
+    text.style.opacity = 1;
+    text.style.transform = "translateY(0)";
+  }
 }, 500);
 
-   // 🔥 ЧИТ ДЛЯ ТЕСТА
-if (n === 3 && cheatMode) {
-  setTimeout(() => {
-    showStartButton();
-  }, 500);
-}
+  if (n === 5) {
+    document.getElementById("mapWave")?.classList.remove("active");
+  }
 }
 
 // 🔊 один звук за раз
@@ -563,34 +1168,684 @@ let prepAudio = null;
   }, 50);
 }
 
-function playAudio(id) {
+function playAudio(id, btn) {
   let audio = document.getElementById(id);
 
   if (prepAudio && prepAudio !== audio) {
+    @@ -44,133 +44,283 @@ button {
+  border: none;
+  background: #2e5e4e;
+  color: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #3f7d68;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+#startBtn {
+  box-shadow: 0 0 20px rgba(100,255,200,0.3);
+}
+  
+.card {
+  background: rgba(20, 40, 30, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+}
+
+  .back-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.card {
+  position: relative;
+}
+.content-img {
+  width: 100%;
+  max-width: 340px;
+  margin: 15px auto;
+  display: block;
+  border-radius: 15px;
+  transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
+}
+
+.content-img.breathing {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.content-img.swap {
+  opacity: 0.25;
+  filter: brightness(0.8);
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.extra-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 16px;
+}
+
+.extra-gallery img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  opacity: 0.88;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.extra-gallery img:hover {
+  transform: scale(1.04);
+  opacity: 1;
+}
+
+.map {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 30px auto;
+  border-radius: 12px;
+}
+  
+.map-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-img:hover {
+  filter: brightness(1.05);
+}
+  
+.zone {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  z-index: 5;
+}
+
+.zone1 { top: 0; left: 0; }
+.zone2 { top: 0; right: 0; }
+.zone3 { bottom: 0; left: 0; }
+.zone4 { bottom: 0; right: 0; }
+
+.zone.selected {
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 25, 20, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zoomed {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:black;
+  z-index:1000;
+}
+
+.audio-action {
+  width: 100%;
+  max-width: 340px;
+  margin: 10px auto 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.audio-btn {
+  margin-top: 0;
+}
+
+.audio-btn.done {
+  opacity: 0.55;
+}
+
+.done-check {
+  color: #9bf1c6;
+  font-size: 20px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.done-check.visible {
+  opacity: 1;
+}
+
+.wave-progress {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  padding: 0 2px;
+}
+
+.wave-progress .wave {
+  flex: 1;
+  min-width: 4px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(77, 111, 96, 0.95);
+  transform-origin: center bottom;
+}
+
+.wave-progress .wave.listened {
+  background: rgba(186, 255, 222, 0.95);
+}
+
+.wave-row {
+  width: 100%;
+  max-width: 220px;
+  margin: 10px auto 4px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+  height: 28px;
+}
+
+.wave-row .wave {
+  width: 6px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(100, 147, 124, 0.8);
+}
+
+.wave-progress.active .wave,
+.wave-row.active .wave {
+  animation: wavePulse 1.2s ease-in-out infinite;
+}
+
+.wave-progress.active .wave:nth-child(2),
+.wave-row.active .wave:nth-child(2) { animation-delay: 0.1s; }
+.wave-progress.active .wave:nth-child(3),
+.wave-row.active .wave:nth-child(3) { animation-delay: 0.2s; }
+.wave-progress.active .wave:nth-child(4),
+.wave-row.active .wave:nth-child(4) { animation-delay: 0.35s; }
+.wave-progress.active .wave:nth-child(5),
+.wave-row.active .wave:nth-child(5) { animation-delay: 0.5s; }
+.wave-progress.active .wave:nth-child(6),
+.wave-row.active .wave:nth-child(6) { animation-delay: 0.7s; }
+
+@keyframes wavePulse {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.45; }
+  50% { transform: scaleY(1.4); opacity: 1; }
+}
+
+.map-note {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #c7ded2;
+}
+
+#motivationModal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(6,18,14,0.58);
+  z-index:1001;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+  .zone.visited {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+  transition: 0.5s;
+}
+
+  .fade-letter {
+  opacity: 0;
+  display: inline-block;
+  animation: fadeLetter 0.6s forwards;
+}
+
+@keyframes fadeLetter {
+  to {
+    opacity: 1;
+  }
+}
+  #insightBlock {
+  opacity: 0;
+  transition: opacity 0.6s;
+  margin-top: 10px;
+}
+
+#insightText {
+  word-break: normal;
+@@ -196,392 +346,521 @@ button:active {
+  background: rgba(243, 248, 244, 0.95);
+  color: #173127;
+  border: 1px solid rgba(46, 94, 78, 0.28);
+}
+
+.final-section textarea::placeholder {
+  color: #5f7b70;
+}
+
+  #finalText {
+  transform: translateY(20px);
+  transition: 1s;
+}
+  
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- экран 1 -->
+<div class="screen" id="screen1">
+  <div class="card">
+    <h2>Добро пожаловать</h2>
+    <img src="IMG_9829.JPG" class="content-img">
+
+    <button onclick="playAudio('audio1')">Слушать</button><br>
+    <img src="IMG_9829.JPG" id="welcomeImg" class="content-img breathing">
+
+    <div class="audio-action" data-audio="audio1">
+      <button class="audio-btn" onclick="playAudio('audio1', this)">Слушать</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <button onclick="nextScreen(2)">Далее</button>
+    <div class="extra-gallery">
+      <img src="hello.jpg" alt="Вдохновляющий кадр">
+      <img src="demo-map.JPG" alt="Карта путешествия">
+    </div>
+  </div>
+</div>
+
+<!-- экран 2 -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Правила</h2>
+    <img src="rules1.png" id="rulesImg" class="content-img">
+
+    <button onclick="nextScreen(3)">Далее</button>
+  </div>
+</div>
+
+<!-- экран 3 -->
+<div class="screen" id="screen3">
+  <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Подготовка</h2>
+
+    <button onclick="playAudio('audio2')">Определяем запрос</button><br>
+    <button onclick="playAudio('audio3')">Высшая цель</button><br>
+    <button onclick="playAudio('audio5')">Собираемся в путь</button><br>
+    <div class="audio-action" data-audio="audio2">
+      <button class="audio-btn" onclick="playAudio('audio2', this)">Определяем запрос</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <div class="audio-action" data-audio="audio3">
+      <button class="audio-btn" onclick="playAudio('audio3', this)">Высшая цель</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+    <div class="audio-action" data-audio="audio5">
+      <button class="audio-btn" onclick="playAudio('audio5', this)">Собираемся в путь</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+
+   <button id="startBtn" onclick="nextScreen(5)" style="display:none;">
+  Начать путешествие
+</button>
+  </div>
+</div>
+
+<!-- карта -->
+<div class="screen" id="screen5">
+   <button class="back-btn" onclick="goBack()">←</button>
+  <h2>Пройди поочередно каждую из четырех локаций</h2>
+  <p class="map-note">После нажатия запускается аудио локации.</p>
+  <div class="wave-row" id="mapWave">
+    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+  </div>
+
+  <div class="map">
+    <img src="IMG_9728.PNG" class="map-img">
+
+ <div class="zone zone1" onclick="cellClick(1)"></div>
+<div class="zone zone2" onclick="cellClick(2)"></div>
+<div class="zone zone3" onclick="cellClick(3)"></div>
+<div class="zone zone4" onclick="cellClick(4)"></div>
+  </div>
+  
+<div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
+  <p id="insightText" style="min-height:40px;"></p>
+
+  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">
+    Завершить
+  </button>
+</div>
+
+</div>
+
+<!-- экран 6 -->
+<div class="screen" id="screen6">
+  <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Заключение</h2>
+    <button onclick="playFinalAudio()">Слушать</button>
+    <img src="rules.jpg" class="content-img" alt="Завершение путешествия">
+    <div class="audio-action" data-audio="audio4">
+      <button class="audio-btn" onclick="playFinalAudio(this)">Слушать</button>
+      <div class="wave-progress">
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      </div>
+      <span class="done-check">✓</span>
+    </div>
+  </div>
+</div>
+
+<!-- экран 7 -->
+<div class="screen" id="screen7">
+  <div class="card">
+     <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Ваше сегодняшнее путешествие подошло к концу 🌿</h2>
+
+    <div class="final-section">
+      <p id="finalText">
+        Но это только начало. Готовы ли вы отправиться в более глубокое путешествие?
+        Ещё больше историй, смыслов и открытий.
+        Я буду рядом в этом пути: поддержу и все объясню.
+      </p>
+
+    <button onclick="window.open('https://t.me/madreshani')">
+  Продолжить путь со мной →
+</button>
+
+     <div id="feedbackBlock" class="final-section">
+      <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
+           <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
+
+     <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
+      <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
+    </div>
+  </div>
+</div>
+
+<div id="motivationModal">
+  <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
+    <h3 style="margin-top:0; margin-bottom:10px; color:#2e5e4e;">Ты отлично идёшь 🌿</h3>
+    <p style="margin:0 0 18px; color:#35594d;">Сделай короткую паузу и зафиксируй инсайт: в заметки или голосом.</p>
+    <button onclick="closeMotivationModal()">Продолжить</button>
+  </div>
+</div>
+  
+<div id="thankYouModal" style="display:none; position:fixed; inset:0; background:rgba(6,18,14,0.58); z-index:999; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
+    <h3 style="margin-top:0; margin-bottom:12px; color:#2e5e4e; font-size:40px; line-height:1.1;">Спасибо, что поделились своей душой 💚</h3>
+    <p style="margin:0 0 20px; color:#35594d; font-size:28px; line-height:1.45;">Это очень ценно для меня.</p>
+    <button onclick="closeThankYouModal()">Закрыть</button>
+  </div>
+</div>
+
+<!-- аудио -->
+<audio id="audio1" src="hello.mp3" preload="none"></audio>
+<audio id="audio2" src="mission2.m4a" preload="none"></audio>
+<audio id="audio3" src="mission3.m4a" preload="none"></audio>
+<audio id="audio4" src="end.m4a" preload="none"></audio>
+<audio id="audio5" src="backpack2.m4a" preload="none"></audio>
+
+<audio id="cell1" src="tothem.m4a" preload="none"></audio>
+<audio id="cell2" src="sweethome.m4a" preload="none"></audio>
+<audio id="cell3" src="stonev2.m4a" preload="none"></audio>
+<audio id="cell4" src="mountain2.m4a" preload="none"></audio>
+
+<script>
+let cheatMode = true;
+  let historyStack = [];
+let historyStack = [];
+  let prepCount = 0;
+  let prepDoneSet = new Set();
+  let waveTimers = new Map();
+
+function getAudioAction(audioId) {
+  return document.querySelector(`.audio-action[data-audio="${audioId}"]`);
+}
+
+function setWaveProgress(audioId, progress = 0, playing = false) {
+  const action = getAudioAction(audioId);
+  if (!action) return;
+  const waveBox = action.querySelector(".wave-progress");
+  if (!waveBox) return;
+  const waves = waveBox.querySelectorAll(".wave");
+  const listenedCount = Math.round((progress / 100) * waves.length);
+
+  waves.forEach((w, i) => {
+    w.classList.toggle("listened", i < listenedCount);
+  });
+  waveBox.classList.toggle("active", playing);
+}
+
+function startWaveTracking(audio, audioId) {
+  stopWaveTracking(audioId);
+  setWaveProgress(audioId, 0, true);
+
+  const timer = setInterval(() => {
+    const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+    setWaveProgress(audioId, progress, !audio.paused);
+  }, 120);
+  waveTimers.set(audioId, timer);
+}
+
+function stopWaveTracking(audioId, fill = false) {
+  if (waveTimers.has(audioId)) {
+    clearInterval(waveTimers.get(audioId));
+    waveTimers.delete(audioId);
+  }
+  setWaveProgress(audioId, fill ? 100 : 0, false);
+}
+
+function markAudioDone(audioId, btnEl) {
+  const action = getAudioAction(audioId);
+  const check = action?.querySelector(".done-check");
+  const button = btnEl || action?.querySelector(".audio-btn");
+  if (check) check.classList.add("visible");
+  if (button) button.classList.add("done");
+}
+  
+function nextScreen(n) {
+  const current = document.querySelector('.screen.active');
+  const next = document.getElementById('screen' + n);
+
+  if (current) {
+    historyStack.push(current.id);
+  }
+  
+  // выключаем затемнение
+  document.getElementById("overlay").classList.remove("active");
+
+  // останавливаем все аудио
+  document.querySelectorAll("audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+    stopWaveTracking(a.id, false);
+  });
+
+  currentAudio = null;
+  prepAudio = null;
+
+  // плавно убираем текущий экран
+  if (current) {
+    current.classList.remove('active');
+
+    setTimeout(() => {
+      current.style.display = 'none';
+    }, 1500);
+  }
+
+  // показываем следующий
+  next.style.display = 'block';
+
+  setTimeout(() => {
+    next.classList.add('active');
+  }, 50);
+
+  setTimeout(() => {
+  document.getElementById("softPush").style.opacity = 1;
+  const softPush = document.getElementById("softPush");
+  if (softPush) softPush.style.opacity = 1;
+}, 2000);
+
+  setTimeout(() => {
+  text.style.opacity = 1;
+  text.style.transform = "translateY(0)";
+  const text = document.getElementById("finalText");
+  if (text) {
+    text.style.opacity = 1;
+    text.style.transform = "translateY(0)";
+  }
+}, 500);
+
+   // 🔥 ЧИТ ДЛЯ ТЕСТА
+if (n === 3 && cheatMode) {
+  setTimeout(() => {
+    showStartButton();
+  }, 500);
+}
+  if (n === 5) {
+    document.getElementById("mapWave")?.classList.remove("active");
+  }
+}
+
+// 🔊 один звук за раз
+let prepAudio = null;
+
+  function goBack() {
+  const prevId = historyStack.pop();
+  if (!prevId) return;
+
+  const current = document.querySelector('.screen.active');
+  const prev = document.getElementById(prevId);
+
+  // останавливаем аудио
+  document.querySelectorAll("audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+    stopWaveTracking(a.id, false);
+  });
+
+  prepAudio = null;
+
+  // скрываем текущий
+  if (current) {
+    current.classList.remove('active');
+
+    setTimeout(() => {
+      current.style.display = 'none';
+    }, 1500);
+  }
+
+  // показываем предыдущий
+  prev.style.display = 'block';
+
+  setTimeout(() => {
+    prev.classList.add('active');
+  }, 50);
+}
+
+function playAudio(id) {
+function playAudio(id, btn) {
+  let audio = document.getElementById(id);
+
+  if (prepAudio && prepAudio !== audio) {
+    stopWaveTracking(prepAudio.id, false);
     prepAudio.pause();
     prepAudio.currentTime = 0;
   }
 
   if (prepAudio === audio && !audio.paused) {
     audio.pause();
+    stopWaveTracking(id, false);
     return;
   }
 
   prepAudio = audio;
   audio.play();
-   updateAudioProgress(audio, `Сейчас звучит: ${audio.id}`);
+   startWaveTracking(audio, id);
 
   // 👉 считаем только подготовительные аудио
   if (id === 'audio2' || id === 'audio3' || id === 'audio5') {
-
     audio.onended = () => {
-      prepCount++;
-       const bar = document.getElementById("audioProgressFill");
-      if (bar) bar.style.width = "100%";
-
-     if (prepCount >= 3 || cheatMode) {
-  showStartButton();
-}
+     stopWaveTracking(id, true);
+      markAudioDone(id, btn);
+      if (!prepDoneSet.has(id)) {
+        prepDoneSet.add(id);
+        prepCount++;
+      }
+      if (prepCount >= 3) {
+        showStartButton();
+      }
+    };
+  } else {
+    audio.onended = () => {
+      stopWaveTracking(id, true);
+      markAudioDone(id, btn);
     };
   }
 }
@@ -625,6 +1880,7 @@ function showInsights() {
 }
 
 function cellClick(n) {
+    const isNewLocation = !visitedSet.has(n);
   setTimeout(() => {
   let zone = document.querySelectorAll('.zone')[n - 1];
 
@@ -698,20 +1954,31 @@ document.getElementById("overlay").onclick = function() {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
+        document.getElementById("mapWave")?.classList.remove("active");
     this.classList.remove("active");
   }
 };
   
-function playFinalAudio() {
+function playFinalAudio(btn) {
   let audio = document.getElementById('audio4'); // аудио заключения
   audio.currentTime = 0;
   audio.play();
+    startWaveTracking(audio, "audio4");
 
   audio.onended = () => {
+     stopWaveTracking("audio4", true);
+    markAudioDone("audio4", btn);
     setTimeout(() => {
       showFinalScreen(); // экран 7
     }, 500);
   };
+}
+function showMotivationModal() {
+  document.getElementById("motivationModal").style.display = "flex";
+}
+
+function closeMotivationModal() {
+  document.getElementById("motivationModal").style.display = "none";
 }
 
 function showFinalScreen() {
@@ -777,8 +2044,21 @@ window.onload = () => {
   setTimeout(() => {
     first.classList.add("active");
   }, 100);
-}
   
+   const welcomeImages = ["IMG_9829.JPG", "hello.jpg", "rules.jpg", "demo-map.JPG"];
+  const welcomeImg = document.getElementById("welcomeImg");
+  let slideIndex = 0;
+  if (welcomeImg) {
+    setInterval(() => {
+      slideIndex = (slideIndex + 1) % welcomeImages.length;
+      welcomeImg.classList.add("swap");
+      setTimeout(() => {
+        welcomeImg.src = welcomeImages[slideIndex];
+        welcomeImg.classList.remove("swap");
+      }, 260);
+    }, 3200);
+  }
+    }
 </script>
   
 </body>
