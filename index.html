@@ -58,11 +58,6 @@ body {
   align-items: center;
 }
 
-#screen1 .tech-next {
-  position: static;
-  margin-top: 10px;
-}
-
 .tech-next:hover {
   background: rgba(232, 242, 236, 0.14);
   color: rgba(232, 242, 236, 0.7);
@@ -291,8 +286,31 @@ button:active {
   width: 44px;
   min-width: 44px;
   padding: 10px 0;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1;
   border-radius: 999px;
+}
+
+.screen-audio-controls {
+  width: 100%;
+  max-width: 340px;
+  margin: 8px auto 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.screen-audio-controls .screen-audio-bar {
+  margin: 0;
+}
+
+.map-audio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .audio-btn.done {
@@ -474,16 +492,18 @@ button:active {
     <h2>Добро пожаловать</h2>
  <img src="IMG_9829.JPG" id="welcomeImg" class="content-img breathing">
 
-    <div class="screen-audio-bar" data-screen="screen1">
-      <div class="wave-progress">
-        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    <div class="screen-audio-controls">
+      <div class="screen-audio-bar" data-screen="screen1">
+        <div class="wave-progress">
+          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        </div>
       </div>
+      <button class="audio-btn pause-btn" onclick="pauseAudio('audio1', 'screen1')" aria-label="Пауза">II</button>
     </div>
     <div class="audio-action" data-audio="audio1">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio1', this, 'screen1')">Слушать</button>
-        <button class="audio-btn pause-btn" onclick="pauseAudio('audio1', 'screen1')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -510,30 +530,30 @@ button:active {
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
-    <div class="screen-audio-bar" data-screen="screen3">
-      <div class="wave-progress">
-        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    <div class="screen-audio-controls">
+      <div class="screen-audio-bar" data-screen="screen3">
+        <div class="wave-progress">
+          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        </div>
       </div>
+      <button class="audio-btn pause-btn" onclick="pausePrepAudio('screen3')" aria-label="Пауза">II</button>
     </div>
  <div class="audio-action" data-audio="audio2">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio2', this, 'screen3')">Определяем запрос</button>
-        <button class="audio-btn pause-btn" onclick="pauseAudio('audio2', 'screen3')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
     <div class="audio-action" data-audio="audio3">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio3', this, 'screen3')">Высшая цель</button>
-        <button class="audio-btn pause-btn" onclick="pauseAudio('audio3', 'screen3')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
     <div class="audio-action" data-audio="audio5">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio5', this, 'screen3')">Собираемся в путь</button>
-        <button class="audio-btn pause-btn" onclick="pauseAudio('audio5', 'screen3')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -550,11 +570,13 @@ button:active {
    <button class="back-btn" onclick="goBack()">←</button>
   <h2>Пройди поочередно каждую из четырех локаций</h2>
    <p class="map-note">После нажатия запускается аудио локации.</p>
-  <div class="wave-row" id="mapWave">
-    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
-    <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+  <div class="map-audio-controls">
+    <div class="wave-row" id="mapWave">
+      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    </div>
+    <button class="audio-btn pause-btn" onclick="pauseMapAudio()" aria-label="Пауза локации">II</button>
   </div>
-  <button class="audio-btn pause-btn" onclick="pauseMapAudio()" aria-label="Пауза локации">⏸</button>
 
   <div class="map">
     <img src="IMG_9728.PNG" class="map-img">
@@ -584,16 +606,18 @@ button:active {
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Заключение</h2>
    <img src="rules.jpg" class="content-img" alt="Завершение путешествия">
-    <div class="screen-audio-bar" data-screen="screen6">
-      <div class="wave-progress">
-        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-        <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    <div class="screen-audio-controls">
+      <div class="screen-audio-bar" data-screen="screen6">
+        <div class="wave-progress">
+          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
+        </div>
       </div>
+      <button class="audio-btn pause-btn" onclick="pauseAudio('audio4', 'screen6')" aria-label="Пауза">II</button>
     </div>
     <div class="audio-action" data-audio="audio4">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playFinalAudio(this, 'screen6')">Слушать</button>
-        <button class="audio-btn pause-btn" onclick="pauseAudio('audio4', 'screen6')" aria-label="Пауза">⏸</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -741,6 +765,11 @@ function pauseAudio(id, screenId) {
   audio.pause();
   stopWaveTracking(id, false);
   if (screenId) setWaveProgress(screenId, audio.duration ? (audio.currentTime / audio.duration) * 100 : 0, false);
+}
+
+function pausePrepAudio(screenId = 'screen3') {
+  if (!prepAudio || prepAudio.paused) return;
+  pauseAudio(prepAudio.id, screenId);
 }
 
 function nextScreen(n) {
@@ -944,7 +973,7 @@ async function sendFeedback() {
   const feedbackText = textField.value.trim();
 
   if (!feedbackText) {
-    status.textContent = 'Пожалуйста, напишите отзыв перед отправкой.';
+    status.textContent = 'Пожалуста, напишите отзыв перед отправкой.';
     status.style.display = 'block';
     status.style.color = '#b85c00';
     textField.focus();
