@@ -166,16 +166,16 @@ button:active {
 
 #traveler {
   position: absolute;
-  width: 28px;
-  height: 28px;
+  width: 84px;
+  height: 84px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 72px;
   left: 10px;
   top: 10px;
   z-index: 8;
-  transition: left 0.9s ease-in-out, top 0.9s ease-in-out;
+  transition: left 1.8s ease-in-out, top 1.8s ease-in-out;
 }
 
 #traveler.walking {
@@ -442,13 +442,9 @@ button:active {
       </div>
     </div>
     <button onclick="nextScreen(2)">Далее</button>
-    <div class="extra-gallery">
-      <img src="hello.jpg" alt="Вдохновляющий кадр">
-      <img src="demo-map.JPG" alt="Карта путешествия">
-    </div>
-      </div>
-    </div>
     <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
+  </div>
+</div>
 
 
 <!-- экран 2 -->
@@ -953,7 +949,7 @@ function moveTravelerToZone(zone, instant = false) {
     traveler.style.left = `${targetLeft}px`;
     traveler.style.top = `${targetTop}px`;
     requestAnimationFrame(() => {
-      traveler.style.transition = 'left 0.9s ease-in-out, top 0.9s ease-in-out';
+      traveler.style.transition = 'left 1.8s ease-in-out, top 1.8s ease-in-out';
       traveler.classList.remove('walking');
     });
     return;
@@ -961,7 +957,7 @@ function moveTravelerToZone(zone, instant = false) {
 
   traveler.style.left = `${targetLeft}px`;
   traveler.style.top = `${targetTop}px`;
-  setTimeout(() => traveler.classList.remove('walking'), 900);
+  setTimeout(() => traveler.classList.remove('walking'), 1800);
 }
 
 </script>
