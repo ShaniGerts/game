@@ -383,7 +383,7 @@ button:active {
   height: 8px;
   border-radius: 3px;
   background: linear-gradient(180deg, rgba(111, 207, 151, 0.95), rgba(59, 163, 115, 0.8));
-  transition: all 0.3s ease-out;
+  transition: height 0.2s ease-out;
 }
 
 .wave-progress .wave.listened {
@@ -420,31 +420,58 @@ button:active {
   height: 8px;
   border-radius: 3px;
   background: linear-gradient(180deg, rgba(111, 207, 151, 0.95), rgba(59, 163, 115, 0.8));
-  transition: all 0.3s ease-out;
+  transition: height 0.2s ease-out;
 }
 
-/* Единая анимация для всех волн - плавное расширение от центра */
-@keyframes waveGentle {
-  0%, 100% { 
+/* Анимация волн как настоящие звуковые волны - плавная бегущая волна */
+@keyframes waveFlow {
+  0% {
     height: 6px;
-    opacity: 0.5;
   }
-  50% { 
+  25% {
     height: 18px;
-    opacity: 1;
+  }
+  50% {
+    height: 12px;
+  }
+  75% {
+    height: 22px;
+  }
+  100% {
+    height: 6px;
   }
 }
 
 .wave-progress.active .wave,
 .wave-row.active .wave {
-  animation: waveGentle 1.4s ease-in-out infinite;
+  animation: waveFlow 1.6s ease-in-out infinite;
 }
 
-/* Все волны имеют одинаковую задержку для синхронного движения */
-.wave-progress.active .wave,
-.wave-row.active .wave {
-  animation-delay: 0s;
-}
+/* Каждая волна имеет свою задержку, создавая эффект бегущей волны */
+.wave-progress.active .wave:nth-child(1) { animation-delay: 0s; }
+.wave-progress.active .wave:nth-child(2) { animation-delay: 0.08s; }
+.wave-progress.active .wave:nth-child(3) { animation-delay: 0.16s; }
+.wave-progress.active .wave:nth-child(4) { animation-delay: 0.24s; }
+.wave-progress.active .wave:nth-child(5) { animation-delay: 0.32s; }
+.wave-progress.active .wave:nth-child(6) { animation-delay: 0.40s; }
+.wave-progress.active .wave:nth-child(7) { animation-delay: 0.48s; }
+.wave-progress.active .wave:nth-child(8) { animation-delay: 0.56s; }
+.wave-progress.active .wave:nth-child(9) { animation-delay: 0.64s; }
+.wave-progress.active .wave:nth-child(10) { animation-delay: 0.72s; }
+.wave-progress.active .wave:nth-child(11) { animation-delay: 0.80s; }
+.wave-progress.active .wave:nth-child(12) { animation-delay: 0.88s; }
+.wave-progress.active .wave:nth-child(13) { animation-delay: 0.96s; }
+.wave-progress.active .wave:nth-child(14) { animation-delay: 1.04s; }
+.wave-progress.active .wave:nth-child(15) { animation-delay: 1.12s; }
+.wave-progress.active .wave:nth-child(16) { animation-delay: 1.20s; }
+
+/* Для карты с 6 волнами */
+.wave-row.active .wave:nth-child(1) { animation-delay: 0s; }
+.wave-row.active .wave:nth-child(2) { animation-delay: 0.12s; }
+.wave-row.active .wave:nth-child(3) { animation-delay: 0.24s; }
+.wave-row.active .wave:nth-child(4) { animation-delay: 0.36s; }
+.wave-row.active .wave:nth-child(5) { animation-delay: 0.48s; }
+.wave-row.active .wave:nth-child(6) { animation-delay: 0.60s; }
 
 .map-note {
   margin-top: 8px;
@@ -722,6 +749,7 @@ let currentAudio = null;
 const visitedSet = new Set();
 let visitedCount = 0;
 let pawTrailTimer = null;
+let currentTravelerPosition = 1; // Текущая позиция котика (1-4)
 
 let audioCurrentTime = {
   audio1: 0,
@@ -995,6 +1023,38 @@ function showLocationPreview(n) {
   preview.style.display = 'block';
 }
 
+function getTravelerCenterX() {
+  const traveler = document.getElementById('traveler');
+  if (!traveler) return 0;
+  const rect = traveler.getBoundingClientRect();
+  const mapRect = document.querySelector('.map').getBoundingClientRect();
+  return (rect.left + rect.width / 2) - mapRect.left;
+}
+
+function getZoneCenterX(zoneNumber) {
+  const zone = document.querySelector(`.zone${zoneNumber}`);
+  if (!zone) return 0;
+  const rect = zone.getBoundingClientRect();
+  const mapRect = document.querySelector('.map').getBoundingClientRect();
+  return (rect.left + rect.width / 2) - mapRect.left;
+}
+
+function updateTravelerDirection(targetZoneNumber) {
+  const traveler = document.getElementById('traveler');
+  if (!traveler) return;
+  
+  const currentX = getTravelerCenterX();
+  const targetX = getZoneCenterX(targetZoneNumber);
+  
+  // Если целевая точка правее текущей -> поворачиваем направо (добавляем класс)
+  // Если левее -> поворачиваем налево (убираем класс)
+  if (targetX > currentX) {
+    traveler.classList.add('facing-right');
+  } else if (targetX < currentX) {
+    traveler.classList.remove('facing-right');
+  }
+}
+
 function cellClick(n) {
   const audio = document.getElementById(`cell${n}`);
   const zone = document.querySelectorAll('.zone')[n - 1];
@@ -1025,15 +1085,8 @@ function cellClick(n) {
   document.getElementById('overlay').classList.add('active');
   document.getElementById('mapWave')?.classList.add('active');
   
-  // Сначала поворачиваем котика, потом начинаем движение
-  const traveler = document.getElementById('traveler');
-  if (traveler) {
-    if (n === 2 || n === 4) {
-      traveler.classList.add('facing-right');
-    } else if (n === 1 || n === 3) {
-      traveler.classList.remove('facing-right');
-    }
-  }
+  // Поворачиваем котика в сторону движения
+  updateTravelerDirection(n);
   
   moveTravelerToZone(zone, false, n);
 
@@ -1201,6 +1254,7 @@ function moveTravelerToZone(zone, instant = false, targetZoneNumber = null) {
       traveler.style.transition = 'left 1.8s ease-in-out, top 1.8s ease-in-out';
       traveler.classList.remove('walking');
     });
+    if (targetZoneNumber) currentTravelerPosition = targetZoneNumber;
     return;
   }
 
@@ -1213,6 +1267,7 @@ function moveTravelerToZone(zone, instant = false, targetZoneNumber = null) {
   traveler.style.left = `${targetLeft}px`;
   traveler.style.top = `${targetTop}px`;
   setTimeout(() => traveler.classList.remove('walking'), 1800);
+  if (targetZoneNumber) currentTravelerPosition = targetZoneNumber;
 }
 
 function startPawTrail(startLeft, startTop, endLeft, endTop, duration) {
