@@ -14,7 +14,7 @@ body {
   margin: 0;
 }
 
-  .visited {
+.visited {
   filter: brightness(0.65) grayscale(0.4);
   transition: 0.5s;
 }
@@ -25,7 +25,6 @@ body {
   opacity: 0;
   transition: opacity 1.5s ease;
   position: relative;
-
   min-height: 100vh;
   justify-content: center;
   align-items: center;
@@ -56,6 +55,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 #screen1 .audio-action {
@@ -77,6 +79,7 @@ button {
   background: #2e5e4e;
   color: white;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 button:hover {
@@ -86,6 +89,7 @@ button:hover {
 button:active {
   transform: scale(0.96);
 }
+
 #startBtn {
   box-shadow: 0 0 20px rgba(100,255,200,0.3);
 }
@@ -96,12 +100,16 @@ button:active {
   padding: 20px;
   border-radius: 20px;
   margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
 }
+
 .card h2 {
   margin-bottom: 10px;
 }
 
-  .back-btn {
+.back-btn {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -109,18 +117,23 @@ button:active {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  margin: 0;
+  padding: 8px 12px;
 }
+
 .card {
   position: relative;
 }
+
 .content-img {
   width: 100%;
   max-width: 340px;
   margin: 15px auto;
   display: block;
   border-radius: 15px;
-   transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
+  transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
 }
+
 .content-img.breathing {
   animation: breathe 4s ease-in-out infinite;
 }
@@ -157,6 +170,7 @@ button:active {
   transform: scale(1.04);
   opacity: 1;
 }
+
 .map {
   position: relative;
   width: 100%;
@@ -239,8 +253,7 @@ button:active {
 .zone.selected {
   background: rgba(255,255,255,0.15);
   border-radius: 20px;
-    box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
-
+  box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
 }
 
 .overlay {
@@ -270,6 +283,7 @@ button:active {
   background:black;
   z-index:1000;
 }
+
 .audio-action {
   width: 100%;
   max-width: 340px;
@@ -285,6 +299,7 @@ button:active {
 
 .audio-btn {
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .audio-btn.pause-btn {
@@ -437,13 +452,13 @@ button:active {
   padding:20px;
 }
 
-  .zone.visited {
+.zone.visited {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 20px;
   transition: 0.5s;
 }
 
-  .fade-letter {
+.fade-letter {
   opacity: 0;
   display: inline-block;
   animation: fadeLetter 0.6s forwards;
@@ -454,7 +469,8 @@ button:active {
     opacity: 1;
   }
 }
-  #insightBlock {
+
+#insightBlock {
   opacity: 0;
   transition: opacity 0.6s;
   margin-top: 10px;
@@ -490,11 +506,17 @@ button:active {
   color: #5f7b70;
 }
 
-  #finalText {
+#finalText {
   transform: translateY(20px);
   transition: 1s;
 }
-  
+
+/* Стили для кнопки "Далее" на первом экране */
+#nextBtnScreen1 {
+  margin-top: 20px;
+  display: none;
+}
+
 </style>
 </head>
 
@@ -506,7 +528,7 @@ button:active {
 <div class="screen" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
- <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
+    <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
 
     <div class="screen-audio-controls">
       <div class="screen-audio-bar" data-screen="screen1">
@@ -515,15 +537,15 @@ button:active {
           <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
         </div>
       </div>
-      <button class="audio-btn pause-btn" onclick="pauseAudio('audio1', 'screen1')" aria-label="Пауза">II</button>
+      <button class="audio-btn pause-btn" id="pauseBtnScreen1" onclick="togglePlayPause('audio1', 'screen1', this)" aria-label="Пауза/Плей">▶</button>
     </div>
     <div class="audio-action" data-audio="audio1">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="playAudio('audio1', this, 'screen1')">Слушать</button>
+        <button class="audio-btn" id="playBtnScreen1" onclick="playAudio('audio1', this, 'screen1')">Слушать</button>
         <span class="done-check">✓</span>
       </div>
     </div>
-    <button onclick="nextScreen(2)">Далее</button>
+    <button id="nextBtnScreen1" onclick="nextScreen(2)">Далее</button>
   </div>
   <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
 </div>
@@ -553,9 +575,9 @@ button:active {
           <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
         </div>
       </div>
-      <button class="audio-btn pause-btn" onclick="pausePrepAudio('screen3')" aria-label="Пауза">II</button>
+      <button class="audio-btn pause-btn" id="pauseBtnScreen3" onclick="togglePlayPausePrep(this)" aria-label="Пауза/Плей">▶</button>
     </div>
- <div class="audio-action" data-audio="audio2">
+    <div class="audio-action" data-audio="audio2">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio2', this, 'screen3')">Определяем запрос</button>
         <span class="done-check">✓</span>
@@ -591,17 +613,17 @@ button:active {
       <span class="wave"></span><span class="wave"></span><span class="wave"></span>
       <span class="wave"></span><span class="wave"></span><span class="wave"></span>
     </div>
-    <button class="audio-btn pause-btn" onclick="pauseMapAudio()" aria-label="Пауза локации">II</button>
+    <button class="audio-btn pause-btn" id="pauseMapBtn" onclick="toggleMapPlayPause(this)" aria-label="Пауза/Плей">▶</button>
   </div>
 
   <div class="map">
     <img src="IMG_9728.PNG" class="map-img">
     <div id="traveler" aria-label="Путешественник">🐈</div>
 
- <div class="zone zone1" onclick="cellClick(1)"></div>
-<div class="zone zone2" onclick="cellClick(2)"></div>
-<div class="zone zone3" onclick="cellClick(3)"></div>
-<div class="zone zone4" onclick="cellClick(4)"></div>
+    <div class="zone zone1" onclick="cellClick(1)"></div>
+    <div class="zone zone2" onclick="cellClick(2)"></div>
+    <div class="zone zone3" onclick="cellClick(3)"></div>
+    <div class="zone zone4" onclick="cellClick(4)"></div>
   </div>
   
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
@@ -629,7 +651,7 @@ button:active {
           <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
         </div>
       </div>
-      <button class="audio-btn pause-btn" onclick="pauseAudio('audio4', 'screen6')" aria-label="Пауза">II</button>
+      <button class="audio-btn pause-btn" id="pauseBtnScreen6" onclick="togglePlayPause('audio4', 'screen6', this)" aria-label="Пауза/Плей">▶</button>
     </div>
     <div class="audio-action" data-audio="audio4">
       <div class="audio-button-row">
@@ -708,6 +730,19 @@ const visitedSet = new Set();
 let visitedCount = 0;
 let pawTrailTimer = null;
 
+// Хранилище для текущих позиций воспроизведения
+let audioCurrentTime = {
+  audio1: 0,
+  audio2: 0,
+  audio3: 0,
+  audio4: 0,
+  audio5: 0,
+  cell1: 0,
+  cell2: 0,
+  cell3: 0,
+  cell4: 0
+};
+
 const locationMeta = {
   1: { title: "Тотем", img: "demo-map.JPG" },
   2: { title: "Сладкий дом", img: "hello.jpg" },
@@ -734,10 +769,12 @@ function setWaveProgress(screenId, progress = 0, playing = false) {
 
 function startWaveTracking(audio, audioId, screenId) {
   stopWaveTracking(audioId);
-  setWaveProgress(screenId, 0, true);
+  setWaveProgress(screenId, audio.duration ? (audio.currentTime / audio.duration) * 100 : 0, true);
   const timer = setInterval(() => {
-    const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-    setWaveProgress(screenId, progress, !audio.paused);
+    if (audio.duration) {
+      const progress = (audio.currentTime / audio.duration) * 100;
+      setWaveProgress(screenId, progress, !audio.paused);
+    }
   }, 120);
   waveTimers.set(audioId, { timer, screenId });
 }
@@ -747,7 +784,9 @@ function stopWaveTracking(audioId, fill = false) {
     const { timer, screenId } = waveTimers.get(audioId);
     clearInterval(timer);
     waveTimers.delete(audioId);
-    setWaveProgress(screenId, fill ? 100 : 0, false);
+    if (!fill) {
+      setWaveProgress(screenId, 0, false);
+    }
   }
 }
 
@@ -761,31 +800,95 @@ function markAudioDone(audioId, btnEl) {
 
 function stopAllAudio() {
   document.querySelectorAll('audio').forEach(audio => {
-    audio.pause();
-    audio.currentTime = 0;
+    if (!audio.paused) {
+      audio.pause();
+    }
     stopWaveTracking(audio.id, false);
   });
   document.querySelectorAll('.screen-audio-bar .wave-progress').forEach(bar => {
     bar.classList.remove('active');
-    bar.querySelectorAll('.wave').forEach(wave => wave.classList.remove('listened'));
   });
   document.getElementById('overlay').classList.remove('active');
   document.getElementById('mapWave')?.classList.remove('active');
+  
+  // Обновляем все кнопки паузы на ▶
+  document.querySelectorAll('.pause-btn').forEach(btn => {
+    btn.textContent = '▶';
+  });
+  
   currentAudio = null;
   prepAudio = null;
 }
 
-function pauseAudio(id, screenId) {
-  const audio = document.getElementById(id);
-  if (!audio || audio.paused) return;
-  audio.pause();
-  stopWaveTracking(id, false);
-  if (screenId) setWaveProgress(screenId, audio.duration ? (audio.currentTime / audio.duration) * 100 : 0, false);
+// Универсальная функция для паузы/плея
+function togglePlayPause(audioId, screenId, btnElement) {
+  const audio = document.getElementById(audioId);
+  if (!audio) return;
+  
+  if (audio.paused) {
+    // Возобновляем с сохраненной позиции
+    audio.currentTime = audioCurrentTime[audioId] || 0;
+    audio.play();
+    btnElement.textContent = 'II';
+    startWaveTracking(audio, audioId, screenId);
+    
+    // Обновляем prepAudio для screen3
+    if (screenId === 'screen3') {
+      prepAudio = audio;
+    }
+  } else {
+    // Сохраняем текущую позицию и ставим на паузу
+    audioCurrentTime[audioId] = audio.currentTime;
+    audio.pause();
+    btnElement.textContent = '▶';
+    stopWaveTracking(audioId, false);
+  }
 }
 
-function pausePrepAudio(screenId = 'screen3') {
-  if (!prepAudio || prepAudio.paused) return;
-  pauseAudio(prepAudio.id, screenId);
+// Специальная функция для prep audio на screen3
+function togglePlayPausePrep(btnElement) {
+  if (!prepAudio) return;
+  const audioId = prepAudio.id;
+  const screenId = 'screen3';
+  
+  if (prepAudio.paused) {
+    prepAudio.currentTime = audioCurrentTime[audioId] || 0;
+    prepAudio.play();
+    btnElement.textContent = 'II';
+    startWaveTracking(prepAudio, audioId, screenId);
+  } else {
+    audioCurrentTime[audioId] = prepAudio.currentTime;
+    prepAudio.pause();
+    btnElement.textContent = '▶';
+    stopWaveTracking(audioId, false);
+  }
+}
+
+// Специальная функция для карты
+function toggleMapPlayPause(btnElement) {
+  if (!currentAudio) return;
+  const audioId = currentAudio.id;
+  
+  if (currentAudio.paused) {
+    currentAudio.currentTime = audioCurrentTime[audioId] || 0;
+    currentAudio.play();
+    btnElement.textContent = 'II';
+    document.getElementById('overlay').classList.add('active');
+    document.getElementById('mapWave')?.classList.add('active');
+    
+    // Возобновляем волновой трекинг
+    if (currentAudio.duration) {
+      const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
+      // Для карты нет screenId, просто активируем визуализацию
+      document.getElementById('mapWave')?.classList.add('active');
+    }
+  } else {
+    audioCurrentTime[audioId] = currentAudio.currentTime;
+    currentAudio.pause();
+    btnElement.textContent = '▶';
+    document.getElementById('overlay').classList.remove('active');
+    document.getElementById('mapWave')?.classList.remove('active');
+  }
 }
 
 function nextScreen(n) {
@@ -834,26 +937,58 @@ function playAudio(id, btn, screenId = 'screen3') {
   const audio = document.getElementById(id);
   if (!audio) return;
 
-  if (prepAudio && prepAudio !== audio) {
-    stopWaveTracking(prepAudio.id, false);
-    prepAudio.pause();
-    prepAudio.currentTime = 0;
+  // Сохраняем ссылку на текущее аудио для screen3
+  if (screenId === 'screen3') {
+    if (prepAudio && prepAudio !== audio && !prepAudio.paused) {
+      // Сохраняем позицию предыдущего аудио перед остановкой
+      audioCurrentTime[prepAudio.id] = prepAudio.currentTime;
+      prepAudio.pause();
+      stopWaveTracking(prepAudio.id, false);
+      // Обновляем кнопку паузы
+      const pauseBtn = document.getElementById('pauseBtnScreen3');
+      if (pauseBtn) pauseBtn.textContent = '▶';
+    }
+    prepAudio = audio;
   }
 
-  if (prepAudio === audio && !audio.paused) {
+  // Если это то же аудио и оно на паузе - возобновляем
+  if (!audio.paused) {
     audio.pause();
+    audioCurrentTime[audio.id] = audio.currentTime;
     stopWaveTracking(id, false);
+    // Обновляем соответствующую кнопку паузы
+    if (screenId === 'screen3') {
+      const pauseBtn = document.getElementById('pauseBtnScreen3');
+      if (pauseBtn) pauseBtn.textContent = '▶';
+    }
     return;
   }
 
-  prepAudio = audio;
-  audio.currentTime = 0;
+  // Воспроизводим с сохраненной позиции или с начала
+  audio.currentTime = audioCurrentTime[audio.id] || 0;
   audio.play();
+  
+  // Обновляем кнопку паузы
+  if (screenId === 'screen3') {
+    const pauseBtn = document.getElementById('pauseBtnScreen3');
+    if (pauseBtn) pauseBtn.textContent = 'II';
+  }
+  
   startWaveTracking(audio, id, screenId);
 
   audio.onended = () => {
     stopWaveTracking(id, true);
     markAudioDone(id, btn);
+    
+    // Обновляем кнопку паузы обратно на ▶
+    if (screenId === 'screen3') {
+      const pauseBtn = document.getElementById('pauseBtnScreen3');
+      if (pauseBtn) pauseBtn.textContent = '▶';
+    }
+    
+    // Сбрасываем сохраненную позицию
+    audioCurrentTime[id] = 0;
+    
     if (['audio2', 'audio3', 'audio5'].includes(id) && !prepDoneSet.has(id)) {
       prepDoneSet.add(id);
       prepCount++;
@@ -898,21 +1033,34 @@ function cellClick(n) {
   const zone = document.querySelectorAll('.zone')[n - 1];
   if (!audio || !zone) return;
 
-  if (currentAudio && currentAudio !== audio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-  }
-
+  // Если это то же аудио и оно на паузе - возобновляем
   if (currentAudio === audio && !audio.paused) {
     audio.pause();
+    audioCurrentTime[audio.id] = audio.currentTime;
     document.getElementById('overlay').classList.remove('active');
     document.getElementById('mapWave')?.classList.remove('active');
+    const mapPauseBtn = document.getElementById('pauseMapBtn');
+    if (mapPauseBtn) mapPauseBtn.textContent = '▶';
     return;
   }
+  
+  // Если есть другое аудио - останавливаем его
+  if (currentAudio && currentAudio !== audio && !currentAudio.paused) {
+    audioCurrentTime[currentAudio.id] = currentAudio.currentTime;
+    currentAudio.pause();
+  }
 
+  // Сохраняем текущее аудио
   currentAudio = audio;
-  audio.currentTime = 0;
+  
+  // Воспроизводим с сохраненной позиции или с начала
+  audio.currentTime = audioCurrentTime[audio.id] || 0;
   audio.play();
+  
+  // Обновляем кнопку паузы карты
+  const mapPauseBtn = document.getElementById('pauseMapBtn');
+  if (mapPauseBtn) mapPauseBtn.textContent = 'II';
+  
   document.getElementById('overlay').classList.add('active');
   document.getElementById('mapWave')?.classList.add('active');
   moveTravelerToZone(zone);
@@ -925,6 +1073,13 @@ function cellClick(n) {
     document.getElementById('overlay').classList.remove('active');
     document.getElementById('mapWave')?.classList.remove('active');
     zone.classList.add('visited');
+    
+    // Обновляем кнопку паузы
+    const mapPauseBtn = document.getElementById('pauseMapBtn');
+    if (mapPauseBtn) mapPauseBtn.textContent = '▶';
+    
+    // Сбрасываем сохраненную позицию
+    audioCurrentTime[audio.id] = 0;
 
     if (!visitedSet.has(n)) {
       visitedSet.add(n);
@@ -935,18 +1090,13 @@ function cellClick(n) {
   };
 }
 
-function pauseMapAudio() {
-  if (!currentAudio || currentAudio.paused) return;
-  currentAudio.pause();
-  document.getElementById('overlay').classList.remove('active');
-  document.getElementById('mapWave')?.classList.remove('active');
-}
-
 document.getElementById('overlay').onclick = function () {
-  if (currentAudio) {
+  if (currentAudio && !currentAudio.paused) {
+    audioCurrentTime[currentAudio.id] = currentAudio.currentTime;
     currentAudio.pause();
-    currentAudio.currentTime = 0;
     document.getElementById('mapWave')?.classList.remove('active');
+    const mapPauseBtn = document.getElementById('pauseMapBtn');
+    if (mapPauseBtn) mapPauseBtn.textContent = '▶';
   }
   this.classList.remove('active');
 };
@@ -954,13 +1104,31 @@ document.getElementById('overlay').onclick = function () {
 function playFinalAudio(btn, screenId = 'screen6') {
   const audio = document.getElementById('audio4');
   if (!audio) return;
-  audio.currentTime = 0;
+  
+  // Если аудио на паузе - возобновляем
+  if (!audio.paused) {
+    audio.pause();
+    audioCurrentTime[audio.id] = audio.currentTime;
+    stopWaveTracking('audio4', false);
+    const pauseBtn = document.getElementById('pauseBtnScreen6');
+    if (pauseBtn) pauseBtn.textContent = '▶';
+    return;
+  }
+  
+  audio.currentTime = audioCurrentTime[audio.id] || 0;
   audio.play();
+  
+  const pauseBtn = document.getElementById('pauseBtnScreen6');
+  if (pauseBtn) pauseBtn.textContent = 'II';
+  
   startWaveTracking(audio, 'audio4', screenId);
 
   audio.onended = () => {
     stopWaveTracking('audio4', true);
     markAudioDone('audio4', btn);
+    audioCurrentTime['audio4'] = 0;
+    const pauseBtn = document.getElementById('pauseBtnScreen6');
+    if (pauseBtn) pauseBtn.textContent = '▶';
     setTimeout(showFinalScreen, 500);
   };
 }
@@ -1045,6 +1213,10 @@ window.onload = () => {
     const firstZone = document.querySelector('.zone1');
     if (firstZone) moveTravelerToZone(firstZone, true);
   }
+  
+  // Скрываем кнопку "Далее" на первом экране изначально
+  const nextBtn1 = document.getElementById('nextBtnScreen1');
+  if (nextBtn1) nextBtn1.style.display = 'none';
 };
 
 function moveTravelerToZone(zone, instant = false) {
@@ -1108,6 +1280,17 @@ function createPawPrint(container, x, y) {
   container.appendChild(paw);
   setTimeout(() => paw.remove(), 1650);
 }
+
+// Добавляем обработчик для аудио на первом экране, чтобы показать кнопку "Далее" после прослушивания
+document.getElementById('audio1').addEventListener('ended', function() {
+  const nextBtn = document.getElementById('nextBtnScreen1');
+  if (nextBtn) {
+    nextBtn.style.display = 'inline-block';
+    nextBtn.style.opacity = 0;
+    nextBtn.style.transition = 'opacity 0.8s';
+    setTimeout(() => { nextBtn.style.opacity = 1; }, 50);
+  }
+});
 
 </script>
   
