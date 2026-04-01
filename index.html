@@ -423,36 +423,28 @@ button:active {
   transition: all 0.3s ease-out;
 }
 
-@keyframes waveExpand {
+/* Единая анимация для всех волн - плавное расширение от центра */
+@keyframes waveGentle {
   0%, 100% { 
-    height: 8px;
+    height: 6px;
     opacity: 0.5;
   }
   50% { 
-    height: 20px;
+    height: 18px;
     opacity: 1;
   }
 }
 
 .wave-progress.active .wave,
 .wave-row.active .wave {
-  animation: waveExpand 1.2s ease-in-out infinite;
+  animation: waveGentle 1.4s ease-in-out infinite;
 }
 
-.wave-progress.active .wave:nth-child(2),
-.wave-row.active .wave:nth-child(2) { animation-delay: 0.1s; }
-.wave-progress.active .wave:nth-child(3),
-.wave-row.active .wave:nth-child(3) { animation-delay: 0.2s; }
-.wave-progress.active .wave:nth-child(4),
-.wave-row.active .wave:nth-child(4) { animation-delay: 0.3s; }
-.wave-progress.active .wave:nth-child(5),
-.wave-row.active .wave:nth-child(5) { animation-delay: 0.4s; }
-.wave-progress.active .wave:nth-child(6),
-.wave-row.active .wave:nth-child(6) { animation-delay: 0.5s; }
-.wave-progress.active .wave:nth-child(7),
-.wave-row.active .wave:nth-child(7) { animation-delay: 0.6s; }
-.wave-progress.active .wave:nth-child(8),
-.wave-row.active .wave:nth-child(8) { animation-delay: 0.7s; }
+/* Все волны имеют одинаковую задержку для синхронного движения */
+.wave-progress.active .wave,
+.wave-row.active .wave {
+  animation-delay: 0s;
+}
 
 .map-note {
   margin-top: 8px;
@@ -1032,6 +1024,17 @@ function cellClick(n) {
   
   document.getElementById('overlay').classList.add('active');
   document.getElementById('mapWave')?.classList.add('active');
+  
+  // Сначала поворачиваем котика, потом начинаем движение
+  const traveler = document.getElementById('traveler');
+  if (traveler) {
+    if (n === 2 || n === 4) {
+      traveler.classList.add('facing-right');
+    } else if (n === 1 || n === 3) {
+      traveler.classList.remove('facing-right');
+    }
+  }
+  
   moveTravelerToZone(zone, false, n);
 
   document.querySelectorAll('.zone').forEach(z => z.classList.remove('selected'));
@@ -1174,7 +1177,7 @@ window.onload = () => {
   const traveler = document.getElementById('traveler');
   if (traveler) {
     const firstZone = document.querySelector('.zone1');
-    if (firstZone) moveTravelerToZone(firstZone, true);
+    if (firstZone) moveTravelerToZone(firstZone, true, 1);
   }
   
   const nextBtn1 = document.getElementById('nextBtnScreen1');
@@ -1185,17 +1188,6 @@ function moveTravelerToZone(zone, instant = false, targetZoneNumber = null) {
   const traveler = document.getElementById('traveler');
   const map = zone?.closest('.map');
   if (!traveler || !map) return;
-
-  // Поворачиваем котика в зависимости от направления движения
-  if (targetZoneNumber) {
-    if (targetZoneNumber === 2 || targetZoneNumber === 4) {
-      // Движение вправо - котик смотрит направо
-      traveler.classList.add('facing-right');
-    } else if (targetZoneNumber === 1 || targetZoneNumber === 3) {
-      // Движение влево - котик смотрит налево (убираем класс)
-      traveler.classList.remove('facing-right');
-    }
-  }
 
   const targetLeft = zone.offsetLeft + (zone.offsetWidth / 2) - (traveler.offsetWidth / 2);
   const targetTop = zone.offsetTop + (zone.offsetHeight / 2) - (traveler.offsetHeight / 2);
