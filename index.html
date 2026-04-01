@@ -14,7 +14,7 @@ body {
   margin: 0;
 }
 
-  .visited {
+.visited {
   filter: brightness(0.65) grayscale(0.4);
   transition: 0.5s;
 }
@@ -25,7 +25,6 @@ body {
   opacity: 0;
   transition: opacity 1.5s ease;
   position: relative;
-
   min-height: 100vh;
   justify-content: center;
   align-items: center;
@@ -50,6 +49,7 @@ body {
   font-size: 16px;
   line-height: 1;
   padding: 0;
+  cursor: pointer;
 }
 
 #screen1 .card {
@@ -87,6 +87,7 @@ button:hover {
 button:active {
   transform: scale(0.96);
 }
+
 #startBtn {
   box-shadow: 0 0 20px rgba(100,255,200,0.3);
 }
@@ -97,12 +98,16 @@ button:active {
   padding: 20px;
   border-radius: 20px;
   margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
 }
+
 .card h2 {
   margin-bottom: 10px;
 }
 
-  .back-btn {
+.back-btn {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -110,18 +115,23 @@ button:active {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  margin: 0;
+  padding: 8px 12px;
 }
+
 .card {
   position: relative;
 }
+
 .content-img {
   width: 100%;
   max-width: 340px;
   margin: 15px auto;
   display: block;
   border-radius: 15px;
-   transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
+  transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
 }
+
 .content-img.breathing {
   animation: breathe 4s ease-in-out infinite;
 }
@@ -158,6 +168,7 @@ button:active {
   transform: scale(1.04);
   opacity: 1;
 }
+
 .map {
   position: relative;
   width: 100%;
@@ -240,8 +251,7 @@ button:active {
 .zone.selected {
   background: rgba(255,255,255,0.15);
   border-radius: 20px;
-    box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
-
+  box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
 }
 
 .overlay {
@@ -271,6 +281,7 @@ button:active {
   background:black;
   z-index:1000;
 }
+
 .audio-action {
   width: 100%;
   max-width: 340px;
@@ -286,6 +297,7 @@ button:active {
 
 .audio-btn {
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .audio-btn.pause-btn {
@@ -318,7 +330,8 @@ button:active {
   gap: 10px;
 }
 
-.screen-audio-controls .screen-audio-bar {
+.screen-audio-controls .wave-canvas-container {
+  flex: 1;
   margin: 0;
 }
 
@@ -348,80 +361,35 @@ button:active {
   opacity: 1;
 }
 
-.wave-progress {
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 4px;
-  height: 22px;
-  padding: 0 8px;
-}
-
-.wave-progress .wave {
-  width: 3px;
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(117, 186, 157, 0.95), rgba(54, 95, 80, 0.72));
-  transform-origin: center bottom;
-  transition: transform 0.24s ease, opacity 0.24s ease, background 0.24s ease;
-}
-
-.wave-progress .wave.listened {
-  background: linear-gradient(180deg, rgba(210, 255, 233, 0.98), rgba(122, 191, 160, 0.86));
-}
-
-.screen-audio-bar {
-  width: 100%;
-  max-width: 800px;
-  margin: 8px auto 14px;
-}
-
-.screen-audio-bar .wave-progress {
-  border: none;
+/* Стили для canvas-волн */
+.wave-canvas-container {
+  background: rgba(10, 28, 20, 0.22);
   border-radius: 999px;
   padding: 6px 8px;
-  background: rgba(10, 28, 20, 0.22);
-  justify-content: center;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
-.wave-row {
+.wave-canvas {
   width: 100%;
-  max-width: 180px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 5px;
+  height: 100%;
+  display: block;
+  border-radius: 999px;
+}
+
+.map-wave-container {
+  background: transparent;
+  padding: 0;
+  width: 180px;
   height: 28px;
 }
 
-.wave-row .wave {
-  width: 3px;
-  height: 7px;
+.map-wave-canvas {
+  width: 100%;
+  height: 100%;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(137, 201, 173, 0.95), rgba(72, 120, 100, 0.8));
-}
-
-.wave-progress.active .wave,
-.wave-row.active .wave {
-  animation: wavePulse 1.2s ease-in-out infinite;
-}
-
-.wave-progress.active .wave:nth-child(2),
-.wave-row.active .wave:nth-child(2) { animation-delay: 0.1s; }
-.wave-progress.active .wave:nth-child(3),
-.wave-row.active .wave:nth-child(3) { animation-delay: 0.2s; }
-.wave-progress.active .wave:nth-child(4),
-.wave-row.active .wave:nth-child(4) { animation-delay: 0.35s; }
-.wave-progress.active .wave:nth-child(5),
-.wave-row.active .wave:nth-child(5) { animation-delay: 0.5s; }
-.wave-progress.active .wave:nth-child(6),
-.wave-row.active .wave:nth-child(6) { animation-delay: 0.7s; }
-
-@keyframes wavePulse {
-  0%, 100% { transform: scaleY(0.35) translateY(1px); opacity: 0.42; height: 6px; }
-  50% { transform: scaleY(1.65) translateY(-1px); opacity: 1; height: 10px; }
 }
 
 .map-note {
@@ -441,13 +409,13 @@ button:active {
   padding:20px;
 }
 
-  .zone.visited {
+.zone.visited {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 20px;
   transition: 0.5s;
 }
 
-  .fade-letter {
+.fade-letter {
   opacity: 0;
   display: inline-block;
   animation: fadeLetter 0.6s forwards;
@@ -458,7 +426,8 @@ button:active {
     opacity: 1;
   }
 }
-  #insightBlock {
+
+#insightBlock {
   opacity: 0;
   transition: opacity 0.6s;
   margin-top: 10px;
@@ -494,17 +463,16 @@ button:active {
   color: #5f7b70;
 }
 
-  #finalText {
+#finalText {
   transform: translateY(20px);
   transition: 1s;
 }
-  
-/* Стиль для кнопки далее на первом экране */
+
 #nextBtnScreen1 {
   display: none;
   margin-top: 20px;
 }
-  
+
 </style>
 </head>
 
@@ -516,14 +484,11 @@ button:active {
 <div class="screen" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
- <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
+    <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
 
     <div class="screen-audio-controls">
-      <div class="screen-audio-bar" data-screen="screen1">
-        <div class="wave-progress">
-          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-        </div>
+      <div class="wave-canvas-container" data-screen="screen1">
+        <canvas id="waveCanvas1" class="wave-canvas" width="300" height="28"></canvas>
       </div>
       <button class="audio-btn pause-btn" id="pauseBtnScreen1" onclick="togglePlayPause('audio1', 'screen1', this)" aria-label="Пауза/Плей">▶</button>
     </div>
@@ -538,14 +503,12 @@ button:active {
   <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
 </div>
 
-
 <!-- экран 2 -->
 <div class="screen" id="screen2">
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Правила</h2>
     <img src="rules1.png" id="rulesImg" class="content-img">
-
     <button onclick="nextScreen(3)">Далее</button>
   </div>
   <button class="tech-next" onclick="nextScreen(3)" aria-label="Следующий экран">→</button>
@@ -557,15 +520,12 @@ button:active {
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
     <div class="screen-audio-controls">
-      <div class="screen-audio-bar" data-screen="screen3">
-        <div class="wave-progress">
-          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-        </div>
+      <div class="wave-canvas-container" data-screen="screen3">
+        <canvas id="waveCanvas3" class="wave-canvas" width="300" height="28"></canvas>
       </div>
       <button class="audio-btn pause-btn" id="pauseBtnScreen3" onclick="togglePlayPausePrep(this)" aria-label="Пауза/Плей">▶</button>
     </div>
- <div class="audio-action" data-audio="audio2">
+    <div class="audio-action" data-audio="audio2">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio2', this, 'screen3')">Определяем запрос</button>
         <span class="done-check">✓</span>
@@ -583,10 +543,7 @@ button:active {
         <span class="done-check">✓</span>
       </div>
     </div>
-    
-   <button id="startBtn" onclick="nextScreen(5)" style="display:none;">
-  Начать путешествие
-</button>
+    <button id="startBtn" onclick="nextScreen(5)" style="display:none;">Начать путешествие</button>
   </div>
   <button class="tech-next" onclick="nextScreen(5)" aria-label="Следующий экран">→</button>
 </div>
@@ -597,9 +554,8 @@ button:active {
   <h2>Пройди поочередно каждую из четырех локаций</h2>
    <p class="map-note">После нажатия запускается аудио локации.</p>
   <div class="map-audio-controls">
-    <div class="wave-row" id="mapWave">
-      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
-      <span class="wave"></span><span class="wave"></span><span class="wave"></span>
+    <div class="wave-canvas-container map-wave-container">
+      <canvas id="mapWaveCanvas" class="map-wave-canvas" width="180" height="28"></canvas>
     </div>
     <button class="audio-btn pause-btn" id="pauseMapBtn" onclick="toggleMapPlayPause(this)" aria-label="Пауза/Плей">▶</button>
   </div>
@@ -607,24 +563,18 @@ button:active {
   <div class="map">
     <img src="IMG_9728.PNG" class="map-img">
     <div id="traveler" aria-label="Путешественник">🐈</div>
-
- <div class="zone zone1" onclick="cellClick(1)"></div>
-<div class="zone zone2" onclick="cellClick(2)"></div>
-<div class="zone zone3" onclick="cellClick(3)"></div>
-<div class="zone zone4" onclick="cellClick(4)"></div>
+    <div class="zone zone1" onclick="cellClick(1)"></div>
+    <div class="zone zone2" onclick="cellClick(2)"></div>
+    <div class="zone zone3" onclick="cellClick(3)"></div>
+    <div class="zone zone4" onclick="cellClick(4)"></div>
   </div>
   
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
   <p id="insightText" style="min-height:40px;"></p>
-
-  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">
-    Завершить
-  </button>
+  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">Завершить</button>
 </div>
-
   <button class="tech-next" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
 </div>
-
 
 <!-- экран 6 -->
 <div class="screen" id="screen6">
@@ -633,11 +583,8 @@ button:active {
     <h2>Заключение</h2>
    <img src="end.jpg" class="content-img" alt="Завершение путешествия">
     <div class="screen-audio-controls">
-      <div class="screen-audio-bar" data-screen="screen6">
-        <div class="wave-progress">
-          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-          <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
-        </div>
+      <div class="wave-canvas-container" data-screen="screen6">
+        <canvas id="waveCanvas6" class="wave-canvas" width="300" height="28"></canvas>
       </div>
       <button class="audio-btn pause-btn" id="pauseBtnScreen6" onclick="togglePlayPause('audio4', 'screen6', this)" aria-label="Пауза/Плей">▶</button>
     </div>
@@ -656,29 +603,24 @@ button:active {
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Ваше сегодняшнее путешествие подошло к концу 🌿</h2>
-
     <div class="final-section">
       <p id="finalText">
         Но это только начало. Готовы ли вы отправиться в более глубокое путешествие?
         Ещё больше историй, смыслов и открытий.
         Я буду рядом в этом пути: поддержу и все объясню.
       </p>
-
-    <button onclick="window.open('https://t.me/madreshani')">
-  Продолжить путь со мной →
-</button>
-
-     <div id="feedbackBlock" class="final-section">
-      <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
-           <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
-
-     <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
-      <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
+      <button onclick="window.open('https://t.me/madreshani')">Продолжить путь со мной →</button>
+      <div id="feedbackBlock" class="final-section">
+        <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
+        <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
+        <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
+        <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
+      </div>
     </div>
   </div>
 </div>
 
-  <div id="motivationModal">
+<div id="motivationModal">
   <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
     <h3 style="margin-top:0; margin-bottom:10px; color:#2e5e4e;">Ты отлично идёшь 🌿</h3>
     <p style="margin:0 0 18px; color:#35594d;">Сделай короткую паузу и зафиксируй инсайт: в заметки или голосом.</p>
@@ -700,7 +642,6 @@ button:active {
 <audio id="audio3" src="mission3.m4a" preload="none"></audio>
 <audio id="audio4" src="end.m4a" preload="none"></audio>
 <audio id="audio5" src="backpack2.m4a" preload="none"></audio>
-
 <audio id="cell1" src="tothem.m4a" preload="none"></audio>
 <audio id="cell2" src="sweethome.m4a" preload="none"></audio>
 <audio id="cell3" src="stonev2.m4a" preload="none"></audio>
@@ -711,7 +652,6 @@ button:active {
 let historyStack = [];
 let prepCount = 0;
 const prepDoneSet = new Set();
-const waveTimers = new Map();
 let prepAudio = null;
 let currentAudio = null;
 const visitedSet = new Set();
@@ -731,51 +671,103 @@ let audioCurrentTime = {
   cell4: 0
 };
 
-const locationMeta = {
-  1: { title: "Тотем", img: "demo-map.JPG" },
-  2: { title: "Сладкий дом", img: "hello.jpg" },
-  3: { title: "Камень", img: "rules.png" },
-  4: { title: "Гора", img: "rules.jpg" }
-};
+// Хранилище для canvas анимаций
+let waveAnimations = {};
+
+// Функция для рисования волн на canvas
+function drawWaves(canvas, intensity = 0.3, isActive = false) {
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  
+  ctx.clearRect(0, 0, width, height);
+  
+  const barCount = 24;
+  const barWidth = width / barCount * 0.6;
+  const spacing = width / barCount * 0.4;
+  
+  for (let i = 0; i < barCount; i++) {
+    let barHeight;
+    if (isActive) {
+      // Динамическая анимация - волны пульсируют
+      const time = Date.now() / 400;
+      const phase = (i / barCount) * Math.PI * 2;
+      const sinVal = Math.sin(time + phase);
+      barHeight = 4 + (Math.abs(sinVal) * (height - 8)) * intensity;
+    } else {
+      // Статическое состояние - небольшие волны
+      const phase = (i / barCount) * Math.PI * 2;
+      barHeight = 4 + Math.abs(Math.sin(phase)) * 6;
+    }
+    
+    barHeight = Math.max(3, Math.min(height - 4, barHeight));
+    
+    const x = i * (barWidth + spacing) + spacing / 2;
+    const y = height - barHeight - 2;
+    
+    // Градиент для каждой волны - мятно-зеленый
+    const gradient = ctx.createLinearGradient(x, y, x, y + barHeight);
+    gradient.addColorStop(0, '#6fcf97');
+    gradient.addColorStop(0.5, '#3ba373');
+    gradient.addColorStop(1, '#1f6e4a');
+    
+    ctx.fillStyle = gradient;
+    ctx.shadowBlur = isActive ? 6 : 2;
+    ctx.shadowColor = '#6fcf97';
+    ctx.fillRect(x, y, barWidth, barHeight);
+  }
+  ctx.shadowBlur = 0;
+}
+
+// Функция для запуска анимации волн
+function startWaveAnimation(canvasId, audioElement = null) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  
+  if (waveAnimations[canvasId]) {
+    cancelAnimationFrame(waveAnimations[canvasId]);
+  }
+  
+  let intensity = 0.4;
+  
+  function animate() {
+    if (!canvas.isConnected) return;
+    
+    let isActive = false;
+    if (audioElement && !audioElement.paused && audioElement.duration) {
+      // Если есть аудио и оно играет, интенсивность зависит от громкости
+      isActive = true;
+      if (audioElement.volume > 0) {
+        intensity = 0.5 + (audioElement.volume * 0.5);
+      } else {
+        intensity = 0.7;
+      }
+    } else if (audioElement && !audioElement.paused) {
+      isActive = true;
+      intensity = 0.6;
+    }
+    
+    drawWaves(canvas, intensity, isActive);
+    waveAnimations[canvasId] = requestAnimationFrame(animate);
+  }
+  
+  animate();
+}
+
+// Остановка анимации волн
+function stopWaveAnimation(canvasId) {
+  if (waveAnimations[canvasId]) {
+    cancelAnimationFrame(waveAnimations[canvasId]);
+    delete waveAnimations[canvasId];
+  }
+  // Рисуем статичные волны
+  const canvas = document.getElementById(canvasId);
+  if (canvas) drawWaves(canvas, 0.3, false);
+}
 
 function getAudioAction(audioId) {
   return document.querySelector(`.audio-action[data-audio="${audioId}"]`);
-}
-
-function getScreenWaveBox(screenId) {
-  return document.querySelector(`.screen-audio-bar[data-screen="${screenId}"] .wave-progress`);
-}
-
-function setWaveProgress(screenId, progress = 0, playing = false) {
-  const waveBox = getScreenWaveBox(screenId);
-  if (!waveBox) return;
-  const waves = waveBox.querySelectorAll('.wave');
-  const listenedCount = Math.round((progress / 100) * waves.length);
-  waves.forEach((wave, idx) => wave.classList.toggle('listened', idx < listenedCount));
-  waveBox.classList.toggle('active', playing);
-}
-
-function startWaveTracking(audio, audioId, screenId) {
-  stopWaveTracking(audioId);
-  setWaveProgress(screenId, audio.duration ? (audio.currentTime / audio.duration) * 100 : 0, true);
-  const timer = setInterval(() => {
-    if (audio.duration) {
-      const progress = (audio.currentTime / audio.duration) * 100;
-      setWaveProgress(screenId, progress, !audio.paused);
-    }
-  }, 120);
-  waveTimers.set(audioId, { timer, screenId });
-}
-
-function stopWaveTracking(audioId, fill = false) {
-  if (waveTimers.has(audioId)) {
-    const { timer, screenId } = waveTimers.get(audioId);
-    clearInterval(timer);
-    waveTimers.delete(audioId);
-    if (!fill) {
-      setWaveProgress(screenId, 0, false);
-    }
-  }
 }
 
 function markAudioDone(audioId, btnEl) {
@@ -791,13 +783,13 @@ function stopAllAudio() {
     if (!audio.paused) {
       audio.pause();
     }
-    stopWaveTracking(audio.id, false);
-  });
-  document.querySelectorAll('.screen-audio-bar .wave-progress').forEach(bar => {
-    bar.classList.remove('active');
   });
   document.getElementById('overlay').classList.remove('active');
-  document.getElementById('mapWave')?.classList.remove('active');
+  
+  // Останавливаем все canvas анимации
+  ['waveCanvas1', 'waveCanvas3', 'waveCanvas6', 'mapWaveCanvas'].forEach(canvasId => {
+    stopWaveAnimation(canvasId);
+  });
   
   // Обновляем все кнопки паузы на ▶
   document.querySelectorAll('.pause-btn').forEach(btn => {
@@ -813,23 +805,22 @@ function togglePlayPause(audioId, screenId, btnElement) {
   const audio = document.getElementById(audioId);
   if (!audio) return;
   
+  let canvasId = '';
+  if (screenId === 'screen1') canvasId = 'waveCanvas1';
+  else if (screenId === 'screen3') canvasId = 'waveCanvas3';
+  else if (screenId === 'screen6') canvasId = 'waveCanvas6';
+  
   if (audio.paused) {
-    // Возобновляем с сохраненной позиции
     audio.currentTime = audioCurrentTime[audioId] || 0;
     audio.play();
     btnElement.textContent = 'II';
-    startWaveTracking(audio, audioId, screenId);
-    
-    // Обновляем prepAudio для screen3
-    if (screenId === 'screen3') {
-      prepAudio = audio;
-    }
+    startWaveAnimation(canvasId, audio);
+    if (screenId === 'screen3') prepAudio = audio;
   } else {
-    // Сохраняем текущую позицию и ставим на паузу
     audioCurrentTime[audioId] = audio.currentTime;
     audio.pause();
     btnElement.textContent = '▶';
-    stopWaveTracking(audioId, false);
+    stopWaveAnimation(canvasId);
   }
 }
 
@@ -837,18 +828,17 @@ function togglePlayPause(audioId, screenId, btnElement) {
 function togglePlayPausePrep(btnElement) {
   if (!prepAudio) return;
   const audioId = prepAudio.id;
-  const screenId = 'screen3';
   
   if (prepAudio.paused) {
     prepAudio.currentTime = audioCurrentTime[audioId] || 0;
     prepAudio.play();
     btnElement.textContent = 'II';
-    startWaveTracking(prepAudio, audioId, screenId);
+    startWaveAnimation('waveCanvas3', prepAudio);
   } else {
     audioCurrentTime[audioId] = prepAudio.currentTime;
     prepAudio.pause();
     btnElement.textContent = '▶';
-    stopWaveTracking(audioId, false);
+    stopWaveAnimation('waveCanvas3');
   }
 }
 
@@ -862,13 +852,13 @@ function toggleMapPlayPause(btnElement) {
     currentAudio.play();
     btnElement.textContent = 'II';
     document.getElementById('overlay').classList.add('active');
-    document.getElementById('mapWave')?.classList.add('active');
+    startWaveAnimation('mapWaveCanvas', currentAudio);
   } else {
     audioCurrentTime[audioId] = currentAudio.currentTime;
     currentAudio.pause();
     btnElement.textContent = '▶';
     document.getElementById('overlay').classList.remove('active');
-    document.getElementById('mapWave')?.classList.remove('active');
+    stopWaveAnimation('mapWaveCanvas');
   }
 }
 
@@ -918,26 +908,26 @@ function playAudio(id, btn, screenId = 'screen3') {
   const audio = document.getElementById(id);
   if (!audio) return;
 
-  // Сохраняем ссылку на текущее аудио для screen3
+  let canvasId = '';
+  if (screenId === 'screen1') canvasId = 'waveCanvas1';
+  else if (screenId === 'screen3') canvasId = 'waveCanvas3';
+  else if (screenId === 'screen6') canvasId = 'waveCanvas6';
+
   if (screenId === 'screen3') {
     if (prepAudio && prepAudio !== audio && !prepAudio.paused) {
-      // Сохраняем позицию предыдущего аудио перед остановкой
       audioCurrentTime[prepAudio.id] = prepAudio.currentTime;
       prepAudio.pause();
-      stopWaveTracking(prepAudio.id, false);
-      // Обновляем кнопку паузы
+      stopWaveAnimation('waveCanvas3');
       const pauseBtn = document.getElementById('pauseBtnScreen3');
       if (pauseBtn) pauseBtn.textContent = '▶';
     }
     prepAudio = audio;
   }
 
-  // Если это то же аудио и оно на паузе - возобновляем
   if (!audio.paused) {
     audio.pause();
     audioCurrentTime[audio.id] = audio.currentTime;
-    stopWaveTracking(id, false);
-    // Обновляем соответствующую кнопку паузы
+    stopWaveAnimation(canvasId);
     if (screenId === 'screen3') {
       const pauseBtn = document.getElementById('pauseBtnScreen3');
       if (pauseBtn) pauseBtn.textContent = '▶';
@@ -945,29 +935,25 @@ function playAudio(id, btn, screenId = 'screen3') {
     return;
   }
 
-  // Воспроизводим с сохраненной позиции или с начала
   audio.currentTime = audioCurrentTime[audio.id] || 0;
   audio.play();
   
-  // Обновляем кнопку паузы
   if (screenId === 'screen3') {
     const pauseBtn = document.getElementById('pauseBtnScreen3');
     if (pauseBtn) pauseBtn.textContent = 'II';
   }
   
-  startWaveTracking(audio, id, screenId);
+  startWaveAnimation(canvasId, audio);
 
   audio.onended = () => {
-    stopWaveTracking(id, true);
+    stopWaveAnimation(canvasId);
     markAudioDone(id, btn);
     
-    // Обновляем кнопку паузы обратно на ▶
     if (screenId === 'screen3') {
       const pauseBtn = document.getElementById('pauseBtnScreen3');
       if (pauseBtn) pauseBtn.textContent = '▶';
     }
     
-    // Сбрасываем сохраненную позицию
     audioCurrentTime[id] = 0;
     
     if (['audio2', 'audio3', 'audio5'].includes(id) && !prepDoneSet.has(id)) {
@@ -1003,7 +989,6 @@ function showLocationPreview(n) {
   const img = document.getElementById('locationImage');
   const data = locationMeta[n];
   if (!preview || !title || !img || !data) return;
-
   title.textContent = `Локация: ${data.title}`;
   img.src = data.img;
   preview.style.display = 'block';
@@ -1014,36 +999,30 @@ function cellClick(n) {
   const zone = document.querySelectorAll('.zone')[n - 1];
   if (!audio || !zone) return;
 
-  // Если это то же аудио и оно играет - ставим на паузу
   if (currentAudio === audio && !audio.paused) {
     audio.pause();
     audioCurrentTime[audio.id] = audio.currentTime;
     document.getElementById('overlay').classList.remove('active');
-    document.getElementById('mapWave')?.classList.remove('active');
+    stopWaveAnimation('mapWaveCanvas');
     const mapPauseBtn = document.getElementById('pauseMapBtn');
     if (mapPauseBtn) mapPauseBtn.textContent = '▶';
     return;
   }
   
-  // Если есть другое аудио - останавливаем его
   if (currentAudio && currentAudio !== audio && !currentAudio.paused) {
     audioCurrentTime[currentAudio.id] = currentAudio.currentTime;
     currentAudio.pause();
   }
 
-  // Сохраняем текущее аудио
   currentAudio = audio;
-  
-  // Воспроизводим с сохраненной позиции или с начала
   audio.currentTime = audioCurrentTime[audio.id] || 0;
   audio.play();
   
-  // Обновляем кнопку паузы карты
   const mapPauseBtn = document.getElementById('pauseMapBtn');
   if (mapPauseBtn) mapPauseBtn.textContent = 'II';
   
   document.getElementById('overlay').classList.add('active');
-  document.getElementById('mapWave')?.classList.add('active');
+  startWaveAnimation('mapWaveCanvas', audio);
   moveTravelerToZone(zone);
 
   document.querySelectorAll('.zone').forEach(z => z.classList.remove('selected'));
@@ -1052,14 +1031,11 @@ function cellClick(n) {
 
   audio.onended = () => {
     document.getElementById('overlay').classList.remove('active');
-    document.getElementById('mapWave')?.classList.remove('active');
+    stopWaveAnimation('mapWaveCanvas');
     zone.classList.add('visited');
     
-    // Обновляем кнопку паузы
     const mapPauseBtn = document.getElementById('pauseMapBtn');
     if (mapPauseBtn) mapPauseBtn.textContent = '▶';
-    
-    // Сбрасываем сохраненную позицию
     audioCurrentTime[audio.id] = 0;
 
     if (!visitedSet.has(n)) {
@@ -1075,7 +1051,7 @@ document.getElementById('overlay').onclick = function () {
   if (currentAudio && !currentAudio.paused) {
     audioCurrentTime[currentAudio.id] = currentAudio.currentTime;
     currentAudio.pause();
-    document.getElementById('mapWave')?.classList.remove('active');
+    stopWaveAnimation('mapWaveCanvas');
     const mapPauseBtn = document.getElementById('pauseMapBtn');
     if (mapPauseBtn) mapPauseBtn.textContent = '▶';
   }
@@ -1086,11 +1062,10 @@ function playFinalAudio(btn, screenId = 'screen6') {
   const audio = document.getElementById('audio4');
   if (!audio) return;
   
-  // Если аудио играет - ставим на паузу
   if (!audio.paused) {
     audio.pause();
     audioCurrentTime[audio.id] = audio.currentTime;
-    stopWaveTracking('audio4', false);
+    stopWaveAnimation('waveCanvas6');
     const pauseBtn = document.getElementById('pauseBtnScreen6');
     if (pauseBtn) pauseBtn.textContent = '▶';
     return;
@@ -1102,10 +1077,10 @@ function playFinalAudio(btn, screenId = 'screen6') {
   const pauseBtn = document.getElementById('pauseBtnScreen6');
   if (pauseBtn) pauseBtn.textContent = 'II';
   
-  startWaveTracking(audio, 'audio4', screenId);
+  startWaveAnimation('waveCanvas6', audio);
 
   audio.onended = () => {
-    stopWaveTracking('audio4', true);
+    stopWaveAnimation('waveCanvas6');
     markAudioDone('audio4', btn);
     audioCurrentTime['audio4'] = 0;
     const pauseBtn = document.getElementById('pauseBtnScreen6');
@@ -1158,7 +1133,6 @@ async function sendFeedback() {
       mode: 'no-cors',
       body: formData
     });
-
     textField.value = '';
     openThankYouModal();
   } catch (error) {
@@ -1186,18 +1160,22 @@ window.onload = () => {
   setTimeout(() => first.classList.add('active'), 100);
 
   const welcomeImg = document.getElementById('welcomeImg');
-  if (welcomeImg) {
-    welcomeImg.src = 'parade illustration.jpg';
-  }
+  if (welcomeImg) welcomeImg.src = 'parade illustration.jpg';
+  
   const traveler = document.getElementById('traveler');
   if (traveler) {
     const firstZone = document.querySelector('.zone1');
     if (firstZone) moveTravelerToZone(firstZone, true);
   }
   
-  // Скрываем кнопку "Далее" на первом экране изначально
   const nextBtn1 = document.getElementById('nextBtnScreen1');
   if (nextBtn1) nextBtn1.style.display = 'none';
+  
+  // Инициализируем canvas с статичными волнами
+  ['waveCanvas1', 'waveCanvas3', 'waveCanvas6', 'mapWaveCanvas'].forEach(canvasId => {
+    const canvas = document.getElementById(canvasId);
+    if (canvas) drawWaves(canvas, 0.3, false);
+  });
 };
 
 function moveTravelerToZone(zone, instant = false) {
@@ -1262,7 +1240,7 @@ function createPawPrint(container, x, y) {
   setTimeout(() => paw.remove(), 1650);
 }
 
-// Добавляем обработчик для аудио на первом экране, чтобы показать кнопку "Далее" после прослушивания
+// Обработчик для аудио на первом экране
 document.getElementById('audio1').addEventListener('ended', function() {
   const nextBtn = document.getElementById('nextBtnScreen1');
   if (nextBtn) {
