@@ -14,7 +14,7 @@ body {
   margin: 0;
 }
 
-.visited {
+  .visited {
   filter: brightness(0.65) grayscale(0.4);
   transition: 0.5s;
 }
@@ -25,6 +25,7 @@ body {
   opacity: 0;
   transition: opacity 1.5s ease;
   position: relative;
+
   min-height: 100vh;
   justify-content: center;
   align-items: center;
@@ -51,6 +52,17 @@ body {
   padding: 0;
 }
 
+#screen1 .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#screen1 .audio-action {
+  display: flex;
+  justify-content: center;
+}
+
 .tech-next:hover {
   background: rgba(232, 242, 236, 0.14);
   color: rgba(232, 242, 236, 0.7);
@@ -75,7 +87,6 @@ button:hover {
 button:active {
   transform: scale(0.96);
 }
-
 #startBtn {
   box-shadow: 0 0 20px rgba(100,255,200,0.3);
 }
@@ -86,16 +97,12 @@ button:active {
   padding: 20px;
   border-radius: 20px;
   margin-top: 20px;
-  width: 100%;
-  max-width: 400px;
-  box-sizing: border-box;
 }
-
 .card h2 {
   margin-bottom: 10px;
 }
 
-.back-btn {
+  .back-btn {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -103,23 +110,18 @@ button:active {
   border: none;
   font-size: 20px;
   cursor: pointer;
-  margin: 0;
-  padding: 8px 12px;
 }
-
 .card {
   position: relative;
 }
-
 .content-img {
   width: 100%;
   max-width: 340px;
   margin: 15px auto;
   display: block;
   border-radius: 15px;
-  transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
+   transition: transform 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
 }
-
 .content-img.breathing {
   animation: breathe 4s ease-in-out infinite;
 }
@@ -156,7 +158,6 @@ button:active {
   transform: scale(1.04);
   opacity: 1;
 }
-
 .map {
   position: relative;
   width: 100%;
@@ -239,7 +240,8 @@ button:active {
 .zone.selected {
   background: rgba(255,255,255,0.15);
   border-radius: 20px;
-  box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
+    box-shadow: inset 0 0 0 2px rgba(182, 239, 211, 0.45);
+
 }
 
 .overlay {
@@ -269,7 +271,6 @@ button:active {
   background:black;
   z-index:1000;
 }
-
 .audio-action {
   width: 100%;
   max-width: 340px;
@@ -285,7 +286,6 @@ button:active {
 
 .audio-btn {
   margin-top: 10px;
-  cursor: pointer;
 }
 
 .audio-btn.pause-btn {
@@ -301,6 +301,7 @@ button:active {
   border: none;
   color: #d5eee2;
   box-shadow: none;
+  cursor: pointer;
 }
 
 .audio-btn.pause-btn:hover,
@@ -319,7 +320,6 @@ button:active {
 
 .screen-audio-controls .screen-audio-bar {
   margin: 0;
-  flex: 1;
 }
 
 .map-audio-controls {
@@ -327,9 +327,8 @@ button:active {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  width: 100%;
-  max-width: 340px;
-  margin: 0 auto 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
 }
 
 .audio-btn.done {
@@ -388,7 +387,7 @@ button:active {
 
 .wave-row {
   width: 100%;
-  max-width: 220px;
+  max-width: 180px;
   margin: 0;
   display: flex;
   justify-content: center;
@@ -442,13 +441,13 @@ button:active {
   padding:20px;
 }
 
-.zone.visited {
+  .zone.visited {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 20px;
   transition: 0.5s;
 }
 
-.fade-letter {
+  .fade-letter {
   opacity: 0;
   display: inline-block;
   animation: fadeLetter 0.6s forwards;
@@ -459,8 +458,7 @@ button:active {
     opacity: 1;
   }
 }
-
-#insightBlock {
+  #insightBlock {
   opacity: 0;
   transition: opacity 0.6s;
   margin-top: 10px;
@@ -496,22 +494,17 @@ button:active {
   color: #5f7b70;
 }
 
-#finalText {
+  #finalText {
   transform: translateY(20px);
   transition: 1s;
 }
-
-/* Стили для кнопки "Далее" на первом экране */
+  
+/* Стиль для кнопки далее на первом экране */
 #nextBtnScreen1 {
-  margin-top: 20px;
   display: none;
+  margin-top: 20px;
 }
-
-/* Центрирование кнопки слушать */
-.audio-button-row {
-  justify-content: center;
-}
-
+  
 </style>
 </head>
 
@@ -523,7 +516,7 @@ button:active {
 <div class="screen" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
-    <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
+ <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
 
     <div class="screen-audio-controls">
       <div class="screen-audio-bar" data-screen="screen1">
@@ -536,7 +529,7 @@ button:active {
     </div>
     <div class="audio-action" data-audio="audio1">
       <div class="audio-button-row">
-        <button class="audio-btn" id="playBtnScreen1" onclick="playAudio('audio1', this, 'screen1')">Слушать</button>
+        <button class="audio-btn" onclick="playAudio('audio1', this, 'screen1')">Слушать</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -572,7 +565,7 @@ button:active {
       </div>
       <button class="audio-btn pause-btn" id="pauseBtnScreen3" onclick="togglePlayPausePrep(this)" aria-label="Пауза/Плей">▶</button>
     </div>
-    <div class="audio-action" data-audio="audio2">
+ <div class="audio-action" data-audio="audio2">
       <div class="audio-button-row">
         <button class="audio-btn" onclick="playAudio('audio2', this, 'screen3')">Определяем запрос</button>
         <span class="done-check">✓</span>
@@ -615,10 +608,10 @@ button:active {
     <img src="IMG_9728.PNG" class="map-img">
     <div id="traveler" aria-label="Путешественник">🐈</div>
 
-    <div class="zone zone1" onclick="cellClick(1)"></div>
-    <div class="zone zone2" onclick="cellClick(2)"></div>
-    <div class="zone zone3" onclick="cellClick(3)"></div>
-    <div class="zone zone4" onclick="cellClick(4)"></div>
+ <div class="zone zone1" onclick="cellClick(1)"></div>
+<div class="zone zone2" onclick="cellClick(2)"></div>
+<div class="zone zone3" onclick="cellClick(3)"></div>
+<div class="zone zone4" onclick="cellClick(4)"></div>
   </div>
   
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
@@ -1021,7 +1014,7 @@ function cellClick(n) {
   const zone = document.querySelectorAll('.zone')[n - 1];
   if (!audio || !zone) return;
 
-  // Если это то же аудио и оно на паузе - возобновляем
+  // Если это то же аудио и оно играет - ставим на паузу
   if (currentAudio === audio && !audio.paused) {
     audio.pause();
     audioCurrentTime[audio.id] = audio.currentTime;
@@ -1093,7 +1086,7 @@ function playFinalAudio(btn, screenId = 'screen6') {
   const audio = document.getElementById('audio4');
   if (!audio) return;
   
-  // Если аудио на паузе - возобновляем
+  // Если аудио играет - ставим на паузу
   if (!audio.paused) {
     audio.pause();
     audioCurrentTime[audio.id] = audio.currentTime;
