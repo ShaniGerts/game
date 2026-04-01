@@ -845,13 +845,6 @@ function playAudio(id, btn, screenId = 'screen3') {
     stopWaveTracking(id, false);
     return;
   }
-   // 👉 переключатель play / pause
-  if (audio.paused) {
-    audio.play();
-    prepAudio = audio;
-  } else {
-    audio.pause();
-  }
 
   prepAudio = audio;
   audio.currentTime = 0;
