@@ -51,20 +51,6 @@ body {
   padding: 0;
 }
 
-#screen1 .card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-#screen1 .audio-action {
-  display: flex;
-  justify-content: center;
-}
-
 .tech-next:hover {
   background: rgba(232, 242, 236, 0.14);
   color: rgba(232, 242, 236, 0.7);
@@ -333,13 +319,17 @@ button:active {
 
 .screen-audio-controls .screen-audio-bar {
   margin: 0;
+  flex: 1;
 }
 
 .map-audio-controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto 10px;
 }
 
 .audio-btn.done {
@@ -363,15 +353,14 @@ button:active {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  gap: 3px;
+  justify-content: center;
+  gap: 4px;
   height: 22px;
-  padding: 0 2px;
+  padding: 0 8px;
 }
 
 .wave-progress .wave {
-  flex: 1;
-  min-width: 2px;
-  max-width: 4px;
+  width: 3px;
   height: 6px;
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(117, 186, 157, 0.95), rgba(54, 95, 80, 0.72));
@@ -394,12 +383,13 @@ button:active {
   border-radius: 999px;
   padding: 6px 8px;
   background: rgba(10, 28, 20, 0.22);
+  justify-content: center;
 }
 
 .wave-row {
   width: 100%;
   max-width: 220px;
-  margin: 10px auto 4px;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -431,8 +421,8 @@ button:active {
 .wave-row.active .wave:nth-child(6) { animation-delay: 0.7s; }
 
 @keyframes wavePulse {
-  0%, 100% { transform: scaleY(0.35) translateY(1px); opacity: 0.42; }
-  50% { transform: scaleY(1.65) translateY(-1px); opacity: 1; }
+  0%, 100% { transform: scaleY(0.35) translateY(1px); opacity: 0.42; height: 6px; }
+  50% { transform: scaleY(1.65) translateY(-1px); opacity: 1; height: 10px; }
 }
 
 .map-note {
@@ -515,6 +505,11 @@ button:active {
 #nextBtnScreen1 {
   margin-top: 20px;
   display: none;
+}
+
+/* Центрирование кнопки слушать */
+.audio-button-row {
+  justify-content: center;
 }
 
 </style>
@@ -875,13 +870,6 @@ function toggleMapPlayPause(btnElement) {
     btnElement.textContent = 'II';
     document.getElementById('overlay').classList.add('active');
     document.getElementById('mapWave')?.classList.add('active');
-    
-    // Возобновляем волновой трекинг
-    if (currentAudio.duration) {
-      const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
-      // Для карты нет screenId, просто активируем визуализацию
-      document.getElementById('mapWave')?.classList.add('active');
-    }
   } else {
     audioCurrentTime[audioId] = currentAudio.currentTime;
     currentAudio.pause();
