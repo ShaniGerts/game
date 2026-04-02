@@ -123,20 +123,6 @@ button:active {
   z-index: 10;
 }
 
-.next-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  margin: 0;
-  padding: 8px 12px;
-  color: #e8f2ec;
-  z-index: 10;
-}
-
 .card {
   position: relative;
 }
@@ -216,17 +202,17 @@ button:active {
   left: 10px;
   top: 10px;
   z-index: 8;
-  transition: left 1.8s ease-in-out, top 1.8s ease-in-out;
+  transition: left 1.8s cubic-bezier(0.4, 0.0, 0.2, 1), top 1.8s cubic-bezier(0.4, 0.0, 0.2, 1);
   transform-origin: center;
 }
 
 #traveler.walking {
-  animation: walkBounce 0.28s ease-in-out infinite;
+  animation: walkBounce 0.35s ease-in-out infinite;
 }
 
 @keyframes walkBounce {
-  0%, 100% { transform: translateY(0px) scale(1) rotate(-4deg); }
-  50% { transform: translateY(-10px) scale(1.12) rotate(4deg); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(5deg); }
 }
 
 .map {
@@ -600,11 +586,11 @@ button:active {
 <div class="screen" id="screen2">
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
-    <button class="next-btn" onclick="nextScreen(3)">→</button>
     <h2>Сегодня ты отправишься в путешествие по сказочному острову и посетишь его самые значимые места</h2>
     <img src="IMG_9891.JPG" class="content-img">
     <button onclick="nextScreen(3)">Далее</button>
   </div>
+  <button class="tech-next" onclick="nextScreen(3)" aria-label="Следующий экран">→</button>
 </div>
 
 <!-- ЭКРАН 3: Правила -->
@@ -1235,7 +1221,7 @@ function moveTravelerToZone(zone, instant = false, targetZoneNumber = null) {
     traveler.style.left = `${targetLeft}px`;
     traveler.style.top = `${targetTop}px`;
     requestAnimationFrame(() => {
-      traveler.style.transition = 'left 1.8s ease-in-out, top 1.8s ease-in-out';
+      traveler.style.transition = 'left 1.8s cubic-bezier(0.4, 0.0, 0.2, 1), top 1.8s cubic-bezier(0.4, 0.0, 0.2, 1)';
       traveler.classList.remove('walking');
     });
     return;
