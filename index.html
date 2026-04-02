@@ -119,6 +119,22 @@ button:active {
   cursor: pointer;
   margin: 0;
   padding: 8px 12px;
+  color: #e8f2ec;
+  z-index: 10;
+}
+
+.next-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0;
+  padding: 8px 12px;
+  color: #e8f2ec;
+  z-index: 10;
 }
 
 .card {
@@ -206,10 +222,6 @@ button:active {
 
 #traveler.walking {
   animation: walkBounce 0.28s ease-in-out infinite;
-}
-
-#traveler.facing-right {
-  transform: scaleX(-1);
 }
 
 @keyframes walkBounce {
@@ -423,7 +435,7 @@ button:active {
   transition: height 0.2s ease-out;
 }
 
-/* Анимация волн как настоящие звуковые волны - плавная бегущая волна */
+/* Анимация волн как настоящие звуковые волны */
 @keyframes waveFlow {
   0% {
     height: 6px;
@@ -447,7 +459,6 @@ button:active {
   animation: waveFlow 1.6s ease-in-out infinite;
 }
 
-/* Каждая волна имеет свою задержку, создавая эффект бегущей волны */
 .wave-progress.active .wave:nth-child(1) { animation-delay: 0s; }
 .wave-progress.active .wave:nth-child(2) { animation-delay: 0.08s; }
 .wave-progress.active .wave:nth-child(3) { animation-delay: 0.16s; }
@@ -465,7 +476,6 @@ button:active {
 .wave-progress.active .wave:nth-child(15) { animation-delay: 1.12s; }
 .wave-progress.active .wave:nth-child(16) { animation-delay: 1.20s; }
 
-/* Для карты с 6 волнами */
 .wave-row.active .wave:nth-child(1) { animation-delay: 0s; }
 .wave-row.active .wave:nth-child(2) { animation-delay: 0.12s; }
 .wave-row.active .wave:nth-child(3) { animation-delay: 0.24s; }
@@ -587,18 +597,29 @@ button:active {
   <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- экран 2 -->
+<!-- НОВЫЙ ЭКРАН 1.5 - Вступление -->
+<div class="screen" id="screenIntro">
+  <div class="card">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <button class="next-btn" onclick="nextScreen(3)">→</button>
+    <h2>Сегодня ты отправишься в путешествие по сказочному острову и посетишь его самые значимые места</h2>
+    <img src="IMG_9891.JPG" class="content-img">
+    <button onclick="nextScreen(3)">Далее</button>
+  </div>
+</div>
+
+<!-- экран 2 - правила (теперь стал экраном 3) -->
 <div class="screen" id="screen2">
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Правила</h2>
     <img src="rules1.png" id="rulesImg" class="content-img">
-    <button onclick="nextScreen(3)">Далее</button>
+    <button onclick="nextScreen(4)">Далее</button>
   </div>
-  <button class="tech-next" onclick="nextScreen(3)" aria-label="Следующий экран">→</button>
+  <button class="tech-next" onclick="nextScreen(4)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- экран 3 -->
+<!-- экран 3 - подготовка (стал экраном 4) -->
 <div class="screen" id="screen3">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
@@ -630,12 +651,12 @@ button:active {
         <span class="done-check">✓</span>
       </div>
     </div>
-    <button id="startBtn" onclick="nextScreen(5)" style="display:none;">Начать путешествие</button>
+    <button id="startBtn" onclick="nextScreen(6)" style="display:none;">Начать путешествие</button>
   </div>
-  <button class="tech-next" onclick="nextScreen(5)" aria-label="Следующий экран">→</button>
+  <button class="tech-next" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- карта -->
+<!-- карта (стала экраном 6) -->
 <div class="screen" id="screen5">
    <button class="back-btn" onclick="goBack()">←</button>
   <h2>Пройди поочередно каждую из четырех локаций</h2>
@@ -659,12 +680,12 @@ button:active {
   
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
   <p id="insightText" style="min-height:40px;"></p>
-  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">Завершить</button>
+  <button id="finishBtn" onclick="nextScreen(7)" style="display:none;">Завершить</button>
 </div>
-  <button class="tech-next" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
+  <button class="tech-next" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- экран 6 -->
+<!-- экран 6 - заключение (стал экраном 7) -->
 <div class="screen" id="screen6">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
@@ -686,10 +707,10 @@ button:active {
       </div>
     </div>
   </div>
-  <button class="tech-next" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
+  <button class="tech-next" onclick="nextScreen(8)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- экран 7 -->
+<!-- экран 7 - финал (стал экраном 8) -->
 <div class="screen" id="screen7">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
@@ -749,7 +770,6 @@ let currentAudio = null;
 const visitedSet = new Set();
 let visitedCount = 0;
 let pawTrailTimer = null;
-let currentTravelerPosition = 1; // Текущая позиция котика (1-4)
 
 let audioCurrentTime = {
   audio1: 0,
@@ -912,7 +932,7 @@ function nextScreen(n) {
   next.style.display = 'block';
   setTimeout(() => next.classList.add('active'), 40);
 
-  if (n === 7) {
+  if (n === 8) {
     const text = document.getElementById('finalText');
     if (text) {
       text.style.opacity = 1;
@@ -1023,38 +1043,6 @@ function showLocationPreview(n) {
   preview.style.display = 'block';
 }
 
-function getTravelerCenterX() {
-  const traveler = document.getElementById('traveler');
-  if (!traveler) return 0;
-  const rect = traveler.getBoundingClientRect();
-  const mapRect = document.querySelector('.map').getBoundingClientRect();
-  return (rect.left + rect.width / 2) - mapRect.left;
-}
-
-function getZoneCenterX(zoneNumber) {
-  const zone = document.querySelector(`.zone${zoneNumber}`);
-  if (!zone) return 0;
-  const rect = zone.getBoundingClientRect();
-  const mapRect = document.querySelector('.map').getBoundingClientRect();
-  return (rect.left + rect.width / 2) - mapRect.left;
-}
-
-function updateTravelerDirection(targetZoneNumber) {
-  const traveler = document.getElementById('traveler');
-  if (!traveler) return;
-  
-  const currentX = getTravelerCenterX();
-  const targetX = getZoneCenterX(targetZoneNumber);
-  
-  // Если целевая точка правее текущей -> поворачиваем направо (добавляем класс)
-  // Если левее -> поворачиваем налево (убираем класс)
-  if (targetX > currentX) {
-    traveler.classList.add('facing-right');
-  } else if (targetX < currentX) {
-    traveler.classList.remove('facing-right');
-  }
-}
-
 function cellClick(n) {
   const audio = document.getElementById(`cell${n}`);
   const zone = document.querySelectorAll('.zone')[n - 1];
@@ -1084,9 +1072,6 @@ function cellClick(n) {
   
   document.getElementById('overlay').classList.add('active');
   document.getElementById('mapWave')?.classList.add('active');
-  
-  // Поворачиваем котика в сторону движения
-  updateTravelerDirection(n);
   
   moveTravelerToZone(zone, false, n);
 
@@ -1165,7 +1150,7 @@ function closeMotivationModal() {
 }
 
 function showFinalScreen() {
-  nextScreen(7);
+  nextScreen(8);
 }
 
 const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeZ-PxW0j1VnUCRdhGTbLpXsNTUDNRgS6JHpS7mppd8a9mKSQ/formResponse';
@@ -1254,7 +1239,6 @@ function moveTravelerToZone(zone, instant = false, targetZoneNumber = null) {
       traveler.style.transition = 'left 1.8s ease-in-out, top 1.8s ease-in-out';
       traveler.classList.remove('walking');
     });
-    if (targetZoneNumber) currentTravelerPosition = targetZoneNumber;
     return;
   }
 
@@ -1267,7 +1251,6 @@ function moveTravelerToZone(zone, instant = false, targetZoneNumber = null) {
   traveler.style.left = `${targetLeft}px`;
   traveler.style.top = `${targetTop}px`;
   setTimeout(() => traveler.classList.remove('walking'), 1800);
-  if (targetZoneNumber) currentTravelerPosition = targetZoneNumber;
 }
 
 function startPawTrail(startLeft, startTop, endLeft, endTop, duration) {
