@@ -107,6 +107,7 @@ button:active {
 
 .card h2 {
   margin-bottom: 10px;
+  font-size: 18px;
 }
 
 .back-btn {
@@ -549,6 +550,86 @@ button:active {
   margin-top: 20px;
 }
 
+/* Модальное окно для инсайтов после каждой локации */
+.insight-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 18, 14, 0.85);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+}
+
+.insight-modal.active {
+  display: flex;
+}
+
+.insight-modal-content {
+  background: linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%);
+  border: 1px solid rgba(46, 94, 78, 0.18);
+  border-radius: 24px;
+  max-width: 420px;
+  width: 100%;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  color: #234538;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.insight-modal-content h3 {
+  margin: 0 0 16px 0;
+  color: #2e5e4e;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.insight-modal-content textarea {
+  width: 100%;
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid rgba(46, 94, 78, 0.3);
+  background: white;
+  color: #173127;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.insight-modal-content textarea:focus {
+  outline: none;
+  border-color: #2e5e4e;
+  box-shadow: 0 0 0 2px rgba(46, 94, 78, 0.2);
+}
+
+.insight-modal-content button {
+  margin-top: 0;
+  padding: 12px 24px;
+  font-size: 14px;
+}
+
+.insight-modal-content .modal-status {
+  margin-top: 10px;
+  font-size: 12px;
+  display: none;
+}
+
 </style>
 </head>
 
@@ -718,6 +799,16 @@ button:active {
   </div>
 </div>
 
+<!-- Модальное окно для инсайтов после каждой локации -->
+<div id="insightModal" class="insight-modal">
+  <div class="insight-modal-content">
+    <h3>✨ Что стало для тебя самым значимым в этой точке? ✨</h3>
+    <textarea id="insightModalText" rows="3" placeholder="Напишите свои мысли..."></textarea>
+    <button id="insightModalSubmit" onclick="submitInsight()">Поделиться</button>
+    <p id="insightModalStatus" class="modal-status"></p>
+  </div>
+</div>
+
 <div id="motivationModal">
   <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
     <h3 style="margin-top:0; margin-bottom:10px; color:#2e5e4e;">Ты отлично идёшь 🌿</h3>
@@ -756,6 +847,7 @@ let currentAudio = null;
 const visitedSet = new Set();
 let visitedCount = 0;
 let pawTrailTimer = null;
+let pendingZoneNumber = null; // для сохранения номера локации перед модальным окном
 
 let audioCurrentTime = {
   audio1: 0,
@@ -767,6 +859,13 @@ let audioCurrentTime = {
   cell2: 0,
   cell3: 0,
   cell4: 0
+};
+
+const locationNames = {
+  1: "Тотем",
+  2: "Сладкий дом",
+  3: "Камень",
+  4: "Гора"
 };
 
 const locationMeta = {
@@ -1029,6 +1128,73 @@ function showLocationPreview(n) {
   preview.style.display = 'block';
 }
 
+function showInsightModal(zoneNumber) {
+  const modal = document.getElementById('insightModal');
+  const textarea = document.getElementById('insightModalText');
+  textarea.value = '';
+  pendingZoneNumber = zoneNumber;
+  modal.classList.add('active');
+  textarea.focus();
+}
+
+function closeInsightModal() {
+  const modal = document.getElementById('insightModal');
+  modal.classList.remove('active');
+  pendingZoneNumber = null;
+}
+
+async function submitInsight() {
+  const textarea = document.getElementById('insightModalText');
+  const status = document.getElementById('insightModalStatus');
+  const insightText = textarea.value.trim();
+  const zoneNumber = pendingZoneNumber;
+  const zoneName = locationNames[zoneNumber] || `Локация ${zoneNumber}`;
+  
+  if (!insightText) {
+    status.textContent = 'Пожалуйста, напишите, что стало для вас значимым ✨';
+    status.style.display = 'block';
+    status.style.color = '#b85c00';
+    return;
+  }
+  
+  const submitBtn = document.getElementById('insightModalSubmit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Отправляем...';
+  status.style.display = 'none';
+  
+  // Формируем текст с указанием локации
+  const fullText = `[${zoneName}] ${insightText}`;
+  
+  const formData = new FormData();
+  formData.append('entry.1283820105', fullText);
+  
+  try {
+    await fetch('https://docs.google.com/forms/d/e/1FAIpQLSeZ-PxW0j1VnUCRdhGTbLpXsNTUDNRgS6JHpS7mppd8a9mKSQ/formResponse', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    });
+    
+    // Показываем благодарность
+    status.textContent = 'Спасибо! ✨';
+    status.style.color = '#2e5e4e';
+    status.style.display = 'block';
+    
+    setTimeout(() => {
+      closeInsightModal();
+    }, 1000);
+    
+  } catch (error) {
+    console.error('Ошибка при отправке:', error);
+    status.textContent = 'Не удалось отправить. Попробуйте ещё раз.';
+    status.style.color = '#b00020';
+    status.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Поделиться';
+  }
+}
+
 function cellClick(n) {
   const audio = document.getElementById(`cell${n}`);
   const zone = document.querySelectorAll('.zone')[n - 1];
@@ -1077,6 +1243,9 @@ function cellClick(n) {
     if (!visitedSet.has(n)) {
       visitedSet.add(n);
       visitedCount++;
+      
+      // Показываем модальное окно с вопросом после прохождения локации
+      showInsightModal(n);
     }
 
     if (visitedCount === 4) showInsights();
