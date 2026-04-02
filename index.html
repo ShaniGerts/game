@@ -435,7 +435,6 @@ button:active {
   transition: height 0.2s ease-out;
 }
 
-/* Анимация волн как настоящие звуковые волны */
 @keyframes waveFlow {
   0% {
     height: 6px;
@@ -571,7 +570,7 @@ button:active {
 
 <div class="overlay" id="overlay"></div>
 
-<!-- экран 1 -->
+<!-- ЭКРАН 1: Добро пожаловать -->
 <div class="screen" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
@@ -597,8 +596,8 @@ button:active {
   <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- НОВЫЙ ЭКРАН 1.5 - Вступление -->
-<div class="screen" id="screenIntro">
+<!-- ЭКРАН 2: Вступление -->
+<div class="screen" id="screen2">
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <button class="next-btn" onclick="nextScreen(3)">→</button>
@@ -608,8 +607,8 @@ button:active {
   </div>
 </div>
 
-<!-- экран 2 - правила (теперь стал экраном 3) -->
-<div class="screen" id="screen2">
+<!-- ЭКРАН 3: Правила -->
+<div class="screen" id="screen3">
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Правила</h2>
@@ -619,44 +618,44 @@ button:active {
   <button class="tech-next" onclick="nextScreen(4)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- экран 3 - подготовка (стал экраном 4) -->
-<div class="screen" id="screen3">
+<!-- ЭКРАН 4: Подготовка -->
+<div class="screen" id="screen4">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
     <div class="screen-audio-controls">
-      <div class="screen-audio-bar" data-screen="screen3">
+      <div class="screen-audio-bar" data-screen="screen4">
         <div class="wave-progress">
           <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
           <span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span><span class="wave"></span>
         </div>
       </div>
-      <button class="audio-btn pause-btn" id="pauseBtnScreen3" onclick="togglePlayPausePrep(this)" aria-label="Пауза/Плей">▶</button>
+      <button class="audio-btn pause-btn" id="pauseBtnScreen4" onclick="togglePlayPausePrep(this)" aria-label="Пауза/Плей">▶</button>
     </div>
     <div class="audio-action" data-audio="audio2">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="playAudio('audio2', this, 'screen3')">Определяем запрос</button>
+        <button class="audio-btn" onclick="playAudio('audio2', this, 'screen4')">Определяем запрос</button>
         <span class="done-check">✓</span>
       </div>
     </div>
     <div class="audio-action" data-audio="audio3">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="playAudio('audio3', this, 'screen3')">Высшая цель</button>
+        <button class="audio-btn" onclick="playAudio('audio3', this, 'screen4')">Высшая цель</button>
         <span class="done-check">✓</span>
       </div>
     </div>
     <div class="audio-action" data-audio="audio5">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="playAudio('audio5', this, 'screen3')">Собираемся в путь</button>
+        <button class="audio-btn" onclick="playAudio('audio5', this, 'screen4')">Собираемся в путь</button>
         <span class="done-check">✓</span>
       </div>
     </div>
-    <button id="startBtn" onclick="nextScreen(6)" style="display:none;">Начать путешествие</button>
+    <button id="startBtn" onclick="nextScreen(5)" style="display:none;">Начать путешествие</button>
   </div>
-  <button class="tech-next" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
+  <button class="tech-next" onclick="nextScreen(5)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- карта (стала экраном 6) -->
+<!-- ЭКРАН 5: Карта -->
 <div class="screen" id="screen5">
    <button class="back-btn" onclick="goBack()">←</button>
   <h2>Пройди поочередно каждую из четырех локаций</h2>
@@ -680,12 +679,12 @@ button:active {
   
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
   <p id="insightText" style="min-height:40px;"></p>
-  <button id="finishBtn" onclick="nextScreen(7)" style="display:none;">Завершить</button>
+  <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">Завершить</button>
 </div>
-  <button class="tech-next" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
+  <button class="tech-next" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- экран 6 - заключение (стал экраном 7) -->
+<!-- ЭКРАН 6: Заключение -->
 <div class="screen" id="screen6">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
@@ -707,10 +706,10 @@ button:active {
       </div>
     </div>
   </div>
-  <button class="tech-next" onclick="nextScreen(8)" aria-label="Следующий экран">→</button>
+  <button class="tech-next" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- экран 7 - финал (стал экраном 8) -->
+<!-- ЭКРАН 7: Финал -->
 <div class="screen" id="screen7">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
@@ -870,7 +869,7 @@ function togglePlayPause(audioId, screenId, btnElement) {
     audio.play();
     btnElement.textContent = 'II';
     startWaveTracking(audio, audioId, screenId);
-    if (screenId === 'screen3') prepAudio = audio;
+    if (screenId === 'screen4') prepAudio = audio;
   } else {
     audioCurrentTime[audioId] = audio.currentTime;
     audio.pause();
@@ -882,7 +881,7 @@ function togglePlayPause(audioId, screenId, btnElement) {
 function togglePlayPausePrep(btnElement) {
   if (!prepAudio) return;
   const audioId = prepAudio.id;
-  const screenId = 'screen3';
+  const screenId = 'screen4';
   
   if (prepAudio.paused) {
     prepAudio.currentTime = audioCurrentTime[audioId] || 0;
@@ -932,7 +931,7 @@ function nextScreen(n) {
   next.style.display = 'block';
   setTimeout(() => next.classList.add('active'), 40);
 
-  if (n === 8) {
+  if (n === 7) {
     const text = document.getElementById('finalText');
     if (text) {
       text.style.opacity = 1;
@@ -958,16 +957,16 @@ function goBack() {
   setTimeout(() => prev.classList.add('active'), 40);
 }
 
-function playAudio(id, btn, screenId = 'screen3') {
+function playAudio(id, btn, screenId = 'screen4') {
   const audio = document.getElementById(id);
   if (!audio) return;
 
-  if (screenId === 'screen3') {
+  if (screenId === 'screen4') {
     if (prepAudio && prepAudio !== audio && !prepAudio.paused) {
       audioCurrentTime[prepAudio.id] = prepAudio.currentTime;
       prepAudio.pause();
       stopWaveTracking(prepAudio.id, false);
-      const pauseBtn = document.getElementById('pauseBtnScreen3');
+      const pauseBtn = document.getElementById('pauseBtnScreen4');
       if (pauseBtn) pauseBtn.textContent = '▶';
     }
     prepAudio = audio;
@@ -977,8 +976,8 @@ function playAudio(id, btn, screenId = 'screen3') {
     audio.pause();
     audioCurrentTime[audio.id] = audio.currentTime;
     stopWaveTracking(id, false);
-    if (screenId === 'screen3') {
-      const pauseBtn = document.getElementById('pauseBtnScreen3');
+    if (screenId === 'screen4') {
+      const pauseBtn = document.getElementById('pauseBtnScreen4');
       if (pauseBtn) pauseBtn.textContent = '▶';
     }
     return;
@@ -987,8 +986,8 @@ function playAudio(id, btn, screenId = 'screen3') {
   audio.currentTime = audioCurrentTime[audio.id] || 0;
   audio.play();
   
-  if (screenId === 'screen3') {
-    const pauseBtn = document.getElementById('pauseBtnScreen3');
+  if (screenId === 'screen4') {
+    const pauseBtn = document.getElementById('pauseBtnScreen4');
     if (pauseBtn) pauseBtn.textContent = 'II';
   }
   
@@ -998,8 +997,8 @@ function playAudio(id, btn, screenId = 'screen3') {
     stopWaveTracking(id, true);
     markAudioDone(id, btn);
     
-    if (screenId === 'screen3') {
-      const pauseBtn = document.getElementById('pauseBtnScreen3');
+    if (screenId === 'screen4') {
+      const pauseBtn = document.getElementById('pauseBtnScreen4');
       if (pauseBtn) pauseBtn.textContent = '▶';
     }
     
@@ -1150,7 +1149,7 @@ function closeMotivationModal() {
 }
 
 function showFinalScreen() {
-  nextScreen(8);
+  nextScreen(7);
 }
 
 const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeZ-PxW0j1VnUCRdhGTbLpXsNTUDNRgS6JHpS7mppd8a9mKSQ/formResponse';
