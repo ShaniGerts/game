@@ -555,7 +555,7 @@ button:active {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(6, 18, 14, 0.85);
+  background: rgba(6, 18, 14, 0.9);
   z-index: 2000;
   align-items: center;
   justify-content: center;
@@ -568,22 +568,22 @@ button:active {
 }
 
 .insight-modal-content {
-  background: linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%);
-  border: 1px solid rgba(46, 94, 78, 0.18);
+  background: linear-gradient(180deg, #1a3028 0%, #0f1f19 100%);
+  border: 1px solid rgba(111, 207, 151, 0.25);
   border-radius: 24px;
   max-width: 420px;
   width: 100%;
   padding: 28px 24px;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  color: #234538;
-  animation: fadeInUp 0.4s ease-out;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  color: #d5eee2;
+  animation: fadeInUp 0.6s ease-out;
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
@@ -593,7 +593,7 @@ button:active {
 
 .insight-modal-content h3 {
   margin: 0 0 16px 0;
-  color: #2e5e4e;
+  color: #a8e6cf;
   font-size: 20px;
   line-height: 1.4;
 }
@@ -602,9 +602,9 @@ button:active {
   width: 100%;
   border-radius: 12px;
   padding: 12px;
-  border: 1px solid rgba(46, 94, 78, 0.3);
-  background: white;
-  color: #173127;
+  border: 1px solid rgba(111, 207, 151, 0.3);
+  background: #1e3a2f;
+  color: #e8f2ec;
   font-family: inherit;
   font-size: 14px;
   resize: vertical;
@@ -612,16 +612,30 @@ button:active {
   margin-bottom: 16px;
 }
 
+.insight-modal-content textarea::placeholder {
+  color: #6f9a88;
+}
+
 .insight-modal-content textarea:focus {
   outline: none;
-  border-color: #2e5e4e;
-  box-shadow: 0 0 0 2px rgba(46, 94, 78, 0.2);
+  border-color: #6fcf97;
+  box-shadow: 0 0 0 2px rgba(111, 207, 151, 0.2);
 }
 
 .insight-modal-content button {
   margin-top: 0;
   padding: 12px 24px;
   font-size: 14px;
+  background: #2e5e4e;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.insight-modal-content button:hover {
+  background: #3f7d68;
 }
 
 .insight-modal-content .modal-status {
