@@ -247,6 +247,7 @@ button:active {
   width: 50%;
   height: 50%;
   z-index: 5;
+  cursor: pointer;
 }
 
 .zone1 { top: 0; left: 0; }
@@ -304,6 +305,49 @@ button:active {
 .audio-btn {
   margin-top: 10px;
   cursor: pointer;
+}
+
+.audio-button-row .audio-btn:not(.pause-btn) {
+  min-width: 230px;
+}
+
+.audio-controls-hidden {
+  display: none !important;
+}
+
+/* Стрелка-переход: заменяет текстовые кнопки "Далее"/"Начать путешествие",
+   всегда видима, стиль как у угловой кнопки .tech-next */
+.advance-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 0;
+  padding: 0;
+  margin-top: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 242, 236, 0.3);
+  background: rgba(232, 242, 236, 0.1);
+  color: #e8f2ec;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.advance-btn:hover {
+  background: rgba(232, 242, 236, 0.18);
+}
+
+.advance-btn:active {
+  transform: scale(0.94);
+}
+
+#screen5 .tech-next,
+#screen6 .tech-next {
+  top: 14px;
+  bottom: auto;
 }
 
 .audio-btn.done {
@@ -421,6 +465,51 @@ button:active {
   color: #c7ded2;
 }
 
+/* Ненавязчивый индикатор прогресса: кружочки, соединённые линией */
+.progress-indicator {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(10, 28, 20, 0.3);
+}
+
+.progress-indicator.visible {
+  display: flex;
+}
+
+body.progress-active .screen {
+  padding-top: 52px;
+}
+
+.progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgba(232, 242, 236, 0.22);
+  border: 1px solid rgba(232, 242, 236, 0.3);
+  transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.progress-dot.done {
+  background: #6fcf97;
+  border-color: #6fcf97;
+}
+
+.progress-line {
+  width: 9px;
+  height: 1px;
+  flex-shrink: 0;
+  background: rgba(232, 242, 236, 0.22);
+}
+
 #motivationModal {
   display:none;
   position:fixed;
@@ -491,41 +580,6 @@ button:active {
   transition: 1s;
 }
 
-#nextBtnScreen1 {
-  display: none;
-  margin-top: 20px;
-}
-
-/* Модальное окно для инсайтов после каждой локации */
-.insight-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(6, 18, 14, 0.9);
-  z-index: 2000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  backdrop-filter: blur(8px);
-}
-
-.insight-modal.active {
-  display: flex;
-}
-
-.insight-modal-content {
-  background: linear-gradient(180deg, #1a3028 0%, #0f1f19 100%);
-  border: 1px solid rgba(111, 207, 151, 0.25);
-  border-radius: 24px;
-  max-width: 420px;
-  width: 100%;
-  padding: 28px 24px;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  color: #d5eee2;
-  animation: fadeInUp 0.6s ease-out;
-}
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -537,57 +591,110 @@ button:active {
   }
 }
 
-.insight-modal-content h3 {
-  margin: 0 0 16px 0;
-  color: #a8e6cf;
-  font-size: 20px;
-  line-height: 1.4;
+/* Ненавязчивая подсказка после прослушивания локации (не перекрывает экран) */
+.insight-tip {
+  display: none;
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 16px auto 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(20, 40, 30, 0.6);
+  border: 1px solid rgba(111, 207, 151, 0.25);
+  text-align: left;
+  box-sizing: border-box;
+  animation: fadeInUp 0.4s ease-out;
 }
 
-.insight-modal-content textarea {
+.insight-tip.visible {
+  display: block;
+}
+
+.insight-tip-close {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: none;
+  color: rgba(213, 238, 226, 0.55);
+  font-size: 18px;
+  padding: 6px 10px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.insight-tip-close:hover {
+  color: rgba(213, 238, 226, 0.9);
+  background: none;
+}
+
+.insight-tip-text {
+  margin: 0 22px 10px 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #d5eee2;
+  opacity: 0.92;
+}
+
+.insight-tip textarea {
   width: 100%;
-  border-radius: 12px;
-  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 10px;
   border: 1px solid rgba(111, 207, 151, 0.3);
   background: #1e3a2f;
   color: #e8f2ec;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
   resize: vertical;
-  box-sizing: border-box;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
-.insight-modal-content textarea::placeholder {
+.insight-tip textarea::placeholder {
   color: #6f9a88;
 }
 
-.insight-modal-content textarea:focus {
+.insight-tip textarea:focus {
   outline: none;
   border-color: #6fcf97;
   box-shadow: 0 0 0 2px rgba(111, 207, 151, 0.2);
 }
 
-.insight-modal-content button {
+.insight-tip button {
   margin-top: 0;
-  padding: 12px 24px;
-  font-size: 14px;
-  background: #2e5e4e;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 12px;
-  transition: 0.3s;
+  padding: 9px 20px;
+  font-size: 13px;
 }
 
-.insight-modal-content button:hover {
-  background: #3f7d68;
-}
-
-.insight-modal-content .modal-status {
-  margin-top: 10px;
+.insight-tip .modal-status {
+  margin-top: 8px;
   font-size: 12px;
   display: none;
+}
+
+/* Подсказка "нажми сюда" у первой кнопки на экране "Подготовка" */
+.hint-tip {
+  font-size: 12px;
+  color: rgba(213, 238, 226, 0.6);
+  opacity: 0.9;
+  margin: 0 0 4px;
+  transition: opacity 0.3s ease;
+}
+
+.hint-tip.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hint-arrow {
+  display: inline-block;
+  animation: hintBounce 1.2s ease-in-out infinite;
+}
+
+@keyframes hintBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
 }
 
 </style>
@@ -597,6 +704,17 @@ button:active {
 
 <div class="overlay" id="overlay"></div>
 
+<div class="progress-indicator" id="progressIndicator">
+  <span class="progress-dot"></span><span class="progress-line"></span>
+  <span class="progress-dot"></span><span class="progress-line"></span>
+  <span class="progress-dot"></span><span class="progress-line"></span>
+  <span class="progress-dot"></span><span class="progress-line"></span>
+  <span class="progress-dot"></span><span class="progress-line"></span>
+  <span class="progress-dot"></span><span class="progress-line"></span>
+  <span class="progress-dot"></span><span class="progress-line"></span>
+  <span class="progress-dot"></span>
+</div>
+
 <!-- ЭКРАН 1: Добро пожаловать -->
 <div class="screen" id="screen1">
   <div class="card">
@@ -604,7 +722,7 @@ button:active {
     <p style="font-size: 14px; margin-top: -10px; margin-bottom: 10px; opacity: 0.8;">в мир игры «Жить = Творить»</p>
     <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
 
-    <div class="screen-audio-controls" id="screen1AudioControls">
+    <div class="screen-audio-controls audio-controls-hidden" id="screen1AudioControls">
       <button class="audio-btn pause-btn" id="pauseBtnScreen1" aria-label="Пауза/Плей">▶</button>
       <div class="audio-track">
         <div class="wave-progress"></div>
@@ -613,37 +731,34 @@ button:active {
     </div>
     <div class="audio-action" data-audio="audio1">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="screen1Bar.toggle()">Начать игру</button>
+        <button class="audio-btn" onclick="revealAndPlay(screen1Bar, 'screen1AudioControls', this.closest('.audio-action'))">Начать игру</button>
         <span class="done-check">✓</span>
       </div>
     </div>
-    <button id="nextBtnScreen1" onclick="nextScreen(2)">Далее</button>
+    <button id="nextBtnScreen1" class="advance-btn" onclick="nextScreen(2)" aria-label="Далее">→</button>
   </div>
-  <button class="tech-next" onclick="nextScreen(2)" aria-label="Следующий экран">→</button>
 </div>
 
-<!-- ЭКРАН 2: Вступление -->
+<!-- ЭКРАН 2: Правила -->
 <div class="screen" id="screen2">
+  <div class="card">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h2>Правила</h2>
+    <img src="rules1.png" id="rulesImg" class="content-img">
+    <button class="advance-btn" onclick="nextScreen(3)" aria-label="Далее">→</button>
+  </div>
+</div>
+
+<!-- ЭКРАН 3: Вступление -->
+<div class="screen" id="screen3">
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Сегодня вы отправитесь в путешествие по сказочному острову Ляньоп</h2>
     <img src="IMG_9891.JPG" class="content-img">
     <p style="font-size: 14px; margin-top: 5px; opacity: 0.9;">Легенда гласит, что обойдя этот остров полностью, люди меняются навсегда.
       Я же подготовила для вас тур по четырем значимым местам.</p>
-    <button onclick="nextScreen(3)">Далее</button>
+    <button class="advance-btn" onclick="nextScreen(4)" aria-label="Далее">→</button>
   </div>
-  <button class="tech-next" onclick="nextScreen(3)" aria-label="Следующий экран">→</button>
-</div>
-
-<!-- ЭКРАН 3: Правила -->
-<div class="screen" id="screen3">
-  <div class="card">
-    <button class="back-btn" onclick="goBack()">←</button>
-    <h2>Правила</h2>
-    <img src="rules1.png" id="rulesImg" class="content-img">
-    <button onclick="nextScreen(4)">Далее</button>
-  </div>
-  <button class="tech-next" onclick="nextScreen(4)" aria-label="Следующий экран">→</button>
 </div>
 
 <!-- ЭКРАН 4: Подготовка -->
@@ -660,6 +775,7 @@ button:active {
       </div>
     </div>
     <div class="audio-action" data-audio="audio2">
+      <div class="hint-tip" id="prepHint">нажми сюда <span class="hint-arrow">↓</span></div>
       <div class="audio-button-row">
         <button class="audio-btn" onclick="selectPrepTrack('audio2')">Определяем запрос</button>
         <span class="done-check">✓</span>
@@ -677,9 +793,8 @@ button:active {
         <span class="done-check">✓</span>
       </div>
     </div>
-    <button id="startBtn" onclick="nextScreen(5)" style="display:none;">Начать путешествие</button>
+    <button id="startBtn" class="advance-btn" onclick="nextScreen(5)" aria-label="Начать путешествие">→</button>
   </div>
-  <button class="tech-next" onclick="nextScreen(5)" aria-label="Следующий экран">→</button>
 </div>
   
 <!-- ЭКРАН 5: Карта -->
@@ -703,7 +818,15 @@ button:active {
     <div class="zone zone3" onclick="cellClick(3)"></div>
     <div class="zone zone4" onclick="cellClick(4)"></div>
   </div>
-  
+
+  <div id="locationInsightTip" class="insight-tip">
+    <button class="insight-tip-close" onclick="closeInsightTip()" aria-label="Закрыть">×</button>
+    <p class="insight-tip-text">Запишите свои наблюдения и то, что вам особенно запомнилось: к себе в блокнот или в поле ниже.</p>
+    <textarea id="insightModalText" rows="2" placeholder="Напишите свои мысли..."></textarea>
+    <button id="insightModalSubmit" onclick="submitInsight()">Поделиться</button>
+    <p id="insightModalStatus" class="modal-status"></p>
+  </div>
+
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
   <p id="insightText" style="min-height:40px;"></p>
   <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">Далее</button>
@@ -715,9 +838,8 @@ button:active {
 <div class="screen" id="screen6">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
-    <h2>Заключение</h2>
    <img src="end.jpg" class="content-img" alt="Завершение путешествия">
-    <div class="screen-audio-controls" id="screen6AudioControls">
+    <div class="screen-audio-controls audio-controls-hidden" id="screen6AudioControls">
       <button class="audio-btn pause-btn" id="pauseBtnScreen6" aria-label="Пауза/Плей">▶</button>
       <div class="audio-track">
         <div class="wave-progress"></div>
@@ -726,7 +848,7 @@ button:active {
     </div>
     <div class="audio-action" data-audio="audio4">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="screen6Bar.toggle()">Слушать</button>
+        <button class="audio-btn" onclick="revealAndPlay(screen6Bar, 'screen6AudioControls', this.closest('.audio-action'))">Финальная точка</button>
         <span class="done-check">✓</span>
       </div>
     </div>
@@ -753,16 +875,6 @@ button:active {
         <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- Модальное окно для инсайтов после каждой локации -->
-<div id="insightModal" class="insight-modal">
-  <div class="insight-modal-content">
-    <h3>✨ Что стало для Вас самым значимым в этой точке? ✨</h3>
-    <textarea id="insightModalText" rows="3" placeholder="Напишите свои мысли..."></textarea>
-    <button id="insightModalSubmit" onclick="submitInsight()">Поделиться</button>
-    <p id="insightModalStatus" class="modal-status"></p>
   </div>
 </div>
 
@@ -800,8 +912,31 @@ let prepCount = 0;
 const prepDoneSet = new Set();
 const visitedSet = new Set();
 let visitedCount = 0;
+let finalAudioDone = false;
 let pawTrailTimer = null;
 let pendingZoneNumber = null; // для сохранения номера локации перед модальным окном
+
+// Ненавязчивый индикатор прогресса: виден на экранах "Вступление", "Подготовка",
+// "Карта" и "Заключение" (3, 4, 5, 6); кружочки заполняются по мере прохождения
+// 3 шагов подготовки + 4 локаций + финального аудио.
+const PROGRESS_SCREENS = new Set([3, 4, 5, 6]);
+
+function setProgressVisible(screenNum) {
+  const el = document.getElementById('progressIndicator');
+  if (!el) return;
+  const visible = PROGRESS_SCREENS.has(screenNum);
+  el.classList.toggle('visible', visible);
+  document.body.classList.toggle('progress-active', visible);
+}
+
+function renderProgressDots() {
+  const el = document.getElementById('progressIndicator');
+  if (!el) return;
+  const doneSteps = prepDoneSet.size + visitedSet.size + (finalAudioDone ? 1 : 0);
+  el.querySelectorAll('.progress-dot').forEach((dot, idx) => {
+    dot.classList.toggle('done', idx < doneSteps);
+  });
+}
 
 const locationNames = {
   1: "Тотем",
@@ -979,6 +1114,15 @@ const screen6Bar = new AudioBar(document.getElementById('screen6AudioControls'))
 screen1Bar.setAudio(document.getElementById('audio1'));
 screen6Bar.setAudio(document.getElementById('audio4'));
 
+// Кнопка-действие ("Начать игру"/"Финальная точка") скрывается, на её месте
+// появляется аудиоплеер, и сразу начинается воспроизведение.
+function revealAndPlay(bar, controlsId, actionEl) {
+  const controls = document.getElementById(controlsId);
+  if (actionEl) actionEl.style.display = 'none';
+  if (controls) controls.classList.remove('audio-controls-hidden');
+  bar.play();
+}
+
 function stopAllAudio() {
   document.querySelectorAll('audio').forEach(audio => {
     if (!audio.paused) audio.pause();
@@ -1005,6 +1149,7 @@ function nextScreen(n) {
 
   next.style.display = 'block';
   setTimeout(() => next.classList.add('active'), 40);
+  setProgressVisible(n);
 
   if (n === 7) {
     const text = document.getElementById('finalText');
@@ -1030,11 +1175,17 @@ function goBack() {
 
   prev.style.display = 'block';
   setTimeout(() => prev.classList.add('active'), 40);
+  setProgressVisible(parseInt(prevId.replace('screen', ''), 10));
 }
 
 function selectPrepTrack(id) {
   const audio = document.getElementById(id);
   if (!audio) return;
+
+  if (id === 'audio2') {
+    const hint = document.getElementById('prepHint');
+    if (hint) hint.classList.add('hidden');
+  }
 
   if (prepBar.audio === audio) {
     prepBar.toggle();
@@ -1061,19 +1212,10 @@ function selectPrepTrack(id) {
     if (!prepDoneSet.has(id)) {
       prepDoneSet.add(id);
       prepCount++;
-      if (prepCount >= 3) showStartButton();
+      renderProgressDots();
     }
   });
 });
-
-function showStartButton() {
-  const btn = document.getElementById('startBtn');
-  if (!btn) return;
-  btn.style.display = 'inline-block';
-  btn.style.opacity = 0;
-  btn.style.transition = 'opacity 0.8s';
-  setTimeout(() => { btn.style.opacity = 1; }, 50);
-}
 
 function showInsights() {
   const insightBlock = document.getElementById('insightBlock');
@@ -1096,18 +1238,19 @@ function showLocationPreview(n) {
   preview.style.display = 'block';
 }
 
-function showInsightModal(zoneNumber) {
-  const modal = document.getElementById('insightModal');
+function showInsightTip(zoneNumber) {
+  const tip = document.getElementById('locationInsightTip');
   const textarea = document.getElementById('insightModalText');
+  const status = document.getElementById('insightModalStatus');
   textarea.value = '';
+  status.style.display = 'none';
   pendingZoneNumber = zoneNumber;
-  modal.classList.add('active');
-  textarea.focus();
+  tip.classList.add('visible');
 }
 
-function closeInsightModal() {
-  const modal = document.getElementById('insightModal');
-  modal.classList.remove('active');
+function closeInsightTip() {
+  const tip = document.getElementById('locationInsightTip');
+  tip.classList.remove('visible');
   pendingZoneNumber = null;
 }
 
@@ -1149,7 +1292,7 @@ async function submitInsight() {
     status.style.display = 'block';
     
     setTimeout(() => {
-      closeInsightModal();
+      closeInsightTip();
     }, 1000);
     
   } catch (error) {
@@ -1204,9 +1347,10 @@ function cellClick(n) {
     if (!visitedSet.has(n)) {
       visitedSet.add(n);
       visitedCount++;
+      renderProgressDots();
 
-      // Показываем модальное окно с вопросом после прохождения локации
-      showInsightModal(n);
+      // Показываем ненавязчивую подсказку с вопросом после прохождения локации
+      showInsightTip(n);
     }
 
     if (visitedCount === 4) showInsights();
@@ -1225,6 +1369,8 @@ document.getElementById('audio4').addEventListener('ended', () => {
   audio.currentTime = 0;
   screen6Bar.pause();
   markAudioDone('audio4');
+  finalAudioDone = true;
+  renderProgressDots();
   setTimeout(showFinalScreen, 500);
 });
 
@@ -1306,9 +1452,6 @@ window.onload = () => {
     const firstZone = document.querySelector('.zone1');
     if (firstZone) moveTravelerToZone(firstZone, true, 1);
   }
-  
-  const nextBtn1 = document.getElementById('nextBtnScreen1');
-  if (nextBtn1) nextBtn1.style.display = 'none';
 };
 
 function moveTravelerToZone(zone, instant = false, targetZoneNumber = null) {
@@ -1372,16 +1515,6 @@ function createPawPrint(container, x, y) {
   container.appendChild(paw);
   setTimeout(() => paw.remove(), 1650);
 }
-
-document.getElementById('audio1').addEventListener('ended', function() {
-  const nextBtn = document.getElementById('nextBtnScreen1');
-  if (nextBtn) {
-    nextBtn.style.display = 'inline-block';
-    nextBtn.style.opacity = 0;
-    nextBtn.style.transition = 'opacity 0.8s';
-    setTimeout(() => { nextBtn.style.opacity = 1; }, 50);
-  }
-});
 
 </script>
   
