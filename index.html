@@ -309,6 +309,11 @@ button:active {
   display: none !important;
 }
 
+/* Аудиобар на "Подготовке" по ширине совпадает с кнопками над ним */
+#screen4AudioControls {
+  max-width: 230px;
+}
+
 /* Стрелка-переход: заменяет текстовые кнопки "Далее"/"Начать путешествие",
    всегда видима, стиль как у угловой кнопки .tech-next */
 .advance-btn {
@@ -447,6 +452,23 @@ button:active {
   font-variant-numeric: tabular-nums;
 }
 
+.rules-text {
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #dceee6;
+  opacity: 0.95;
+  margin: 6px 0 16px;
+}
+
+.rules-text p {
+  margin: 0 0 12px;
+}
+
+.rules-text p:last-child {
+  margin-bottom: 0;
+}
+
 .map-note {
   margin-top: 8px;
   font-size: 14px;
@@ -551,12 +573,6 @@ body.progress-active .screen {
   opacity: 0;
   transition: opacity 0.6s;
   margin-top: 10px;
-}
-
-#insightText {
-  word-break: normal;
-  overflow-wrap: break-word;
-  line-height: 1.5;
 }
 
 .final-section {
@@ -752,6 +768,10 @@ body.progress-active .screen {
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Правила</h2>
+    <div class="rules-text">
+      <p>Это трансформационная игра — она помогает через бессознательное найти ответы на те вопросы, которые обычными способами не разрешаются. Но эта игра не похожа на остальные: тут нет вопросов и заданий. Вы просто отправляетесь в путешествие и наблюдаете — за собой, за тем, что происходит вокруг, и за своими чувствами и воспоминаниями.</p>
+      <p>Вы сейчас находитесь в ознакомительной демо-версии. Она поможет вам познакомиться с этим миром и попробовать, как это — попасть в фантазию.</p>
+    </div>
     <img src="rules1.png" id="rulesImg" class="content-img">
     <button class="advance-btn" onclick="nextScreen(3)" aria-label="Далее">→</button>
   </div>
@@ -795,7 +815,7 @@ body.progress-active .screen {
         <span class="done-check">✓</span>
       </div>
     </div>
-    <div class="screen-audio-controls" id="screen4AudioControls">
+    <div class="screen-audio-controls audio-controls-hidden" id="screen4AudioControls">
       <button class="audio-btn pause-btn" id="pauseBtnScreen4" aria-label="Пауза/Плей">▶</button>
       <div class="audio-track">
         <div class="wave-progress"></div>
@@ -842,7 +862,6 @@ body.progress-active .screen {
   </div>
 
 <div id="insightBlock" style="opacity:0; transition:1s; margin-top:20px;">
-  <p id="insightText" style="min-height:40px;"></p>
   <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">Далее</button>
 </div>
   <button class="forward-btn" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
@@ -1211,6 +1230,8 @@ function selectPrepTrack(id) {
     if (hint) hint.classList.add('hidden');
   }
 
+  document.getElementById('screen4AudioControls').classList.remove('audio-controls-hidden');
+
   if (prepBar.audio === audio) {
     prepBar.toggle();
     return;
@@ -1243,9 +1264,7 @@ function selectPrepTrack(id) {
 
 function showInsights() {
   const insightBlock = document.getElementById('insightBlock');
-  const insightText = document.getElementById('insightText');
   const finishBtn = document.getElementById('finishBtn');
-  insightText.textContent = 'Зафиксируй свои мысли и инсайты. Можно записать их в заметки или просто проговорить вслух.';
   insightBlock.style.opacity = 1;
   finishBtn.style.display = 'inline-block';
   showMotivationModal();
@@ -1333,11 +1352,23 @@ async function submitInsight() {
   }
 }
 
+function revealMapAudioBar() {
+  const el = document.getElementById('mapAudioControls');
+  if (!el) return;
+  const wasHidden = el.classList.contains('audio-controls-hidden');
+  el.classList.remove('audio-controls-hidden');
+  if (wasHidden) {
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, 350);
+  }
+}
+
 function playHint(n) {
   const audio = document.getElementById(`hint${n}`);
   if (!audio) return;
 
-  document.getElementById('mapAudioControls').classList.remove('audio-controls-hidden');
+  revealMapAudioBar();
 
   if (mapBar.audio === audio) {
     mapBar.toggle();
@@ -1357,7 +1388,7 @@ function cellClick(n) {
   const zone = document.querySelectorAll('.zone')[n - 1];
   if (!audio || !zone) return;
 
-  document.getElementById('mapAudioControls').classList.remove('audio-controls-hidden');
+  revealMapAudioBar();
 
   if (mapBar.audio === audio) {
     mapBar.toggle();
