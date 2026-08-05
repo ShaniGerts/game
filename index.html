@@ -36,20 +36,19 @@ body {
   opacity: 1;
 }
 
-.tech-next {
+/* Зеркальное отражение .back-btn — та же позиция и стиль, но справа */
+.forward-btn {
   position: absolute;
-  right: 14px;
-  bottom: 10px;
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  border: 1px solid rgba(232, 242, 236, 0.2);
-  background: rgba(232, 242, 236, 0.08);
-  color: rgba(232, 242, 236, 0.45);
-  font-size: 16px;
-  line-height: 1;
-  padding: 0;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
   cursor: pointer;
+  margin: 0;
+  padding: 8px 12px;
+  color: #e8f2ec;
+  z-index: 10;
 }
 
 #screen1 .card {
@@ -61,11 +60,6 @@ body {
 #screen1 .audio-action {
   display: flex;
   justify-content: center;
-}
-
-.tech-next:hover {
-  background: rgba(232, 242, 236, 0.14);
-  color: rgba(232, 242, 236, 0.7);
 }
 
 button {
@@ -329,7 +323,7 @@ button:active {
   color: #e8f2ec;
   font-size: 18px;
   line-height: 1;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -342,12 +336,6 @@ button:active {
 
 .advance-btn:active {
   transform: scale(0.94);
-}
-
-#screen5 .tech-next,
-#screen6 .tech-next {
-  top: 14px;
-  bottom: auto;
 }
 
 .audio-btn.done {
@@ -463,6 +451,26 @@ button:active {
   margin-top: 8px;
   font-size: 14px;
   color: #c7ded2;
+}
+
+.hint-buttons-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.hint-btn {
+  min-width: 0;
+  margin-top: 0;
+  padding: 8px 16px;
+  font-size: 13px;
+  background: rgba(232, 242, 236, 0.1);
+  border: 1px solid rgba(232, 242, 236, 0.25);
+}
+
+.hint-btn:hover {
+  background: rgba(232, 242, 236, 0.18);
 }
 
 /* Ненавязчивый индикатор прогресса: кружочки, соединённые линией */
@@ -766,14 +774,8 @@ body.progress-active .screen {
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
+    <p style="font-size: 14px; margin-top: -6px; margin-bottom: 6px; opacity: 0.8;">К любому путешествию необходимо подготовиться и собрать все мысли в кучку, и наше — не исключение.</p>
     <img src="stran.png" style="width: 100px; height: auto; margin: 10px auto; display: block;">
-    <div class="screen-audio-controls" id="screen4AudioControls">
-      <button class="audio-btn pause-btn" id="pauseBtnScreen4" aria-label="Пауза/Плей">▶</button>
-      <div class="audio-track">
-        <div class="wave-progress"></div>
-        <span class="audio-time">0:00 / 0:00</span>
-      </div>
-    </div>
     <div class="audio-action" data-audio="audio2">
       <div class="hint-tip" id="prepHint">нажми сюда <span class="hint-arrow">↓</span></div>
       <div class="audio-button-row">
@@ -793,6 +795,13 @@ body.progress-active .screen {
         <span class="done-check">✓</span>
       </div>
     </div>
+    <div class="screen-audio-controls" id="screen4AudioControls">
+      <button class="audio-btn pause-btn" id="pauseBtnScreen4" aria-label="Пауза/Плей">▶</button>
+      <div class="audio-track">
+        <div class="wave-progress"></div>
+        <span class="audio-time">0:00 / 0:00</span>
+      </div>
+    </div>
     <button id="startBtn" class="advance-btn" onclick="nextScreen(5)" aria-label="Начать путешествие">→</button>
   </div>
 </div>
@@ -802,12 +811,9 @@ body.progress-active .screen {
    <button class="back-btn" onclick="goBack()">←</button>
   <h2>Посетите поочередно каждую из четырех локаций</h2>
    <p class="map-note">После нажатия на область вы услышите мой голос.</p>
-  <div class="map-audio-controls" id="mapAudioControls">
-    <button class="audio-btn pause-btn" id="pauseMapBtn" aria-label="Пауза/Плей">▶</button>
-    <div class="audio-track">
-      <div class="wave-row" id="mapWave"></div>
-      <span class="audio-time">0:00 / 0:00</span>
-    </div>
+  <div class="hint-buttons-row">
+    <button class="audio-btn hint-btn" onclick="playHint(1)">Подсказка 1</button>
+    <button class="audio-btn hint-btn" onclick="playHint(2)">Подсказка 2</button>
   </div>
 
   <div class="map">
@@ -817,6 +823,14 @@ body.progress-active .screen {
     <div class="zone zone2" onclick="cellClick(2)"></div>
     <div class="zone zone3" onclick="cellClick(3)"></div>
     <div class="zone zone4" onclick="cellClick(4)"></div>
+  </div>
+
+  <div class="map-audio-controls audio-controls-hidden" id="mapAudioControls">
+    <button class="audio-btn pause-btn" id="pauseMapBtn" aria-label="Пауза/Плей">▶</button>
+    <div class="audio-track">
+      <div class="wave-row" id="mapWave"></div>
+      <span class="audio-time">0:00 / 0:00</span>
+    </div>
   </div>
 
   <div id="locationInsightTip" class="insight-tip">
@@ -831,13 +845,14 @@ body.progress-active .screen {
   <p id="insightText" style="min-height:40px;"></p>
   <button id="finishBtn" onclick="nextScreen(6)" style="display:none;">Далее</button>
 </div>
-  <button class="tech-next" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
+  <button class="forward-btn" onclick="nextScreen(6)" aria-label="Следующий экран">→</button>
 </div>
 
 <!-- ЭКРАН 6: Заключение -->
 <div class="screen" id="screen6">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
+     <button class="forward-btn" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
    <img src="end.jpg" class="content-img" alt="Завершение путешествия">
     <div class="screen-audio-controls audio-controls-hidden" id="screen6AudioControls">
       <button class="audio-btn pause-btn" id="pauseBtnScreen6" aria-label="Пауза/Плей">▶</button>
@@ -853,7 +868,6 @@ body.progress-active .screen {
       </div>
     </div>
   </div>
-  <button class="tech-next" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
 </div>
 
 <!-- ЭКРАН 7: Финал -->
@@ -904,6 +918,8 @@ body.progress-active .screen {
 <audio id="cell2" src="родовое_поместье.mp3" preload="metadata"></audio>
 <audio id="cell3" src="Камень.mp3" preload="metadata"></audio>
 <audio id="cell4" src="Гора.mp3" preload="metadata"></audio>
+<audio id="hint1" src="это_карта.mp3" preload="metadata"></audio>
+<audio id="hint2" src="сноска_про_аудиоэпизоды.mp3" preload="metadata"></audio>
 
 <script>
 
@@ -971,6 +987,11 @@ function formatTime(sec) {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
+// Иконки play/pause в едином стиле (SVG вместо эмодзи-символов, которые
+// на некоторых мобильных платформах рендерятся цветной эмодзи-версией).
+const ICON_PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const ICON_PAUSE = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+
 // Плеер в стиле Telegram: круглая кнопка play/pause, перематываемая волна
 // (клик и перетаскивание мышью или пальцем) и таймер "прослушано / всего".
 class AudioBar {
@@ -984,7 +1005,10 @@ class AudioBar {
     this.dragging = false;
 
     this._buildBars(barCount);
-    if (this.playBtn) this.playBtn.addEventListener('click', () => this.toggle());
+    if (this.playBtn) {
+      this.playBtn.innerHTML = ICON_PLAY;
+      this.playBtn.addEventListener('click', () => this.toggle());
+    }
     this._bindSeek();
     this.render();
   }
@@ -1046,7 +1070,7 @@ class AudioBar {
   play() {
     if (!this.audio) return;
     this.audio.play();
-    if (this.playBtn) this.playBtn.textContent = '⏸';
+    if (this.playBtn) this.playBtn.innerHTML = ICON_PAUSE;
     this.waveBox.classList.add('active');
     this._startLoop();
   }
@@ -1054,7 +1078,7 @@ class AudioBar {
   pause() {
     if (!this.audio) return;
     this.audio.pause();
-    if (this.playBtn) this.playBtn.textContent = '▶';
+    if (this.playBtn) this.playBtn.innerHTML = ICON_PLAY;
     this.waveBox.classList.remove('active');
     this._stopLoop();
     this.render();
@@ -1069,7 +1093,7 @@ class AudioBar {
     if (this.audio && !this.audio.paused) this.audio.pause();
     this._stopLoop();
     this.waveBox.classList.remove('active');
-    if (this.playBtn) this.playBtn.textContent = '▶';
+    if (this.playBtn) this.playBtn.innerHTML = ICON_PLAY;
     if (unbind) this.audio = null;
     this.render();
   }
@@ -1246,6 +1270,9 @@ function showInsightTip(zoneNumber) {
   status.style.display = 'none';
   pendingZoneNumber = zoneNumber;
   tip.classList.add('visible');
+  setTimeout(() => {
+    tip.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 350);
 }
 
 function closeInsightTip() {
@@ -1306,10 +1333,31 @@ async function submitInsight() {
   }
 }
 
+function playHint(n) {
+  const audio = document.getElementById(`hint${n}`);
+  if (!audio) return;
+
+  document.getElementById('mapAudioControls').classList.remove('audio-controls-hidden');
+
+  if (mapBar.audio === audio) {
+    mapBar.toggle();
+    return;
+  }
+
+  if (mapBar.audio && !mapBar.audio.paused) {
+    mapBar.pause();
+  }
+
+  mapBar.setAudio(audio);
+  mapBar.play();
+}
+
 function cellClick(n) {
   const audio = document.getElementById(`cell${n}`);
   const zone = document.querySelectorAll('.zone')[n - 1];
   if (!audio || !zone) return;
+
+  document.getElementById('mapAudioControls').classList.remove('audio-controls-hidden');
 
   if (mapBar.audio === audio) {
     mapBar.toggle();
@@ -1354,6 +1402,16 @@ function cellClick(n) {
     }
 
     if (visitedCount === 4) showInsights();
+  });
+});
+
+['hint1', 'hint2'].forEach(id => {
+  document.getElementById(id).addEventListener('ended', () => {
+    const audio = document.getElementById(id);
+    if (mapBar.audio === audio) {
+      audio.currentTime = 0;
+      mapBar.pause();
+    }
   });
 });
 
