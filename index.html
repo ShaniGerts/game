@@ -605,12 +605,14 @@ body.progress-active .screen {
 /* Финальный экран: элементы проявляются по очереди, друг за другом */
 .reveal-step {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  filter: blur(12px);
+  transform: translateY(14px);
+  transition: opacity 2.2s ease, filter 2.2s ease, transform 2.2s ease;
 }
 
 .reveal-step.visible {
   opacity: 1;
+  filter: blur(0);
   transform: translateY(0);
 }
 
@@ -1494,7 +1496,7 @@ function runFinalReveal() {
   const steps = ['finalHeading', 'revealStep1', 'revealStep2', 'revealStep3', 'revealStep4'];
   steps.forEach(id => document.getElementById(id)?.classList.remove('visible'));
 
-  let delay = 300;
+  let delay = 700;
   steps.forEach((id, idx) => {
     setTimeout(() => {
       const el = document.getElementById(id);
@@ -1502,7 +1504,7 @@ function runFinalReveal() {
       el.classList.add('visible');
       el.scrollIntoView({ behavior: 'smooth', block: idx === 0 ? 'start' : 'center' });
     }, delay);
-    delay += 1500;
+    delay += 3200;
   });
 }
 
