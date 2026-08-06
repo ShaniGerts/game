@@ -586,6 +586,11 @@ body.progress-active .screen {
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* Сильнее разделяем смысловые блоки финального экрана друг от друга */
+.final-group {
+  margin-top: 48px;
+}
+
 .final-section p {
   margin-top: 0;
   line-height: 1.6;
@@ -614,6 +619,12 @@ body.progress-active .screen {
   opacity: 1;
   filter: blur(0);
   transform: translateY(0) scale(1);
+}
+
+/* Заголовок проявляется заметно быстрее остальных шагов */
+.reveal-step.reveal-fast {
+  filter: blur(12px);
+  transition: opacity 1.1s ease, filter 1.1s ease, transform 1.1s ease;
 }
 
 @keyframes fadeInUp {
@@ -905,23 +916,27 @@ body.progress-active .screen {
 <div class="screen" id="screen7">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
-    <h2 class="reveal-step" id="finalHeading">Ваше путешествие подошло к концу 🌿
+    <h2 class="reveal-step reveal-fast" id="finalHeading">Ваше путешествие подошло к концу 🌿
     Сегодня вы побывали лишь в нескольких уголках этого острова.</h2>
-    <div class="final-section reveal-step" id="revealStep1">
+
+    <div class="final-section reveal-step final-group" id="continueGroup">
       <p id="finalText">
         В полной версии вас ждут новые места,
         неожиданные встречи и маршрут,
         который рождается уже из вашей личной истории.
       </p>
+      <div class="reveal-step" id="revealStep2">
+        <button onclick="window.open('https://t.me/madreshani')">Продолжить путь со мной →</button>
+      </div>
     </div>
-    <div class="reveal-step" id="revealStep2">
-      <button onclick="window.open('https://t.me/madreshani')">Продолжить путь со мной →</button>
-    </div>
-    <p class="reveal-step screen-subtitle" id="revealStep3" style="font-size: 14px;">Если захочется, поделитесь тем, что оказалось самым важным в этом путешествии: мне интересен каждый путь</p>
-    <div class="final-section reveal-step" id="revealStep4">
-      <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
-      <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
-      <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
+
+    <div class="final-section reveal-step final-group" id="feedbackGroup">
+      <p class="screen-subtitle" style="font-size: 14px;">Если захочется, поделитесь тем, что оказалось самым важным в этом путешествии: мне интересен каждый путь</p>
+      <div class="reveal-step" id="revealStep4">
+        <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
+        <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
+        <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
+      </div>
     </div>
   </div>
 </div>
@@ -1493,18 +1508,23 @@ function showFinalScreen() {
 // шаг плавно въезжает снизу, а страница мягко доскролливает до него, так что
 // прочитанный текст как будто уезжает вверх, а не просто "падает" ниже экрана.
 function runFinalReveal() {
-  const steps = ['finalHeading', 'revealStep1', 'revealStep2', 'revealStep3', 'revealStep4'];
-  steps.forEach(id => document.getElementById(id)?.classList.remove('visible'));
+  // Заголовок появляется быстро, дальше — неспешно и туманно, шаг за шагом.
+  const steps = [
+    { id: 'finalHeading', delay: 200 },
+    { id: 'continueGroup', delay: 1600 },
+    { id: 'revealStep2', delay: 1600 + 4800 },
+    { id: 'feedbackGroup', delay: 1600 + 4800 * 2 },
+    { id: 'revealStep4', delay: 1600 + 4800 * 3 }
+  ];
+  steps.forEach(({ id }) => document.getElementById(id)?.classList.remove('visible'));
 
-  let delay = 900;
-  steps.forEach((id, idx) => {
+  steps.forEach(({ id, delay }, idx) => {
     setTimeout(() => {
       const el = document.getElementById(id);
       if (!el) return;
       el.classList.add('visible');
       el.scrollIntoView({ behavior: 'smooth', block: idx === 0 ? 'start' : 'center' });
     }, delay);
-    delay += 4800;
   });
 }
 
