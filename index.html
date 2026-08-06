@@ -452,12 +452,16 @@ button:active {
   font-variant-numeric: tabular-nums;
 }
 
+/* Текст-описание под заголовками: чуть тоньше и с мягким зелёным оттенком */
+.screen-subtitle {
+  font-weight: 300;
+  color: #a3c9b6;
+}
+
 .rules-text {
   text-align: left;
   font-size: 15px;
   line-height: 1.7;
-  color: #dceee6;
-  opacity: 0.95;
   margin: 6px 0 16px;
 }
 
@@ -472,7 +476,6 @@ button:active {
 .map-note {
   margin-top: 8px;
   font-size: 14px;
-  color: #c7ded2;
 }
 
 .hint-buttons-row {
@@ -599,9 +602,16 @@ body.progress-active .screen {
   color: #5f7b70;
 }
 
-#finalText {
-  transform: translateY(20px);
-  transition: 1s;
+/* Финальный экран: элементы проявляются по очереди, друг за другом */
+.reveal-step {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal-step.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @keyframes fadeInUp {
@@ -743,7 +753,7 @@ body.progress-active .screen {
 <div class="screen" id="screen1">
   <div class="card">
     <h2>Добро пожаловать</h2>
-    <p style="font-size: 14px; margin-top: -10px; margin-bottom: 10px; opacity: 0.8;">в мир игры «Жить = Творить»</p>
+    <p class="screen-subtitle" style="font-size: 14px; margin-top: -10px; margin-bottom: 10px;">в мир игры «Жить = Творить»</p>
     <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
 
     <div class="screen-audio-controls audio-controls-hidden" id="screen1AudioControls">
@@ -768,7 +778,7 @@ body.progress-active .screen {
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Правила</h2>
-    <div class="rules-text">
+    <div class="rules-text screen-subtitle">
       <p>Это трансформационная игра — она помогает через бессознательное найти ответы на те вопросы, которые обычными способами не разрешаются. Но эта игра не похожа на остальные: тут нет вопросов и заданий. Вы просто отправляетесь в путешествие и наблюдаете — за собой, за тем, что происходит вокруг, и за своими чувствами и воспоминаниями.</p>
       <p>Вы сейчас находитесь в ознакомительной демо-версии. Она поможет вам познакомиться с этим миром и попробовать, как это — попасть в фантазию.</p>
     </div>
@@ -783,7 +793,7 @@ body.progress-active .screen {
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Сегодня вы отправитесь в путешествие по сказочному острову Ляньоп</h2>
     <img src="IMG_9891.JPG" class="content-img">
-    <p style="font-size: 14px; margin-top: 5px; opacity: 0.9;">Легенда гласит, что обойдя этот остров полностью, люди меняются навсегда.
+    <p class="screen-subtitle" style="font-size: 14px; margin-top: 5px;">Легенда гласит, что обойдя этот остров полностью, люди меняются навсегда.
       Я же подготовила для вас тур по четырем значимым местам.</p>
     <button class="advance-btn" onclick="nextScreen(4)" aria-label="Далее">→</button>
   </div>
@@ -794,7 +804,7 @@ body.progress-active .screen {
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
-    <p style="font-size: 14px; margin-top: -6px; margin-bottom: 6px; opacity: 0.8;">К любому путешествию необходимо подготовиться и собрать все мысли в кучку, и наше — не исключение.</p>
+    <p class="screen-subtitle" style="font-size: 14px; margin-top: -6px; margin-bottom: 6px;">К любому путешествию необходимо подготовиться и собрать все мысли в кучку, и наше — не исключение.</p>
     <img src="stran.png" style="width: 100px; height: auto; margin: 10px auto; display: block;">
     <div class="audio-action" data-audio="audio2">
       <div class="hint-tip" id="prepHint">нажми сюда <span class="hint-arrow">↓</span></div>
@@ -830,7 +840,7 @@ body.progress-active .screen {
 <div class="screen" id="screen5">
    <button class="back-btn" onclick="goBack()">←</button>
   <h2>Пришло время отправиться в путь!</h2>
-   <p class="map-note">Исследуйте карту, нажимая на каждую область поочередно, и следуйте за голосами: моим и своим внутренним</p>
+   <p class="map-note screen-subtitle">Исследуйте карту, нажимая на каждую область поочередно, и следуйте за голосами: моим и своим внутренним</p>
   <div class="hint-buttons-row">
     <button class="audio-btn hint-btn" onclick="playHint(1)">Подсказка 1</button>
     <button class="audio-btn hint-btn" onclick="playHint(2)">Подсказка 2</button>
@@ -893,22 +903,23 @@ body.progress-active .screen {
 <div class="screen" id="screen7">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
-    <h2>Ваше путешествие подошло к концу 🌿
+    <h2 class="reveal-step" id="finalHeading">Ваше путешествие подошло к концу 🌿
     Сегодня вы побывали лишь в нескольких уголках этого острова.</h2>
-    <div class="final-section">
+    <div class="final-section reveal-step" id="revealStep1">
       <p id="finalText">
         В полной версии вас ждут новые места,
         неожиданные встречи и маршрут,
         который рождается уже из вашей личной истории.
       </p>
+    </div>
+    <div class="reveal-step" id="revealStep2">
       <button onclick="window.open('https://t.me/madreshani')">Продолжить путь со мной →</button>
-      <div id="feedbackBlock" class="final-section">
-        <p>Если захочется, поделитесь тем, что оказалось самым важным в этом путешествии:
-          Мне интересен каждый путь</p>
-        <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
-        <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
-        <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
-      </div>
+    </div>
+    <p class="reveal-step screen-subtitle" id="revealStep3" style="font-size: 14px;">Если захочется, поделитесь тем, что оказалось самым важным в этом путешествии: мне интересен каждый путь</p>
+    <div class="final-section reveal-step" id="revealStep4">
+      <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
+      <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
+      <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
     </div>
   </div>
 </div>
@@ -923,8 +934,8 @@ body.progress-active .screen {
   
 <div id="thankYouModal" style="display:none; position:fixed; inset:0; background:rgba(6,18,14,0.58); z-index:999; align-items:center; justify-content:center; padding:20px;">
   <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
-    <h3 style="margin-top:0; margin-bottom:12px; color:#2e5e4e; font-size:40px; line-height:1.1;">Спасибо, что доверили мне часть своей истории 💚</h3>
-    <p style="margin:0 0 20px; color:#35594d; font-size:28px; line-height:1.45;">Берегите то, что сегодня удалось найти. Со временем, все встанет на свои места.</p>
+    <h3 style="margin-top:0; margin-bottom:12px; color:#2e5e4e; font-size:20px; line-height:1.3;">Спасибо, что доверили мне часть своей истории 💚</h3>
+    <p style="margin:0 0 20px; color:#35594d; font-size:14px; line-height:1.55;">Берегите то, что сегодня удалось найти. Со временем, все встанет на свои места.</p>
     <button onclick="closeThankYouModal()">До новых встреч 🌿</button>
   </div>
 </div>
@@ -1197,11 +1208,7 @@ function nextScreen(n) {
   setProgressVisible(n);
 
   if (n === 7) {
-    const text = document.getElementById('finalText');
-    if (text) {
-      text.style.opacity = 1;
-      text.style.transform = 'translateY(0)';
-    }
+    runFinalReveal();
   }
 }
 
@@ -1477,6 +1484,26 @@ function closeMotivationModal() {
 
 function showFinalScreen() {
   nextScreen(7);
+}
+
+// Финальный экран проявляется по шагам: заголовок, затем описание, кнопка,
+// приглашение поделиться мыслями и, наконец, поле отзыва — каждый следующий
+// шаг плавно въезжает снизу, а страница мягко доскролливает до него, так что
+// прочитанный текст как будто уезжает вверх, а не просто "падает" ниже экрана.
+function runFinalReveal() {
+  const steps = ['finalHeading', 'revealStep1', 'revealStep2', 'revealStep3', 'revealStep4'];
+  steps.forEach(id => document.getElementById(id)?.classList.remove('visible'));
+
+  let delay = 300;
+  steps.forEach((id, idx) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.add('visible');
+      el.scrollIntoView({ behavior: 'smooth', block: idx === 0 ? 'start' : 'center' });
+    }, delay);
+    delay += 1500;
+  });
 }
 
 const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeZ-PxW0j1VnUCRdhGTbLpXsNTUDNRgS6JHpS7mppd8a9mKSQ/formResponse';
