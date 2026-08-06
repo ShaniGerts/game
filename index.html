@@ -829,8 +829,8 @@ body.progress-active .screen {
 <!-- ЭКРАН 5: Карта -->
 <div class="screen" id="screen5">
    <button class="back-btn" onclick="goBack()">←</button>
-  <h2>Посетите поочередно каждую из четырех локаций</h2>
-   <p class="map-note">После нажатия на область вы услышите мой голос.</p>
+  <h2>Пришло время отправиться в путь!</h2>
+   <p class="map-note">Исследуйте карту, нажимая на каждую область поочередно, и следуйте за голосами: моим и своим внутренним</p>
   <div class="hint-buttons-row">
     <button class="audio-btn hint-btn" onclick="playHint(1)">Подсказка 1</button>
     <button class="audio-btn hint-btn" onclick="playHint(2)">Подсказка 2</button>
@@ -893,16 +893,18 @@ body.progress-active .screen {
 <div class="screen" id="screen7">
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
-    <h2>Ваше сегодняшнее путешествие подошло к концу 🌿</h2>
+    <h2>Ваше путешествие подошло к концу 🌿
+    Сегодня вы побывали лишь в нескольких уголках этого острова.</h2>
     <div class="final-section">
       <p id="finalText">
-        Но это только начало. Готовы ли вы отправиться в более глубокое путешествие?
-        Ещё больше историй, смыслов и открытий.
-        Я буду рядом в этом пути: поддержу и все объясню.
+        В полной версии вас ждут новые места,
+        неожиданные встречи и маршрут,
+        который рождается уже из вашей личной истории.
       </p>
       <button onclick="window.open('https://t.me/madreshani')">Продолжить путь со мной →</button>
       <div id="feedbackBlock" class="final-section">
-        <p>Поделитесь своими ощущениями от путешествия и инсайтами:</p>
+        <p>Если захочется, поделитесь тем, что оказалось самым важным в этом путешествии:
+          Мне интересен каждый путь</p>
         <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
         <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
         <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
@@ -914,16 +916,16 @@ body.progress-active .screen {
 <div id="motivationModal">
   <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
     <h3 style="margin-top:0; margin-bottom:10px; color:#2e5e4e;">Ты отлично идёшь 🌿</h3>
-    <p style="margin:0 0 18px; color:#35594d;">Сделай короткую паузу и зафиксируй инсайт: в заметки или голосом.</p>
+    <p style="margin:0 0 18px; color:#35594d;">Сделай короткую паузу и зафиксируй инсайты: в заметки или вслух для себя</p>
     <button onclick="closeMotivationModal()">Продолжить</button>
   </div>
 </div>
   
 <div id="thankYouModal" style="display:none; position:fixed; inset:0; background:rgba(6,18,14,0.58); z-index:999; align-items:center; justify-content:center; padding:20px;">
   <div style="background:linear-gradient(180deg, #f3f8f4 0%, #e5efe8 100%); border:1px solid rgba(46,94,78,0.18); border-radius:16px; max-width:420px; width:100%; padding:24px; text-align:center; box-shadow:0 16px 40px rgba(0,0,0,0.22); color:#234538;">
-    <h3 style="margin-top:0; margin-bottom:12px; color:#2e5e4e; font-size:40px; line-height:1.1;">Спасибо, что поделились своей душой 💚</h3>
-    <p style="margin:0 0 20px; color:#35594d; font-size:28px; line-height:1.45;">Это очень ценно для меня.</p>
-    <button onclick="closeThankYouModal()">Закрыть</button>
+    <h3 style="margin-top:0; margin-bottom:12px; color:#2e5e4e; font-size:40px; line-height:1.1;">Спасибо, что доверили мне часть своей истории 💚</h3>
+    <p style="margin:0 0 20px; color:#35594d; font-size:28px; line-height:1.45;">Берегите то, что сегодня удалось найти. Со временем, все встанет на свои места.</p>
+    <button onclick="closeThankYouModal()">До новых встреч 🌿</button>
   </div>
 </div>
 
