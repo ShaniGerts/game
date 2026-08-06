@@ -605,15 +605,15 @@ body.progress-active .screen {
 /* Финальный экран: элементы проявляются по очереди, друг за другом */
 .reveal-step {
   opacity: 0;
-  filter: blur(12px);
-  transform: translateY(14px);
-  transition: opacity 2.2s ease, filter 2.2s ease, transform 2.2s ease;
+  filter: blur(24px);
+  transform: translateY(10px) scale(1.035);
+  transition: opacity 3.6s ease, filter 3.6s ease, transform 3.6s ease;
 }
 
 .reveal-step.visible {
   opacity: 1;
   filter: blur(0);
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 @keyframes fadeInUp {
@@ -1496,7 +1496,7 @@ function runFinalReveal() {
   const steps = ['finalHeading', 'revealStep1', 'revealStep2', 'revealStep3', 'revealStep4'];
   steps.forEach(id => document.getElementById(id)?.classList.remove('visible'));
 
-  let delay = 700;
+  let delay = 900;
   steps.forEach((id, idx) => {
     setTimeout(() => {
       const el = document.getElementById(id);
@@ -1504,7 +1504,7 @@ function runFinalReveal() {
       el.classList.add('visible');
       el.scrollIntoView({ behavior: 'smooth', block: idx === 0 ? 'start' : 'center' });
     }, delay);
-    delay += 3200;
+    delay += 4800;
   });
 }
 
