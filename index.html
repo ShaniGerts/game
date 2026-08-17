@@ -592,6 +592,142 @@ body.progress-active .screen {
   margin-top: 48px;
 }
 
+.footnote-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.footnote-link:hover {
+  opacity: 1;
+}
+
+/* Попап "Что нужно знать о полной версии" — аккордеон вопрос/ответ */
+.faq-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 18, 14, 0.85);
+  z-index: 2001;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.faq-modal.active {
+  display: flex;
+}
+
+.faq-modal-content {
+  position: relative;
+  background: linear-gradient(180deg, #1a3028 0%, #0f1f19 100%);
+  border: 1px solid rgba(111, 207, 151, 0.25);
+  border-radius: 20px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 82vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 26px 20px 12px;
+  color: #d5eee2;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.faq-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: rgba(213, 238, 226, 0.6);
+  font-size: 22px;
+  padding: 6px 10px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.faq-modal-close:hover {
+  color: rgba(213, 238, 226, 0.9);
+  background: none;
+}
+
+.faq-modal-content h3 {
+  margin: 0 0 12px;
+  padding-right: 20px;
+  color: #a8e6cf;
+  font-size: 18px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.faq-item {
+  border-top: 1px solid rgba(232, 242, 236, 0.12);
+}
+
+.faq-item:first-of-type {
+  border-top: none;
+}
+
+.faq-question {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #e8f2ec;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 26px 14px 0;
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.faq-question:hover {
+  background: none;
+}
+
+.faq-question::after {
+  content: '+';
+  position: absolute;
+  right: 2px;
+  top: 12px;
+  font-size: 20px;
+  font-weight: 400;
+  color: rgba(213, 238, 226, 0.6);
+  transition: transform 0.3s ease;
+}
+
+.faq-item.open .faq-question::after {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 500px;
+}
+
+.faq-answer p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(213, 238, 226, 0.85);
+  text-align: left;
+}
+
+.faq-answer p:last-child {
+  margin-bottom: 14px;
+}
+
 .final-section p {
   margin-top: 0;
   line-height: 1.6;
@@ -935,12 +1071,71 @@ body.progress-active .screen {
       </div>
     </div>
 
+    <p class="reveal-step footnote-link screen-subtitle" id="revealFootnote" onclick="openFaqModal()">что нужно знать о полной версии</p>
+
     <div class="final-section reveal-step final-group" id="feedbackGroup">
       <p class="screen-subtitle" style="font-size: 14px;">Если захочется, поделитесь тем, что оказалось самым важным в этом путешествии: мне интересен каждый путь</p>
       <div class="reveal-step" id="revealStep4">
         <textarea id="feedbackText" rows="3" style="width:100%; border-radius:10px; padding:10px;" placeholder="Напишите несколько слов о своих ощущениях..."></textarea>
         <button id="feedbackSubmitBtn" onclick="sendFeedback()">Отправить</button>
         <p id="feedbackStatus" style="display:none; margin-top:10px; font-size:14px;"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="faqModal" class="faq-modal">
+  <div class="faq-modal-content">
+    <button class="faq-modal-close" onclick="closeFaqModal()" aria-label="Закрыть">×</button>
+    <h3>Что нужно знать о полной версии</h3>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Что это?</button>
+      <div class="faq-answer">
+        <p>Рефлексивная игра. Основная механика — свободные ассоциации и выстраивание связей между образами и чувствами, чтобы глубже понять то, что с нами происходит.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Как проходит?</button>
+      <div class="faq-answer">
+        <p>Онлайн или офлайн, 2–3 часа. Я последовательно помещаю вас в различные образные ситуации. Вы идёте за собственными ассоциациями, а после значимых шагов останавливаетесь и рефлексируете.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">С чем приходить?</button>
+      <div class="faq-answer">
+        <p>С вопросом, ситуацией или просто любопытством. Можно не иметь чёткого запроса.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Что понадобится?</button>
+      <div class="faq-answer">
+        <p>Любимый блокнот и ручка.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Есть ли правильные ответы?</button>
+      <div class="faq-answer">
+        <p>Нет. Символы не имеют универсальной расшифровки — значение возникает из вашей собственной реакции и ассоциаций.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Индивидуально / в паре / группе</button>
+      <div class="faq-answer">
+        <p>Индивидуально — наиболее глубокий формат. В паре или группе меньше времени на личную рефлексию, зато появляется возможность увидеть разные способы восприятия одного пространства.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">Чем заканчивается?</button>
+      <div class="faq-answer">
+        <p>Иногда это новое понимание себя, иногда — неожиданный взгляд на привычную ситуацию, иногда — ответ на вопрос, который давно не давал покоя.</p>
+        <p>А иногда самое ценное — обнаружить, что у вас уже есть собственный опыт, знания и способы справляться, которыми вы ещё не пользовались.</p>
       </div>
     </div>
   </div>
@@ -1504,6 +1699,18 @@ function closeMotivationModal() {
   if (modal) modal.style.display = 'none';
 }
 
+function openFaqModal() {
+  document.getElementById('faqModal')?.classList.add('active');
+}
+
+function closeFaqModal() {
+  document.getElementById('faqModal')?.classList.remove('active');
+}
+
+function toggleFaq(btn) {
+  btn.closest('.faq-item')?.classList.toggle('open');
+}
+
 function showFinalScreen() {
   nextScreen(7);
 }
@@ -1518,8 +1725,9 @@ function runFinalReveal() {
     { id: 'finalHeading', delay: 200 },
     { id: 'continueGroup', delay: 1600 },
     { id: 'revealStep2', delay: 1600 + 4800 },
-    { id: 'feedbackGroup', delay: 1600 + 4800 * 2 },
-    { id: 'revealStep4', delay: 1600 + 4800 * 3 }
+    { id: 'revealFootnote', delay: 1600 + 4800 * 2 },
+    { id: 'feedbackGroup', delay: 1600 + 4800 * 3 },
+    { id: 'revealStep4', delay: 1600 + 4800 * 4 }
   ];
   steps.forEach(({ id }) => document.getElementById(id)?.classList.remove('visible'));
 
