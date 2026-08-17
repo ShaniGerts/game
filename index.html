@@ -1425,6 +1425,7 @@ function nextScreen(n) {
   setProgressVisible(n);
 
   if (n === 7) {
+    window.scrollTo(0, 0);
     runFinalReveal();
   }
 }
@@ -1736,7 +1737,9 @@ function runFinalReveal() {
       const el = document.getElementById(id);
       if (!el) return;
       el.classList.add('visible');
-      el.scrollIntoView({ behavior: 'smooth', block: idx === 0 ? 'start' : 'center' });
+      if (idx > 0) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }, delay);
   });
 }
