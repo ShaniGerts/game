@@ -908,7 +908,7 @@ body.progress-active .screen {
   <div class="card">
     <h2>Добро пожаловать</h2>
     <p class="screen-subtitle" style="font-size: 14px; margin-top: -10px; margin-bottom: 10px;">в мир игры «Жить = Творить»</p>
-    <img src="parade illustration.jpg" id="welcomeImg" class="content-img breathing">
+    <img src="open.PNG" id="welcomeImg" class="content-img breathing">
 
     <div class="screen-audio-controls audio-controls-hidden" id="screen1AudioControls">
       <button class="audio-btn pause-btn" id="pauseBtnScreen1" aria-label="Пауза/Плей">▶</button>
@@ -946,7 +946,7 @@ body.progress-active .screen {
   <div class="card">
     <button class="back-btn" onclick="goBack()">←</button>
     <h2>Сегодня вы отправитесь в путешествие по сказочному острову Ляньоп</h2>
-    <img src="IMG_9891.JPG" class="content-img">
+    <img src="2.png" class="content-img">
     <p class="screen-subtitle" style="font-size: 14px; margin-top: 5px;">Легенда гласит, что обойдя этот остров полностью, люди меняются навсегда.
       Я же подготовила для вас тур по четырем значимым местам.</p>
     <button class="advance-btn" onclick="nextScreen(4)" aria-label="Далее">→</button>
@@ -1036,7 +1036,7 @@ body.progress-active .screen {
   <div class="card">
      <button class="back-btn" onclick="goBack()">←</button>
      <button class="forward-btn" onclick="nextScreen(7)" aria-label="Следующий экран">→</button>
-   <img src="end.jpg" class="content-img" alt="Завершение путешествия">
+   <img src="6.png" class="content-img" alt="Завершение путешествия">
     <div class="screen-audio-controls audio-controls-hidden" id="screen6AudioControls">
       <button class="audio-btn pause-btn" id="pauseBtnScreen6" aria-label="Пауза/Плей">▶</button>
       <div class="audio-track">
@@ -1801,7 +1801,7 @@ window.onload = () => {
   setTimeout(() => first.classList.add('active'), 100);
 
   const welcomeImg = document.getElementById('welcomeImg');
-  if (welcomeImg) welcomeImg.src = 'parade illustration.jpg';
+  if (welcomeImg) welcomeImg.src = 'open.PNG';
   
   const traveler = document.getElementById('traveler');
   if (traveler) {
