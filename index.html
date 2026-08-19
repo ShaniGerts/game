@@ -21,6 +21,7 @@ body {
   
 .screen {
   display: none;
+  box-sizing: border-box;
   padding: 20px;
   opacity: 0;
   transition: opacity 1.5s ease;
@@ -100,6 +101,7 @@ button:active {
 }
 
 .card h2 {
+  margin-top: 0;
   margin-bottom: 10px;
   font-size: 18px;
 }
@@ -293,7 +295,12 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+}
+
+/* Кнопка — единственный элемент в раскладке ряда; галочка позиционируется
+   поверх, не сдвигая кнопку от центра, пока невидима (opacity: 0) */
+.audio-button-row .audio-btn {
+  position: relative;
 }
 
 .audio-btn {
@@ -312,6 +319,11 @@ button:active {
 /* Аудиобар на "Подготовке" по ширине совпадает с кнопками над ним */
 #screen4AudioControls {
   max-width: 230px;
+  margin: 6px auto 8px;
+}
+
+#screen4 .audio-action {
+  margin: 6px auto 4px;
 }
 
 /* Стрелка-переход: заменяет текстовые кнопки "Далее"/"Начать путешествие",
@@ -321,7 +333,7 @@ button:active {
   height: 44px;
   min-width: 0;
   padding: 0;
-  margin-top: 18px;
+  margin-top: 12px;
   border-radius: 50%;
   border: 1px solid rgba(232, 242, 236, 0.3);
   background: rgba(232, 242, 236, 0.1);
@@ -348,6 +360,11 @@ button:active {
 }
 
 .done-check {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 10px;
   color: #e9ffe9;
   font-size: 22px;
   font-weight: 700;
@@ -919,8 +936,7 @@ body.progress-active .screen {
     </div>
     <div class="audio-action" data-audio="audio1">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="revealAndPlay(screen1Bar, 'screen1AudioControls', this.closest('.audio-action'))">Начать игру</button>
-        <span class="done-check">✓</span>
+        <button class="audio-btn" onclick="revealAndPlay(screen1Bar, 'screen1AudioControls', this.closest('.audio-action'))">Начать игру<span class="done-check">✓</span></button>
       </div>
     </div>
     <button id="nextBtnScreen1" class="advance-btn" onclick="nextScreen(2)" aria-label="Далее">→</button>
@@ -959,24 +975,21 @@ body.progress-active .screen {
      <button class="back-btn" onclick="goBack()">←</button>
     <h2>Подготовка</h2>
     <p class="screen-subtitle" style="font-size: 14px; margin-top: -6px; margin-bottom: 6px;">К любому путешествию необходимо подготовиться и собрать все мысли в кучку, и наше — не исключение.</p>
-    <img src="stran.png" style="width: 100px; height: auto; margin: 10px auto; display: block;">
+    <img src="stran.png" id="prepImg" style="width: 112px; height: auto; margin: 6px auto; display: block; transition: opacity 0.3s ease;">
     <div class="audio-action" data-audio="audio2">
       <div class="hint-tip" id="prepHint">нажми сюда <span class="hint-arrow">↓</span></div>
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="selectPrepTrack('audio2')">Определяем запрос</button>
-        <span class="done-check">✓</span>
+        <button class="audio-btn" onclick="selectPrepTrack('audio2')">Определяем запрос<span class="done-check">✓</span></button>
       </div>
     </div>
     <div class="audio-action" data-audio="audio3">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="selectPrepTrack('audio3')">Высшая цель</button>
-        <span class="done-check">✓</span>
+        <button class="audio-btn" onclick="selectPrepTrack('audio3')">Высшая цель<span class="done-check">✓</span></button>
       </div>
     </div>
     <div class="audio-action" data-audio="audio5">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="selectPrepTrack('audio5')">Собираемся в путь</button>
-        <span class="done-check">✓</span>
+        <button class="audio-btn" onclick="selectPrepTrack('audio5')">Собираемся в путь<span class="done-check">✓</span></button>
       </div>
     </div>
     <div class="screen-audio-controls audio-controls-hidden" id="screen4AudioControls">
@@ -1046,8 +1059,7 @@ body.progress-active .screen {
     </div>
     <div class="audio-action" data-audio="audio4">
       <div class="audio-button-row">
-        <button class="audio-btn" onclick="revealAndPlay(screen6Bar, 'screen6AudioControls', this.closest('.audio-action'))">Финальная точка</button>
-        <span class="done-check">✓</span>
+        <button class="audio-btn" onclick="revealAndPlay(screen6Bar, 'screen6AudioControls', this.closest('.audio-action'))">Финальная точка<span class="done-check">✓</span></button>
       </div>
     </div>
   </div>
@@ -1448,6 +1460,12 @@ function goBack() {
   setProgressVisible(parseInt(prevId.replace('screen', ''), 10));
 }
 
+const PREP_TRACK_IMAGES = {
+  audio2: '3.png',
+  audio3: '4.png',
+  audio5: '5.png'
+};
+
 function selectPrepTrack(id) {
   const audio = document.getElementById(id);
   if (!audio) return;
@@ -1455,6 +1473,11 @@ function selectPrepTrack(id) {
   if (id === 'audio2') {
     const hint = document.getElementById('prepHint');
     if (hint) hint.classList.add('hidden');
+  }
+
+  const img = document.getElementById('prepImg');
+  if (img && PREP_TRACK_IMAGES[id]) {
+    img.src = PREP_TRACK_IMAGES[id];
   }
 
   document.getElementById('screen4AudioControls').classList.remove('audio-controls-hidden');
